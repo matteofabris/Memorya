@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WordsMemory</string>
+    <string name="translation">Translation</string>
+    <string name="logo_image">Logo Image</string>
+</resources>
