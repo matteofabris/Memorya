@@ -7,17 +7,26 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.room.Room
 import com.example.wordsmemory.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val testo: Testo = Testo("bella li")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         //binding.testo = testo
+
+        /*
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "database-name"
+        ).build()
+        val userDao = db.userDao()
+        val users: List<User> = userDao.getAll()
+        */
     }
 
     fun onTryClicked(view: View) {
@@ -28,5 +37,3 @@ class MainActivity : AppCompatActivity() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
-
-data class Testo(var testo: String);
