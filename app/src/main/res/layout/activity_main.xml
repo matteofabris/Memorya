@@ -14,126 +14,65 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/game_background"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.23"
+            app:layout_constraintWidth_percent="0.7">
+
+            <TextView
+                android:id="@+id/randomWordTextView"
+                style="@style/wm_labelStyle"
+                android:text="TextView"
+                app:layout_constraintBottom_toTopOf="@+id/translationEditText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/translationEditText"
+                style="@style/wm_labelStyle"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:text="Name"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/randomWordTextView"
+                app:layout_constraintStart_toStartOf="@id/randomWordTextView"
+                app:layout_constraintTop_toBottomOf="@+id/randomWordTextView" />
+
+            <ImageButton
+                android:id="@+id/acceptTranslationImageButton"
+                android:contentDescription="@string/logo_image"
+                app:layout_constraintBottom_toBottomOf="@+id/translationEditText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.67"
+                app:layout_constraintStart_toEndOf="@+id/translationEditText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.917"
+                app:srcCompat="@drawable/abc_vector_test"
+                style="@style/imageButtonStyle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/game_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.23000002">
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            app:layout_constraintVertical_bias="0.63"
+            app:srcCompat="@mipmap/ic_launcher" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical"
-                android:padding="25dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:fontFamily="@font/doppio_one"
-                    android:gravity="center"
-                    android:text="TextView"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/medium_font_size" />
-
-                <EditText
-                    android:id="@+id/editTextTextPersonName"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:fontFamily="@font/doppio_one"
-                    android:inputType="textPersonName"
-                    android:text="Name"
-                    android:textAlignment="center" />
-
-            </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/linearLayout"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.689"
-                app:srcCompat="@drawable/abc_vector_test" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-
-
-    <!--
-    <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".MainActivity">
-
-        <data>
-
-            <variable
-                name="testo"
-                type="com.example.wordsmemory.Testo" />
-        </data>
-
-        <LinearLayout
-            android:id="@+id/text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/wordLabel"
-                style="@style/wm_label_style"
-                android:fontFamily="@font/catamaran_bold"
-                android:inputType="textShortMessage"
-                android:text="@={testo.testo}" />
-
-            <EditText
-                android:id="@+id/editTextTextPersonName"
-                style="@style/wm_label_style"
-                android:ems="10"
-                android:hint="@string/translation"
-                android:importantForAutofill="no"
-                android:inputType="textPersonName"
-                android:shadowColor="#FFFFFF"
-                android:textColorHint="@color/white" />
-
-            <Button
-                android:id="@+id/button2"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isScrollContainer="false"
-                android:onClick="onTryClicked"
-                android:text="DONE"
-                app:iconGravity="textStart"
-                app:iconTint="@color/black" />
-
-            <ImageView
-                android:id="@+id/logoImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/logo_image"
-                android:paddingTop="300dp"
-                app:srcCompat="@mipmap/ic_launcher" />
-        </LinearLayout>
-
-    </layout>
-    -->
