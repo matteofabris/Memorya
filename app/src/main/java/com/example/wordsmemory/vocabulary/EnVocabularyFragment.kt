@@ -1,4 +1,4 @@
-package com.example.wordsmemory
+package com.example.wordsmemory.vocabulary
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.databinding.FragmentEnVocabularyBinding
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -33,7 +34,7 @@ class EnVocabularyFragment : Fragment() {
 
         viewModel.vocabularyList.observe(
             viewLifecycleOwner,
-            { it?.let { vocabularyAdapter.data = it } })
+            { it?.let { vocabularyAdapter.submitList(it) } })
 
         return binding.root
     }

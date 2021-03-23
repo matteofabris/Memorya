@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_play"/>
     <fragment
         android:id="@+id/enVocabularyFragment"
-        android:name="com.example.wordsmemory.EnVocabularyFragment"
+        android:name="com.example.wordsmemory.vocabulary.EnVocabularyFragment"
         android:label="EnVocabularyFragment"
         tools:layout="@layout/fragment_en_vocabulary"/>
 </navigation>

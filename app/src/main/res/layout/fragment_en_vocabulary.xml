@@ -7,13 +7,13 @@
 
         <variable
             name="enVocabularyViewModel"
-            type="com.example.wordsmemory.EnVocabularyViewModel" />
+            type="com.example.wordsmemory.vocabulary.EnVocabularyViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".EnVocabularyFragment">
+        tools:context=".vocabulary.EnVocabularyFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/vocabularyList"

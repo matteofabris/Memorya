@@ -1,8 +1,10 @@
-package com.example.wordsmemory
+package com.example.wordsmemory.vocabulary
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.wordsmemory.EnVocabulary
+import com.example.wordsmemory.EnVocabularyDao
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
