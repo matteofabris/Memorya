@@ -5,4 +5,8 @@
     <string name="vocabulary">Vocabulary</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="english_word">ENGLISH WORD:</string>
+    <string name="translate">TRANSLATE:</string>
+    <string name="app_icon">App Icon</string>
+    <string name="check_word">CHECK WORD</string>
 </resources>

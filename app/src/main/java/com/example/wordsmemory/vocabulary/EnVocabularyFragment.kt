@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.databinding.FragmentEnVocabularyBinding
+import com.example.wordsmemory.play.PlayFragmentViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 
 class EnVocabularyFragment : Fragment() {
@@ -21,11 +22,7 @@ class EnVocabularyFragment : Fragment() {
     ): View {
         val binding = FragmentEnVocabularyBinding.inflate(inflater)
 
-        val application = requireNotNull(this.activity).application
-        val dbDao = VocabularyDatabase.getInstance(application).enVocabularyDao()
-
-        val factory = EnVocabularyViewModelFactory(dbDao)
-        viewModel = ViewModelProvider(this, factory).get(EnVocabularyViewModel::class.java)
+        createViewModel()
 
         binding.enVocabularyViewModel = viewModel
 
@@ -37,5 +34,15 @@ class EnVocabularyFragment : Fragment() {
             { it?.let { vocabularyAdapter.submitList(it) } })
 
         return binding.root
+    }
+
+    @InternalCoroutinesApi
+    private fun createViewModel()
+    {
+        val application = requireNotNull(this.activity).application
+        val dbDao = VocabularyDatabase.getInstance(application).enVocabularyDao()
+
+        val factory = EnVocabularyViewModelFactory(dbDao)
+        viewModel = ViewModelProvider(this, factory).get(EnVocabularyViewModel::class.java)
     }
 }
