@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class EnVocabularyViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
 
-    var vocabularyList = dbDao.getAll()
+    var vocabularyList = dbDao.getAllAsLiveData()
 
     fun onClicked() {
         val a = EnVocabulary("house", "casa")

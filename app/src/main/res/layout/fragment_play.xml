@@ -44,7 +44,7 @@
             <TextView
                 android:id="@+id/randomWordTextView"
                 style="@style/wm_labelStyle"
-                android:textAlignment="textStart"
+                android:text="@{playViewModel.vocabularyItem.enWord}"
                 app:layout_constraintBottom_toTopOf="@+id/translationEditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.12"
@@ -68,7 +68,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
-                android:textAlignment="textStart"
+                android:text="@={playViewModel.translationText}"
                 app:layout_constraintBottom_toBottomOf="@id/translationEditTextTitle"
                 app:layout_constraintEnd_toEndOf="@+id/randomWordTextView"
                 app:layout_constraintStart_toStartOf="@id/randomWordTextView"
@@ -94,6 +94,7 @@
             android:background="@drawable/button_background"
             android:contentDescription="@string/logo_image"
             android:letterSpacing="0"
+            android:onClick="@{() -> playViewModel.onCheckClicked()}"
             android:text="@string/check_word"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +102,6 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
             app:layout_constraintVertical_bias="0.060000002"
             app:srcCompat="@drawable/abc_vector_test" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

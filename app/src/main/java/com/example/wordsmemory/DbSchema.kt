@@ -31,7 +31,10 @@ interface EnVocabularyDao {
     suspend fun delete(word: EnVocabulary)
 
     @Query("SELECT * FROM en_vocabulary")
-    fun getAll(): LiveData<List<EnVocabulary>>
+    fun getAllAsLiveData(): LiveData<List<EnVocabulary>>
+
+    @Query("SELECT * FROM en_vocabulary")
+    suspend fun getAll(): List<EnVocabulary>
 }
 
 @Database(entities = [EnVocabulary::class], version = 1, exportSchema = false)

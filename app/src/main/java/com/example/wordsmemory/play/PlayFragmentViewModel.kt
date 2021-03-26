@@ -1,13 +1,42 @@
 package com.example.wordsmemory.play
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import com.example.wordsmemory.EnVocabulary
 import com.example.wordsmemory.EnVocabularyDao
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class PlayFragmentViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
 
-    var vocabularyList = dbDao.getAll()
+    private var vocabularyList = emptyList<EnVocabulary>()
+
+    private val _vocabularyItem = MutableLiveData<EnVocabulary>()
+    val vocabularyItem: LiveData<EnVocabulary>
+        get() = _vocabularyItem
+
+    val translationText = MutableLiveData<String>()
+
+    private val _isTranslationOk = MutableLiveData<Boolean>()
+    val isTranslationOk: LiveData<Boolean>
+        get() = _isTranslationOk
+
+    init {
+        viewModelScope.launch {
+            vocabularyList = dbDao.getAll()
+            setPlayWord()
+        }
+    }
+
+    private fun setPlayWord() {
+        val randomIndex = Random.nextInt(vocabularyList.size)
+        _vocabularyItem.value = vocabularyList[randomIndex]
+    }
+
+    fun onCheckClicked() {
+        _isTranslationOk.value =
+            translationText.value!!.equals(_vocabularyItem.value!!.itWord, ignoreCase = true)
+    }
 }
 
 class PlayFragmentViewModelFactory(
