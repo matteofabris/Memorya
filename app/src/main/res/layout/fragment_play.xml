@@ -11,6 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".play.PlayFragment">
@@ -93,6 +94,7 @@
             style="@style/buttonStyle"
             android:background="@drawable/button_background"
             android:contentDescription="@string/logo_image"
+            android:enabled="@{playViewModel.buttonEnabled}"
             android:letterSpacing="0"
             android:onClick="@{() -> playViewModel.onCheckClicked()}"
             android:text="@string/check_word"
