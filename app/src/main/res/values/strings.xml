@@ -3,10 +3,13 @@
     <string name="translation">Translation</string>
     <string name="logo_image">Logo Image</string>
     <string name="vocabulary">Vocabulary</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="english_word">ENGLISH WORD:</string>
     <string name="translate">TRANSLATE:</string>
     <string name="app_icon">App Icon</string>
     <string name="check_word">CHECK WORD</string>
+    <string name="right_translation">Risposta esatta!!</string>
+    <string name="wrong_translation">Hai sbagliato, riprova!</string>
+    <string name="english">ENGLISH</string>
+    <string name="italian">ITALIAN</string>
 </resources>

@@ -12,30 +12,33 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/vocabularyItemView"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="@drawable/vocabulary_item_background">
 
         <TextView
             android:id="@+id/enWordTextView"
+            style="@style/wm_labelStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            app:enWord="@{vocabularyItem}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/itWordTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:enWord="@{vocabularyItem}"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/itWordTextView"
+            style="@style/wm_labelStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            app:itWord="@{vocabularyItem}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/enWordTextView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:itWord="@{vocabularyItem}"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

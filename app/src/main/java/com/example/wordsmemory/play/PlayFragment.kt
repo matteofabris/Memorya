@@ -64,7 +64,8 @@ class PlayFragment : Fragment() {
         viewModel.isTranslationOk.observe(
             viewLifecycleOwner,
             {
-                val text: String = if (it) "Risposta esatta!!" else "Hai sbagliato, riprova!"
+                val text: String =
+                    if (it) getString(R.string.right_translation) else getString(R.string.wrong_translation)
                 Toast.makeText(this.context, text, Toast.LENGTH_SHORT).show()
 
                 changeBackgroundColor(!it)

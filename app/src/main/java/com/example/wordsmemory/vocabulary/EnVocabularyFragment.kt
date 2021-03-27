@@ -14,6 +14,12 @@ class EnVocabularyFragment : Fragment() {
     @InternalCoroutinesApi
     private lateinit var viewModel: EnVocabularyViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.actionBar?.title = "Vocabulary"
+    }
+
     @InternalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +35,7 @@ class EnVocabularyFragment : Fragment() {
 
         viewModel.vocabularyList.observe(
             viewLifecycleOwner,
-            { it?.let { vocabularyAdapter.submitList(it) } })
+            { it?.let { vocabularyAdapter.addHeaderAndSubmitList(it) } })
 
         return binding.root
     }
