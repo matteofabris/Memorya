@@ -16,15 +16,6 @@ class PlayFragmentViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
         get() = _vocabularyItem
 
     val translationText = MutableLiveData<String>()
-    //set(value) {
-    //    buttonEnabled.value = !value.value.isNullOrBlank()
-    //    field = value
-    //}
-
-    val buttonEnabled = MutableLiveData<Boolean>()
-    //private val _buttonEnabled = MutableLiveData<Boolean>()
-    //val buttonEnabled: LiveData<Boolean>
-    //    get() = _buttonEnabled
 
     private val _isTranslationOk = MutableLiveData<Boolean>()
     val isTranslationOk: LiveData<Boolean>

@@ -34,7 +34,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:backgroundTint="@color/wm_primary"
-            android:onClick="@{() -> enVocabularyViewModel.onAddClicked()}"
             android:src="@drawable/ic_add_white_18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/deleteButton"

@@ -37,6 +37,11 @@ class EnVocabularyFragment : Fragment() {
             viewLifecycleOwner,
             { it?.let { vocabularyAdapter.addHeaderAndSubmitList(it) } })
 
+        binding.addButton.setOnClickListener {
+            val addDialog = AddVocabularyItemFragment()
+            addDialog.show(parentFragmentManager, "addVocabularyItem")
+        }
+
         return binding.root
     }
 

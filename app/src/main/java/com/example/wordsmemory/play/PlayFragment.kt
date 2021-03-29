@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.wordsmemory.R
 import com.example.wordsmemory.VocabularyDatabase
+import com.example.wordsmemory.afterTextChanged
 import com.example.wordsmemory.databinding.FragmentPlayBinding
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -44,20 +45,14 @@ class PlayFragment : Fragment() {
 
         val filter = TranslateInputFilter()
         binding.translationEditText.filters = arrayOf(filter)
+        binding.translationEditText.afterTextChanged { s ->
+            binding.acceptTranslationButton.isEnabled = s.isNotEmpty()
 
-        setupTranslationObserver()
         setupResultObserver()
+        }
+
 
         return binding.root
-    }
-
-    private fun setupTranslationObserver() {
-        viewModel.translationText.observe(
-            viewLifecycleOwner,
-            {
-                viewModel.buttonEnabled.value = !it.isNullOrEmpty()
-            }
-        )
     }
 
     private fun setupResultObserver() {

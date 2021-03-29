@@ -12,4 +12,7 @@
     <string name="wrong_translation">Hai sbagliato, riprova!</string>
     <string name="english">ENGLISH</string>
     <string name="italian">ITALIAN</string>
+    <string name="italian_word">ITALIAN WORD:</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
 </resources>
