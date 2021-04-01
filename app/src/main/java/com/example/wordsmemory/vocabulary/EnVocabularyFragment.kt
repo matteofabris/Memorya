@@ -1,5 +1,6 @@
 package com.example.wordsmemory.vocabulary
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ class EnVocabularyFragment : Fragment() {
         activity?.actionBar?.title = "Vocabulary"
     }
 
+    @SuppressLint("InflateParams")
     @InternalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +40,8 @@ class EnVocabularyFragment : Fragment() {
             { it?.let { vocabularyAdapter.addHeaderAndSubmitList(it) } })
 
         binding.addButton.setOnClickListener {
-            val addDialog = AddVocabularyItemFragment()
-            addDialog.show(parentFragmentManager, "addVocabularyItem")
+            val addVocabularyItemBottomFragment = AddVocabularyItemBottomFragment.newInstance()
+            addVocabularyItemBottomFragment.show(parentFragmentManager, "add_word")
         }
 
         return binding.root

@@ -16,7 +16,6 @@
         android:layout_height="match_parent"
         tools:context=".play.PlayFragment">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="0dp"
@@ -94,16 +93,15 @@
             style="@style/buttonStyle"
             android:background="@drawable/button_background"
             android:contentDescription="@string/logo_image"
+            android:enabled="false"
             android:letterSpacing="0"
             android:onClick="@{() -> playViewModel.onCheckClicked()}"
             android:text="@string/check_word"
-            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-            app:layout_constraintVertical_bias="0.060000002"
-            app:srcCompat="@drawable/abc_vector_test" />
+            app:layout_constraintVertical_bias="0.060000002" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

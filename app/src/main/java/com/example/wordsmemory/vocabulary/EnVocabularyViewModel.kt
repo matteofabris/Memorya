@@ -17,7 +17,7 @@ class EnVocabularyViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
     }
 
     fun onRemoveClicked() {
-
+        mockWords()
     }
 
     fun mockWords() {

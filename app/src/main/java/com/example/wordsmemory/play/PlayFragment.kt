@@ -47,12 +47,20 @@ class PlayFragment : Fragment() {
         binding.translationEditText.filters = arrayOf(filter)
         binding.translationEditText.afterTextChanged { s ->
             binding.acceptTranslationButton.isEnabled = s.isNotEmpty()
-
-        setupResultObserver()
         }
 
+        setupResultObserver()
 
         return binding.root
+    }
+
+    @InternalCoroutinesApi
+    private fun createViewModel() {
+        val application = requireNotNull(this.activity).application
+        val dbDao = VocabularyDatabase.getInstance(application).enVocabularyDao()
+
+        val factory = PlayFragmentViewModelFactory(dbDao)
+        viewModel = ViewModelProvider(this, factory).get(PlayFragmentViewModel::class.java)
     }
 
     private fun setupResultObserver() {
@@ -80,15 +88,6 @@ class PlayFragment : Fragment() {
                 binding.container.setBackgroundColor(Color.TRANSPARENT)
             }
         }
-    }
-
-    @InternalCoroutinesApi
-    private fun createViewModel() {
-        val application = requireNotNull(this.activity).application
-        val dbDao = VocabularyDatabase.getInstance(application).enVocabularyDao()
-
-        val factory = PlayFragmentViewModelFactory(dbDao)
-        viewModel = ViewModelProvider(this, factory).get(PlayFragmentViewModel::class.java)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
