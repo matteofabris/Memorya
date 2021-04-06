@@ -12,10 +12,6 @@ class EnVocabularyViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
 
     var vocabularyList = dbDao.getAllAsLiveData()
 
-    fun onAddClicked() {
-
-    }
-
     fun onRemoveClicked() {
         mockWords()
     }

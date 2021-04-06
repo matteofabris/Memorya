@@ -1,10 +1,10 @@
 package com.example.wordsmemory.play
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.Spanned
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
@@ -13,13 +13,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.wordsmemory.R
+import com.example.wordsmemory.TranslateInputFilter
 import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.afterTextChanged
 import com.example.wordsmemory.databinding.FragmentPlayBinding
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
 
 class PlayFragment : Fragment() {
 
@@ -52,6 +52,11 @@ class PlayFragment : Fragment() {
         setupResultObserver()
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.setPlayWord()
     }
 
     @InternalCoroutinesApi
@@ -96,29 +101,17 @@ class PlayFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
-                || super.onOptionsItemSelected(item)
-    }
-}
-
-internal class TranslateInputFilter : InputFilter {
-    override fun filter(
-        source: CharSequence?,
-        start: Int,
-        end: Int,
-        dest: Spanned?,
-        dstart: Int,
-        dend: Int
-    ): CharSequence {
-        if (source == null) return ""
-
-        for (i in start until end) {
-            if (!Character.isLetter(source[i]) ||
-                Character.isSpaceChar(source[i])
-            ) {
-                return ""
+        if (NavigationUI.onNavDestinationSelected(item, requireView().findNavController())) {
+            val view = activity?.currentFocus
+            if (view != null) {
+                val imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
             }
+
+            return true
         }
-        return source
+
+        return super.onOptionsItemSelected(item)
     }
 }
+

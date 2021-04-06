@@ -40,7 +40,7 @@ class EnVocabularyFragment : Fragment() {
             { it?.let { vocabularyAdapter.addHeaderAndSubmitList(it) } })
 
         binding.addButton.setOnClickListener {
-            val addVocabularyItemBottomFragment = AddVocabularyItemBottomFragment.newInstance()
+            val addVocabularyItemBottomFragment = AddVocabularyItemSheet.newInstance()
             addVocabularyItemBottomFragment.show(parentFragmentManager, "add_word")
         }
 

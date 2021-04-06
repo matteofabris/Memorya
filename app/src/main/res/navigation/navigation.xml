@@ -14,14 +14,5 @@
         android:id="@+id/enVocabularyFragment"
         android:name="com.example.wordsmemory.vocabulary.EnVocabularyFragment"
         android:label="EnVocabularyFragment"
-        tools:layout="@layout/fragment_en_vocabulary">
-        <action
-            android:id="@+id/action_enVocabularyFragment_to_addVocabularyItemFragment"
-            app:destination="@id/addVocabularyItemFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/addVocabularyItemFragment"
-        android:name="com.example.wordsmemory.vocabulary.AddVocabularyItemFragment"
-        android:label="add_vocabulary_item_fragment"
-        tools:layout="@layout/add_vocabulary_item_fragment" />
+        tools:layout="@layout/fragment_en_vocabulary"/>
 </navigation>

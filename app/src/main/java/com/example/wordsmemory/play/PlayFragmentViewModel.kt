@@ -28,7 +28,7 @@ class PlayFragmentViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
         }
     }
 
-    private fun setPlayWord() {
+    fun setPlayWord() {
         if (vocabularyList.isNotEmpty()) {
             val randomIndex = Random.nextInt(vocabularyList.size)
             _vocabularyItem.value = vocabularyList[randomIndex]
