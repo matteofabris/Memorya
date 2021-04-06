@@ -56,11 +56,12 @@ class EnVocabularyDiffCallback : DiffUtil.ItemCallback<DataItem>() {
     override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
         return oldItem == newItem
     }
-
 }
 
 class ViewHolder private constructor(private val binding: VocabularyItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
+
+    var itemId: Int = -1
 
     companion object {
         fun from(parent: ViewGroup): ViewHolder {
@@ -72,6 +73,7 @@ class ViewHolder private constructor(private val binding: VocabularyItemBinding)
     }
 
     fun bind(item: EnVocabulary) {
+        itemId = item.id
         binding.vocabularyItem = item
         binding.executePendingBindings()
     }

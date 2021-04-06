@@ -25,4 +25,19 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/medium_font_size</item>
     </style>
+
+    <style name="topBarTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:fontFamily">@font/doppio_one</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/big_font_size</item>
+    </style>
+
+    <style name="topBarStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:backgroundTint">@color/wm_primaryVariant</item>
+    </style>
 </resources>

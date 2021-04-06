@@ -3,7 +3,9 @@ package com.example.wordsmemory.play
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.graphics.ColorUtils
@@ -11,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.example.wordsmemory.R
 import com.example.wordsmemory.TranslateInputFilter
 import com.example.wordsmemory.VocabularyDatabase
@@ -43,12 +44,8 @@ class PlayFragment : Fragment() {
         binding.playViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val filter = TranslateInputFilter()
-        binding.translationEditText.filters = arrayOf(filter)
-        binding.translationEditText.afterTextChanged { s ->
-            binding.acceptTranslationButton.isEnabled = s.isNotEmpty()
-        }
-
+        setupEditText()
+        setupVocabularyButtonListener()
         setupResultObserver()
 
         return binding.root
@@ -66,6 +63,26 @@ class PlayFragment : Fragment() {
 
         val factory = PlayFragmentViewModelFactory(dbDao)
         viewModel = ViewModelProvider(this, factory).get(PlayFragmentViewModel::class.java)
+    }
+
+    private fun setupEditText() {
+        val filter = TranslateInputFilter()
+        binding.translationEditText.filters = arrayOf(filter)
+        binding.translationEditText.afterTextChanged { s ->
+            binding.acceptTranslationButton.isEnabled = s.isNotEmpty()
+        }
+    }
+
+    private fun setupVocabularyButtonListener() {
+        binding.vocabularyButton.setOnClickListener {
+            it.findNavController().navigate(R.id.action_playFragment_to_enVocabularyFragment)
+
+            val view = activity?.currentFocus
+            if (view != null) {
+                val imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+        }
     }
 
     private fun setupResultObserver() {
@@ -95,23 +112,23 @@ class PlayFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.main_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (NavigationUI.onNavDestinationSelected(item, requireView().findNavController())) {
-            val view = activity?.currentFocus
-            if (view != null) {
-                val imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
-            }
-
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//        inflater.inflate(R.menu.main_menu, menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (NavigationUI.onNavDestinationSelected(item, requireView().findNavController())) {
+//            val view = activity?.currentFocus
+//            if (view != null) {
+//                val imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//                imm.hideSoftInputFromWindow(view.windowToken, 0)
+//            }
+//
+//            return true
+//        }
+//
+//        return super.onOptionsItemSelected(item)
+//    }
 }
 

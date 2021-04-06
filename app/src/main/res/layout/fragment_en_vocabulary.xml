@@ -10,49 +10,75 @@
             type="com.example.wordsmemory.vocabulary.EnVocabularyViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".vocabulary.EnVocabularyFragment">
+        android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/vocabularyList"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/addButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.appbar.AppBarLayout style="@style/topBarStyle">
 
-        <ImageButton
-            android:id="@+id/addButton"
-            style="@style/buttonStyle"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/wm_primary"
-            android:src="@drawable/ic_add_white_18dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/deleteButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/vocabularyList"
-            tools:ignore="ContentDescription" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/deleteButton"
-            style="@style/buttonStyle"
-            android:backgroundTint="@color/wm_primary"
-            android:enabled="false"
-            android:onClick="@{() -> enVocabularyViewModel.onRemoveClicked()}"
-            android:src="@drawable/ic_delete_white_18dp"
-            app:layout_constraintBottom_toBottomOf="@id/addButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/addButton"
-            app:layout_constraintTop_toTopOf="@+id/addButton"
-            tools:ignore="ContentDescription" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/topBarTitle"
+                    style="@style/topBarTitle"
+                    android:text="@string/english_vocabulary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".vocabulary.EnVocabularyFragment">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/vocabularyList"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toTopOf="@id/addButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/addButton"
+                style="@style/buttonStyle"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/wm_primary"
+                android:src="@drawable/ic_add_white_18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/deleteButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vocabularyList"
+                tools:ignore="ContentDescription" />
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                style="@style/buttonStyle"
+                android:backgroundTint="@color/wm_primary"
+                android:enabled="false"
+                android:onClick="@{() -> enVocabularyViewModel.onRemoveClicked()}"
+                android:src="@drawable/ic_delete_white_18dp"
+                app:layout_constraintBottom_toBottomOf="@id/addButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/addButton"
+                app:layout_constraintTop_toTopOf="@+id/addButton"
+                tools:ignore="ContentDescription" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

@@ -9,7 +9,11 @@
         android:id="@+id/playFragment"
         android:name="com.example.wordsmemory.play.PlayFragment"
         android:label="PlayFragment"
-        tools:layout="@layout/fragment_play"/>
+        tools:layout="@layout/fragment_play">
+        <action
+            android:id="@+id/action_playFragment_to_enVocabularyFragment"
+            app:destination="@id/enVocabularyFragment" />
+    </fragment>
     <fragment
         android:id="@+id/enVocabularyFragment"
         android:name="com.example.wordsmemory.vocabulary.EnVocabularyFragment"

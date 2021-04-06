@@ -31,6 +31,12 @@ class EnVocabularyViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
             list.forEach { dbDao.insert(it) }
         }
     }
+
+    fun removeItem(id: Int) {
+        viewModelScope.launch {
+            dbDao.delete(vocabularyList.value!!.first { it.id == id })
+        }
+    }
 }
 
 class EnVocabularyViewModelFactory(
