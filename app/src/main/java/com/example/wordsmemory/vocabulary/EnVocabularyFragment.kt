@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.paris.extensions.style
+import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.databinding.FragmentEnVocabularyBinding
@@ -30,6 +32,7 @@ class EnVocabularyFragment : Fragment() {
         binding = FragmentEnVocabularyBinding.inflate(inflater)
 
         createViewModel()
+        setStyles()
         setupVocabularyList()
         setupAddButtonListener()
 
@@ -44,6 +47,16 @@ class EnVocabularyFragment : Fragment() {
         viewModel = ViewModelProvider(this, factory).get(EnVocabularyViewModel::class.java)
 
         binding.enVocabularyViewModel = viewModel
+    }
+
+    private fun setStyles() {
+        if (Constants.isTablet) {
+            binding.addButton.style(R.style.buttonStyleTablet)
+            binding.addButton.setImageResource(R.drawable.outline_add_white_36)
+
+            binding.topBar.style(R.style.topBarStyleTablet)
+            binding.topBarTitle.style(R.style.topBarTitleTablet)
+        }
     }
 
     private fun setupVocabularyList() {

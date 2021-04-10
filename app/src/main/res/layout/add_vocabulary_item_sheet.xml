@@ -33,7 +33,7 @@
 
             <TextView
                 android:id="@+id/enWordTitleTextView"
-                style="@style/wm_labelStyle"
+                style="@style/wm_labelStylePhone"
                 android:text="@string/english_word"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toTopOf="@+id/itWordEditText"
@@ -44,7 +44,7 @@
 
             <EditText
                 android:id="@+id/enWordEditText"
-                style="@style/wm_labelStyle"
+                style="@style/wm_labelStylePhone"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
@@ -57,7 +57,7 @@
 
             <TextView
                 android:id="@+id/itWordTitleTextView"
-                style="@style/wm_labelStyle"
+                style="@style/wm_labelStylePhone"
                 android:text="@string/italian_word"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -68,7 +68,7 @@
 
             <EditText
                 android:id="@+id/itWordEditText"
-                style="@style/wm_labelStyle"
+                style="@style/wm_labelStylePhone"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
@@ -83,7 +83,7 @@
 
         <Button
             android:id="@+id/addButton"
-            style="@style/buttonStyle"
+            style="@style/buttonStylePhone"
             android:layout_marginBottom="20dp"
             android:backgroundTint="@color/wm_primary"
             android:enabled="false"
@@ -96,7 +96,7 @@
 
         <Button
             android:id="@+id/googleTranslateButton"
-            style="@style/buttonStyle"
+            style="@style/buttonStylePhone"
             android:backgroundTint="@color/wm_primary"
             android:text="@string/g_translate"
             android:textSize="12sp"

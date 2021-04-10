@@ -10,12 +10,17 @@ import kotlin.random.Random
 class PlayFragmentViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
 
     private var vocabularyList = emptyList<EnVocabulary>()
+    private var allAttempts = 0
+    private var correctAttempts = 0
 
     private val _vocabularyItem = MutableLiveData<EnVocabulary>()
     val vocabularyItem: LiveData<EnVocabulary>
         get() = _vocabularyItem
 
     val translationText = MutableLiveData<String>()
+
+    val recentAttemptsText =
+        MutableLiveData("Recent attempts: $correctAttempts/$allAttempts correct")
 
     private val _isTranslationOk = MutableLiveData<Boolean>()
     val isTranslationOk: LiveData<Boolean>

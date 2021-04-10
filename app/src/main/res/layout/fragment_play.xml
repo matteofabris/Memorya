@@ -15,7 +15,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.appbar.AppBarLayout style="@style/topBarStyle">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/topBar"
+            style="@style/topBarStylePhone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -23,7 +25,7 @@
 
                 <TextView
                     android:id="@+id/topBarTitle"
-                    style="@style/topBarTitle"
+                    style="@style/topBarTitlePhone"
                     android:text="@string/app_title"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_library_books_white_18dp"
+                    android:src="@drawable/outline_library_books_white_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
@@ -71,7 +73,7 @@
 
                 <TextView
                     android:id="@+id/randomWordTitleTextView"
-                    style="@style/wm_labelStyle"
+                    style="@style/wm_labelStylePhone"
                     android:text="@string/english_word"
                     android:textAlignment="textStart"
                     app:layout_constraintBottom_toTopOf="@+id/translationEditText"
@@ -82,7 +84,7 @@
 
                 <TextView
                     android:id="@+id/randomWordTextView"
-                    style="@style/wm_labelStyle"
+                    style="@style/wm_labelStylePhone"
                     android:text="@{playViewModel.vocabularyItem.enWord}"
                     app:layout_constraintBottom_toTopOf="@+id/translationEditText"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -92,7 +94,7 @@
 
                 <TextView
                     android:id="@+id/translationEditTextTitle"
-                    style="@style/wm_labelStyle"
+                    style="@style/wm_labelStylePhone"
                     android:text="@string/translate"
                     android:textAlignment="textStart"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -103,7 +105,7 @@
 
                 <EditText
                     android:id="@+id/translationEditText"
-                    style="@style/wm_labelStyle"
+                    style="@style/wm_labelStylePhone"
                     android:ems="10"
                     android:importantForAutofill="no"
                     android:inputType="textPersonName"
@@ -116,6 +118,36 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:id="@+id/recentAttemptsTextView"
+                style="@style/wm_recentAttemptsLabelStylePhone"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@{playViewModel.recentAttemptsText}"
+                app:layout_constraintBottom_toTopOf="@+id/acceptTranslationButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                app:layout_constraintVertical_bias="0.01999998"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <Button
+                android:id="@+id/acceptTranslationButton"
+                style="@style/buttonStylePhone"
+                android:background="@drawable/button_background"
+                android:contentDescription="@string/logo_image"
+                android:enabled="false"
+                android:letterSpacing="0"
+                android:onClick="@{() -> playViewModel.onCheckClicked()}"
+                android:text="@string/check_word"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recentAttemptsTextView"
+                app:layout_constraintVertical_bias="0.060000002" />
+
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
@@ -126,21 +158,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/acceptTranslationButton"
                 app:srcCompat="@mipmap/ic_launcher" />
-
-            <Button
-                android:id="@+id/acceptTranslationButton"
-                style="@style/buttonStyle"
-                android:background="@drawable/button_background"
-                android:contentDescription="@string/logo_image"
-                android:enabled="false"
-                android:letterSpacing="0"
-                android:onClick="@{() -> playViewModel.onCheckClicked()}"
-                android:text="@string/check_word"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-                app:layout_constraintVertical_bias="0.060000002" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

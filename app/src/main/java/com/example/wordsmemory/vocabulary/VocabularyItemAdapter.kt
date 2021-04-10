@@ -1,13 +1,14 @@
 package com.example.wordsmemory.vocabulary
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.EnVocabulary
 import com.example.wordsmemory.R
+import com.example.wordsmemory.databinding.VocabularyHeaderBinding
 import com.example.wordsmemory.databinding.VocabularyItemBinding
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
@@ -35,7 +36,10 @@ class VocabularyItemAdapter :
         when (holder) {
             is ViewHolder -> {
                 val item = getItem(position) as DataItem.EnVocabularyItem
-                holder.bind(item.vocabulary)
+                holder.setLayout(item.vocabulary)
+            }
+            is HeaderViewHolder -> {
+                holder.setStyles()
             }
         }
     }
@@ -72,20 +76,29 @@ class ViewHolder private constructor(private val binding: VocabularyItemBinding)
         }
     }
 
-    fun bind(item: EnVocabulary) {
+    fun setLayout(item: EnVocabulary) {
+        binding.enWordTextView.style(R.style.wm_labelStyleTablet)
+        binding.itWordTextView.style(R.style.wm_labelStyleTablet)
+
         itemId = item.id
         binding.vocabularyItem = item
         binding.executePendingBindings()
     }
 }
 
-class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class HeaderViewHolder private constructor(private val binding: VocabularyHeaderBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     companion object {
         fun from(parent: ViewGroup): HeaderViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
-            val view = layoutInflater.inflate(R.layout.vocabulary_header, parent, false)
-            return HeaderViewHolder(view)
+            val binding = VocabularyHeaderBinding.inflate(layoutInflater, parent, false)
+            return HeaderViewHolder(binding)
         }
+    }
+
+    fun setStyles() {
+        binding.enColumnTextView.style(R.style.wm_labelStyleTablet)
+        binding.itColumnTextView.style(R.style.wm_labelStyleTablet)
     }
 }
 

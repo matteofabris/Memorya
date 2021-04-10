@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.*
 import com.example.wordsmemory.databinding.AddVocabularyItemSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
@@ -28,6 +28,7 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment() {
 
         createViewModel()
         binding.addItemViewModel = viewModel
+        setStyles()
         setEditTextsFilter()
         setupButtons()
 
@@ -51,6 +52,30 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment() {
             ViewModelProvider(this, factory).get(AddVocabularyItemSheetViewModel::class.java)
     }
 
+    private fun setStyles() {
+        if (Constants.isTablet) {
+            binding.addButton.style(R.style.buttonStyleTablet)
+            binding.googleTranslateButton.style(R.style.buttonStyleTablet)
+            binding.googleTranslateButton.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.baseline_g_translate_white_36,
+                0,
+                0,
+                0
+            )
+
+            binding.enWordTitleTextView.style(R.style.wm_labelStyleTablet)
+            binding.enWordEditText.style(R.style.wm_labelStyleTablet)
+            binding.itWordTitleTextView.style(R.style.wm_labelStyleTablet)
+            binding.itWordEditText.style(R.style.wm_labelStyleTablet)
+        }
+    }
+
+    private fun setEditTextsFilter() {
+        val filter = TranslateInputFilter()
+        binding.enWordEditText.filters = arrayOf(filter)
+        binding.itWordEditText.filters = arrayOf(filter)
+    }
+
     private fun setupButtons() {
         binding.addButton.setOnClickListener {
             viewModel.saveVocabularyItem()
@@ -72,11 +97,5 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment() {
         binding.itWordEditText.afterTextChanged { s ->
             binding.addButton.isEnabled = s.isNotEmpty() && binding.enWordEditText.text.isNotEmpty()
         }
-    }
-
-    private fun setEditTextsFilter() {
-        val filter = TranslateInputFilter()
-        binding.enWordEditText.filters = arrayOf(filter)
-        binding.itWordEditText.filters = arrayOf(filter)
     }
 }

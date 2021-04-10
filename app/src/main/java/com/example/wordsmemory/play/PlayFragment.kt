@@ -3,6 +3,7 @@ package com.example.wordsmemory.play
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.example.wordsmemory.R
-import com.example.wordsmemory.TranslateInputFilter
-import com.example.wordsmemory.VocabularyDatabase
-import com.example.wordsmemory.afterTextChanged
+import com.airbnb.paris.extensions.style
+import com.example.wordsmemory.*
 import com.example.wordsmemory.databinding.FragmentPlayBinding
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -44,6 +43,7 @@ class PlayFragment : Fragment() {
         binding.playViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        setStyles()
         setupEditText()
         setupVocabularyButtonListener()
         setupResultObserver()
@@ -63,6 +63,22 @@ class PlayFragment : Fragment() {
 
         val factory = PlayFragmentViewModelFactory(dbDao)
         viewModel = ViewModelProvider(this, factory).get(PlayFragmentViewModel::class.java)
+    }
+
+    private fun setStyles() {
+        if (Constants.isTablet) {
+            binding.acceptTranslationButton.style(R.style.buttonStyleTablet)
+            binding.vocabularyButton.setImageResource(R.drawable.outline_library_books_white_36)
+
+            binding.randomWordTitleTextView.style(R.style.wm_labelStyleTablet)
+            binding.randomWordTextView.style(R.style.wm_labelStyleTablet)
+            binding.translationEditTextTitle.style(R.style.wm_labelStyleTablet)
+            binding.translationEditText.style(R.style.wm_labelStyleTablet)
+            binding.recentAttemptsTextView.style(R.style.wm_recentAttemptsLabelStyleTablet)
+
+            binding.topBar.style(R.style.topBarStyleTablet)
+            binding.topBarTitle.style(R.style.topBarTitleTablet)
+        }
     }
 
     private fun setupEditText() {
@@ -91,24 +107,29 @@ class PlayFragment : Fragment() {
             {
                 val text: String =
                     if (it) getString(R.string.right_translation) else getString(R.string.wrong_translation)
-                Toast.makeText(this.context, text, Toast.LENGTH_SHORT).show()
+                val toast = Toast.makeText(this.context, text, Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.TOP, 0, 0)
+                toast.show()
 
-                changeBackgroundColor(!it)
+                changeBackgroundColor(it)
             })
     }
 
-    private fun changeBackgroundColor(showBackground: Boolean) {
-        if (showBackground) {
-            lifecycleScope.launch {
-                binding.container.setBackgroundColor(
-                    ColorUtils.setAlphaComponent(
-                        Color.RED,
-                        200
-                    )
+    private fun changeBackgroundColor(rightAnswer: Boolean) {
+        val color = if (rightAnswer) resources.getColor(
+            R.color.wm_primaryVariant,
+            context?.theme
+        ) else Color.RED
+
+        lifecycleScope.launch {
+            binding.container.setBackgroundColor(
+                ColorUtils.setAlphaComponent(
+                    color,
+                    200
                 )
-                delay(170)
-                binding.container.setBackgroundColor(Color.TRANSPARENT)
-            }
+            )
+            delay(170)
+            binding.container.setBackgroundColor(Color.TRANSPARENT)
         }
     }
 
