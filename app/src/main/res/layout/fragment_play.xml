@@ -123,7 +123,7 @@
                 style="@style/wm_recentAttemptsLabelStylePhone"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="@{playViewModel.recentAttemptsText}"
+                android:text="@={playViewModel.recentAttemptsText}"
                 app:layout_constraintBottom_toTopOf="@+id/acceptTranslationButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"

@@ -20,7 +20,7 @@ class PlayFragmentViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
     val translationText = MutableLiveData<String>()
 
     val recentAttemptsText =
-        MutableLiveData("Recent attempts: $correctAttempts/$allAttempts correct")
+        MutableLiveData(getRecentAttemptsText())
 
     private val _isTranslationOk = MutableLiveData<Boolean>()
     val isTranslationOk: LiveData<Boolean>
@@ -33,6 +33,11 @@ class PlayFragmentViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
         }
     }
 
+    companion object {
+        const val correctString = " correct"
+        const val recentAttemptsString = "Recent attempts: "
+    }
+
     fun setPlayWord() {
         if (vocabularyList.isNotEmpty()) {
             val randomIndex = Random.nextInt(vocabularyList.size)
@@ -41,13 +46,21 @@ class PlayFragmentViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
     }
 
     fun onCheckClicked() {
+        allAttempts++
         _isTranslationOk.value =
             translationText.value!!.equals(_vocabularyItem.value!!.itWord, ignoreCase = true)
 
         if (_isTranslationOk.value!!) {
+            correctAttempts++
             setPlayWord()
             translationText.value = ""
         }
+
+        recentAttemptsText.value = getRecentAttemptsText()
+    }
+
+    private fun getRecentAttemptsText(): String {
+        return "$recentAttemptsString$correctAttempts/$allAttempts$correctString"
     }
 }
 
