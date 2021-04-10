@@ -6,6 +6,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="english_word">ENGLISH WORD:</string>
     <string name="translate">TRANSLATE:</string>
+    <string name="g_translate">TRANSLATE</string>
     <string name="app_icon">App Icon</string>
     <string name="check_word">CHECK WORD</string>
     <string name="right_translation">Risposta esatta!!</string>

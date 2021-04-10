@@ -89,16 +89,18 @@
             android:enabled="false"
             android:text="@string/add"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/cancelButton"
+            app:layout_constraintEnd_toStartOf="@id/googleTranslateButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextContainer"
             tools:ignore="ContentDescription" />
 
         <Button
-            android:id="@+id/cancelButton"
+            android:id="@+id/googleTranslateButton"
             style="@style/buttonStyle"
             android:backgroundTint="@color/wm_primary"
-            android:text="@string/cancel"
+            android:text="@string/g_translate"
+            android:textSize="12sp"
+            app:icon="@drawable/baseline_g_translate_white_24"
             app:layout_constraintBottom_toBottomOf="@id/addButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/addButton"

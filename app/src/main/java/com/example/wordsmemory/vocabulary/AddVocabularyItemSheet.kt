@@ -5,12 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.example.wordsmemory.TranslateInputFilter
-import com.example.wordsmemory.VocabularyDatabase
-import com.example.wordsmemory.afterTextChanged
+import androidx.lifecycle.lifecycleScope
+import com.example.wordsmemory.*
 import com.example.wordsmemory.databinding.AddVocabularyItemSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 class AddVocabularyItemSheet : BottomSheetDialogFragment() {
@@ -42,7 +43,10 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment() {
         val application = requireNotNull(this.activity).application
         val dbDao = VocabularyDatabase.getInstance(application).enVocabularyDao()
 
-        val factory = AddVocabularyItemSheetViewModelFactory(dbDao)
+        val factory = AddVocabularyItemSheetViewModelFactory(
+            dbDao,
+            resources.openRawResource(R.raw.wordstranslationcredentials)
+        )
         viewModel =
             ViewModelProvider(this, factory).get(AddVocabularyItemSheetViewModel::class.java)
     }
@@ -52,8 +56,14 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment() {
             viewModel.saveVocabularyItem()
             dismiss()
         }
-        binding.cancelButton.setOnClickListener {
-            dismiss()
+        binding.googleTranslateButton.setOnClickListener {
+            if (activity != null) {
+                lifecycleScope.launch {
+                    if (checkInternetConnection(requireActivity())) {
+                        viewModel.translate()
+                    }
+                }
+            }
         }
 
         binding.enWordEditText.afterTextChanged { s ->

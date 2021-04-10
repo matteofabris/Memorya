@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.wordsmemory.databinding.ActivityMainBinding
 import kotlinx.coroutines.InternalCoroutinesApi
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
