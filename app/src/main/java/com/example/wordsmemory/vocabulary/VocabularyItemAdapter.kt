@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.paris.extensions.style
+import com.example.wordsmemory.Constants
 import com.example.wordsmemory.EnVocabulary
 import com.example.wordsmemory.R
 import com.example.wordsmemory.databinding.VocabularyHeaderBinding
@@ -77,8 +78,10 @@ class ViewHolder private constructor(private val binding: VocabularyItemBinding)
     }
 
     fun setLayout(item: EnVocabulary) {
-        binding.enWordTextView.style(R.style.wm_labelStyleTablet)
-        binding.itWordTextView.style(R.style.wm_labelStyleTablet)
+        if (Constants.isTablet) {
+            binding.enWordTextView.style(R.style.wm_labelStyleTablet)
+            binding.itWordTextView.style(R.style.wm_labelStyleTablet)
+        }
 
         itemId = item.id
         binding.vocabularyItem = item
@@ -97,8 +100,10 @@ class HeaderViewHolder private constructor(private val binding: VocabularyHeader
     }
 
     fun setStyles() {
-        binding.enColumnTextView.style(R.style.wm_labelStyleTablet)
-        binding.itColumnTextView.style(R.style.wm_labelStyleTablet)
+        if (Constants.isTablet) {
+            binding.enColumnTextView.style(R.style.wm_labelStyleTablet)
+            binding.itColumnTextView.style(R.style.wm_labelStyleTablet)
+        }
     }
 }
 
