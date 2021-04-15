@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -16,13 +17,17 @@ import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.databinding.FragmentEnVocabularyBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 class EnVocabularyFragment : Fragment() {
 
     private lateinit var viewModel: EnVocabularyViewModel
     private lateinit var binding: FragmentEnVocabularyBinding
+    private var _addClicked = false
 
     @SuppressLint("InflateParams")
     override fun onCreateView(
@@ -94,8 +99,17 @@ class EnVocabularyFragment : Fragment() {
 
     private fun setupAddButtonListener() {
         binding.addButton.setOnClickListener {
-            val addVocabularyItemBottomFragment = AddVocabularyItemSheet.newInstance()
-            addVocabularyItemBottomFragment.show(parentFragmentManager, "add_word")
+            if (!_addClicked) {
+                _addClicked = true
+
+                val addVocabularyItemBottomFragment = AddVocabularyItemSheet.newInstance()
+                addVocabularyItemBottomFragment.show(parentFragmentManager, "add_word")
+
+                lifecycleScope.launch(Dispatchers.IO) {
+                    delay(500)
+                    _addClicked = false
+                }
+            }
         }
     }
 }
