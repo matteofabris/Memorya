@@ -85,7 +85,7 @@
             android:id="@+id/addButton"
             style="@style/buttonStylePhone"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/wm_primary"
+            android:background="@drawable/button_background"
             android:enabled="false"
             android:text="@string/add"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -97,7 +97,7 @@
         <Button
             android:id="@+id/googleTranslateButton"
             style="@style/buttonStylePhone"
-            android:backgroundTint="@color/wm_primary"
+            android:background="@drawable/button_background"
             android:enabled="false"
             android:text="@string/g_translate"
             android:textSize="12sp"
