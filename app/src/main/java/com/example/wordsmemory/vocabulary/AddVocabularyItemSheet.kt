@@ -93,6 +93,7 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment() {
 
         binding.enWordEditText.afterTextChanged { s ->
             binding.addButton.isEnabled = s.isNotEmpty() && binding.itWordEditText.text.isNotEmpty()
+            binding.googleTranslateButton.isEnabled = s.isNotEmpty()
         }
         binding.itWordEditText.afterTextChanged { s ->
             binding.addButton.isEnabled = s.isNotEmpty() && binding.enWordEditText.text.isNotEmpty()
