@@ -64,11 +64,10 @@ class TranslateInputFilter : InputFilter {
         if (source == null) return ""
 
         for (i in start until end) {
-            if (!Character.isLetter(source[i]) ||
-                Character.isSpaceChar(source[i])
-            ) {
+            if (dest != null && dest.toString() != "to" && !Character.isLetter(source[i]))
                 return ""
-            }
+            else if (dest != null && dest.toString() == "to" && Character.isWhitespace(source[i]))
+                return source
         }
         return source
     }
