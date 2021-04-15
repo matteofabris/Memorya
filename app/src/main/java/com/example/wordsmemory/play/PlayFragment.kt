@@ -85,7 +85,8 @@ class PlayFragment : Fragment() {
         val filter = TranslateInputFilter()
         binding.translationEditText.filters = arrayOf(filter)
         binding.translationEditText.afterTextChanged { s ->
-            binding.acceptTranslationButton.isEnabled = s.isNotEmpty()
+            binding.acceptTranslationButton.isEnabled =
+                binding.randomWordTextView.text.isNotEmpty() && s.isNotEmpty()
         }
     }
 
