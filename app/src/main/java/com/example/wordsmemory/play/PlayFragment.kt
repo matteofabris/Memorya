@@ -46,7 +46,7 @@ class PlayFragment : Fragment() {
         setStyles()
         setupEditText()
         setupVocabularyButtonListener()
-        setupResultObserver()
+        setupObservers()
 
         return binding.root
     }
@@ -101,7 +101,7 @@ class PlayFragment : Fragment() {
         }
     }
 
-    private fun setupResultObserver() {
+    private fun setupObservers() {
         viewModel.isTranslationOk.observe(
             viewLifecycleOwner,
             {
@@ -112,6 +112,12 @@ class PlayFragment : Fragment() {
                 toast.show()
 
                 changeBackgroundColor(it)
+            })
+
+        viewModel.vocabularyList.observe(
+            viewLifecycleOwner,
+            {
+                viewModel.setPlayWord()
             })
     }
 

@@ -1,15 +1,17 @@
 package com.example.wordsmemory.play
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.wordsmemory.EnVocabulary
 import com.example.wordsmemory.EnVocabularyDao
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-class PlayFragmentViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
+class PlayFragmentViewModel(dbDao: EnVocabularyDao) : ViewModel() {
 
-    private var vocabularyList = emptyList<EnVocabulary>()
+    var vocabularyList = dbDao.getAllAsLiveData()
     private var allAttempts = 0
     private var correctAttempts = 0
 
@@ -26,22 +28,19 @@ class PlayFragmentViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
     val isTranslationOk: LiveData<Boolean>
         get() = _isTranslationOk
 
-    init {
-        viewModelScope.launch {
-            vocabularyList = dbDao.getAll()
-            setPlayWord()
-        }
-    }
-
     companion object {
         const val correctString = " correct"
         const val recentAttemptsString = "Recent attempts: "
     }
 
     fun setPlayWord() {
-        if (vocabularyList.isNotEmpty()) {
-            val randomIndex = Random.nextInt(vocabularyList.size)
-            _vocabularyItem.value = vocabularyList[randomIndex]
+        if (vocabularyList.value != null) {
+            if (vocabularyList.value!!.isNotEmpty()) {
+                val randomIndex = Random.nextInt(vocabularyList.value!!.size)
+                _vocabularyItem.value = vocabularyList.value!![randomIndex]
+            } else {
+                _vocabularyItem.value = EnVocabulary("", "")
+            }
         }
     }
 
