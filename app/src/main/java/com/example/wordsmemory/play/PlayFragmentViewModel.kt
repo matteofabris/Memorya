@@ -12,8 +12,8 @@ import kotlin.random.Random
 class PlayFragmentViewModel(dbDao: EnVocabularyDao) : ViewModel() {
 
     var vocabularyList = dbDao.getAllAsLiveData()
-    private var allAttempts = 0
-    private var correctAttempts = 0
+    private var _allAttempts = 0
+    private var _correctAttempts = 0
 
     private val _vocabularyItem = MutableLiveData<EnVocabulary>()
     val vocabularyItem: LiveData<EnVocabulary>
@@ -45,12 +45,12 @@ class PlayFragmentViewModel(dbDao: EnVocabularyDao) : ViewModel() {
     }
 
     fun onCheckClicked() {
-        allAttempts++
+        _allAttempts++
         _isTranslationOk.value =
             translationText.value!!.equals(_vocabularyItem.value!!.itWord, ignoreCase = true)
 
         if (_isTranslationOk.value!!) {
-            correctAttempts++
+            _correctAttempts++
             setPlayWord()
             translationText.value = ""
         }
@@ -59,18 +59,18 @@ class PlayFragmentViewModel(dbDao: EnVocabularyDao) : ViewModel() {
     }
 
     private fun getRecentAttemptsText(): String {
-        return "$recentAttemptsString$correctAttempts/$allAttempts$correctString"
+        return "$recentAttemptsString$_correctAttempts/$_allAttempts$correctString"
     }
 }
 
 class PlayFragmentViewModelFactory(
-    private val dataSource: EnVocabularyDao
+    private val _dataSource: EnVocabularyDao
 ) : ViewModelProvider.Factory {
     @InternalCoroutinesApi
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PlayFragmentViewModel::class.java)) {
-            return PlayFragmentViewModel(dataSource) as T
+            return PlayFragmentViewModel(_dataSource) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

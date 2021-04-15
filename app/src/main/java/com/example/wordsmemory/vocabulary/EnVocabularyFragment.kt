@@ -25,8 +25,8 @@ import kotlinx.coroutines.launch
 @InternalCoroutinesApi
 class EnVocabularyFragment : Fragment() {
 
-    private lateinit var viewModel: EnVocabularyViewModel
-    private lateinit var binding: FragmentEnVocabularyBinding
+    private lateinit var _viewModel: EnVocabularyViewModel
+    private lateinit var _binding: FragmentEnVocabularyBinding
     private var _addClicked = false
 
     @SuppressLint("InflateParams")
@@ -34,14 +34,14 @@ class EnVocabularyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentEnVocabularyBinding.inflate(inflater)
+        _binding = FragmentEnVocabularyBinding.inflate(inflater)
 
         createViewModel()
         setStyles()
         setupVocabularyList()
         setupAddButtonListener()
 
-        return binding.root
+        return _binding.root
     }
 
     private fun createViewModel() {
@@ -49,29 +49,29 @@ class EnVocabularyFragment : Fragment() {
         val dbDao = VocabularyDatabase.getInstance(application).enVocabularyDao()
 
         val factory = EnVocabularyViewModelFactory(dbDao)
-        viewModel = ViewModelProvider(this, factory).get(EnVocabularyViewModel::class.java)
+        _viewModel = ViewModelProvider(this, factory).get(EnVocabularyViewModel::class.java)
 
-        binding.enVocabularyViewModel = viewModel
+        _binding.enVocabularyViewModel = _viewModel
     }
 
     private fun setStyles() {
         if (Constants.isTablet) {
-            binding.addButton.style(R.style.buttonStyleTablet)
-            binding.addButton.setImageResource(R.drawable.outline_add_white_36)
+            _binding.addButton.style(R.style.buttonStyleTablet)
+            _binding.addButton.setImageResource(R.drawable.outline_add_white_36)
 
-            binding.topBar.style(R.style.topBarStyleTablet)
-            binding.topBarTitle.style(R.style.topBarTitleTablet)
+            _binding.topBar.style(R.style.topBarStyleTablet)
+            _binding.topBarTitle.style(R.style.topBarTitleTablet)
         }
     }
 
     private fun setupVocabularyList() {
         val vocabularyAdapter = VocabularyItemAdapter()
-        binding.vocabularyList.adapter = vocabularyAdapter
+        _binding.vocabularyList.adapter = vocabularyAdapter
 
         setListDivider()
         setSwipeGesture()
 
-        viewModel.vocabularyList.observe(
+        _viewModel.vocabularyList.observe(
             viewLifecycleOwner,
             { it?.let { vocabularyAdapter.addHeaderAndSubmitList(it) } })
     }
@@ -84,21 +84,21 @@ class EnVocabularyFragment : Fragment() {
                 R.drawable.vocabulary_list_divider
             )!!
         )
-        binding.vocabularyList.addItemDecoration(itemDecoration)
+        _binding.vocabularyList.addItemDecoration(itemDecoration)
     }
 
     private fun setSwipeGesture() {
         val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                viewModel.removeItem((viewHolder as ViewHolder).itemId)
+                _viewModel.removeItem((viewHolder as ViewHolder).itemId)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
-        itemTouchHelper.attachToRecyclerView(binding.vocabularyList)
+        itemTouchHelper.attachToRecyclerView(_binding.vocabularyList)
     }
 
     private fun setupAddButtonListener() {
-        binding.addButton.setOnClickListener {
+        _binding.addButton.setOnClickListener {
             if (!_addClicked) {
                 _addClicked = true
 

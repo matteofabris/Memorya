@@ -37,7 +37,7 @@ class VocabularyItemAdapter :
         when (holder) {
             is ViewHolder -> {
                 val item = getItem(position) as DataItem.EnVocabularyItem
-                holder.setLayout(item.vocabulary)
+                holder.setLayout(item._vocabulary)
             }
             is HeaderViewHolder -> {
                 holder.setStyles()
@@ -63,8 +63,8 @@ class EnVocabularyDiffCallback : DiffUtil.ItemCallback<DataItem>() {
     }
 }
 
-class ViewHolder private constructor(private val binding: VocabularyItemBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class ViewHolder private constructor(private val _binding: VocabularyItemBinding) :
+    RecyclerView.ViewHolder(_binding.root) {
 
     var itemId: Int = -1
 
@@ -79,18 +79,18 @@ class ViewHolder private constructor(private val binding: VocabularyItemBinding)
 
     fun setLayout(item: EnVocabulary) {
         if (Constants.isTablet) {
-            binding.enWordTextView.style(R.style.wm_labelStyleTablet)
-            binding.itWordTextView.style(R.style.wm_labelStyleTablet)
+            _binding.enWordTextView.style(R.style.wm_labelStyleTablet)
+            _binding.itWordTextView.style(R.style.wm_labelStyleTablet)
         }
 
         itemId = item.id
-        binding.vocabularyItem = item
-        binding.executePendingBindings()
+        _binding.vocabularyItem = item
+        _binding.executePendingBindings()
     }
 }
 
-class HeaderViewHolder private constructor(private val binding: VocabularyHeaderBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class HeaderViewHolder private constructor(private val _binding: VocabularyHeaderBinding) :
+    RecyclerView.ViewHolder(_binding.root) {
     companion object {
         fun from(parent: ViewGroup): HeaderViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
@@ -101,8 +101,8 @@ class HeaderViewHolder private constructor(private val binding: VocabularyHeader
 
     fun setStyles() {
         if (Constants.isTablet) {
-            binding.enColumnTextView.style(R.style.wm_labelStyleTablet)
-            binding.itColumnTextView.style(R.style.wm_labelStyleTablet)
+            _binding.enColumnTextView.style(R.style.wm_labelStyleTablet)
+            _binding.itColumnTextView.style(R.style.wm_labelStyleTablet)
         }
     }
 }
@@ -110,8 +110,8 @@ class HeaderViewHolder private constructor(private val binding: VocabularyHeader
 sealed class DataItem {
     abstract val id: Int
 
-    data class EnVocabularyItem(val vocabulary: EnVocabulary) : DataItem() {
-        override val id = vocabulary.id
+    data class EnVocabularyItem(val _vocabulary: EnVocabulary) : DataItem() {
+        override val id = _vocabulary.id
     }
 
     object Header : DataItem() {

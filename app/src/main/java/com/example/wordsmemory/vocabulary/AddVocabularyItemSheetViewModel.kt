@@ -18,13 +18,13 @@ import java.io.InputStream
 import java.util.*
 
 class AddVocabularyItemSheetViewModel(
-    private val dbDao: EnVocabularyDao,
+    private val _dbDao: EnVocabularyDao,
     credentials: InputStream
 ) : ViewModel() {
 
     val enText = MutableLiveData<String>()
     val itText = MutableLiveData<String>()
-    private var translate: Translate? = null
+    private var _translate: Translate? = null
 
     init {
         getTranslateService(credentials)
@@ -32,7 +32,7 @@ class AddVocabularyItemSheetViewModel(
 
     fun saveVocabularyItem() {
         viewModelScope.launch {
-            dbDao.insert(
+            _dbDao.insert(
                 EnVocabulary(
                     enText.value!!.toLowerCase(Locale.getDefault()), itText.value!!.toLowerCase(
                         Locale.getDefault()
@@ -54,7 +54,7 @@ class AddVocabularyItemSheetViewModel(
                 //Set credentials and get translate service:
                 val translateOptions =
                     TranslateOptions.newBuilder().setCredentials(myCredentials).build()
-                translate = translateOptions.service
+                _translate = translateOptions.service
             }
         } catch (ioe: IOException) {
             ioe.printStackTrace()
@@ -62,11 +62,11 @@ class AddVocabularyItemSheetViewModel(
     }
 
     fun translate() {
-        if (translate == null) return
+        if (_translate == null) return
 
         //Get input text to be translated:
         val textToTranslate = enText.value
-        val translation = translate?.translate(
+        val translation = _translate?.translate(
             textToTranslate,
             Translate.TranslateOption.targetLanguage("it"),
             Translate.TranslateOption.model("nmt")
@@ -82,14 +82,14 @@ class AddVocabularyItemSheetViewModel(
 }
 
 class AddVocabularyItemSheetViewModelFactory(
-    private val dataSource: EnVocabularyDao,
-    private val credentials: InputStream
+    private val _dataSource: EnVocabularyDao,
+    private val _credentials: InputStream
 ) : ViewModelProvider.Factory {
     @InternalCoroutinesApi
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AddVocabularyItemSheetViewModel::class.java)) {
-            return AddVocabularyItemSheetViewModel(dataSource, credentials) as T
+            return AddVocabularyItemSheetViewModel(_dataSource, _credentials) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

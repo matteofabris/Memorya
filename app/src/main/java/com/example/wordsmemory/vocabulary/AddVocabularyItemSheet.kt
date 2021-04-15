@@ -16,23 +16,23 @@ import kotlinx.coroutines.launch
 @InternalCoroutinesApi
 class AddVocabularyItemSheet : BottomSheetDialogFragment() {
 
-    private lateinit var viewModel: AddVocabularyItemSheetViewModel
-    private lateinit var binding: AddVocabularyItemSheetBinding
+    private lateinit var _viewModel: AddVocabularyItemSheetViewModel
+    private lateinit var _binding: AddVocabularyItemSheetBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = AddVocabularyItemSheetBinding.inflate(inflater)
-        binding.lifecycleOwner = viewLifecycleOwner
+        _binding = AddVocabularyItemSheetBinding.inflate(inflater)
+        _binding.lifecycleOwner = viewLifecycleOwner
 
         createViewModel()
-        binding.addItemViewModel = viewModel
+        _binding.addItemViewModel = _viewModel
         setStyles()
         setEditTextsFilter()
         setupButtons()
 
-        return binding.root
+        return _binding.root
     }
 
     companion object {
@@ -48,55 +48,55 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment() {
             dbDao,
             resources.openRawResource(R.raw.wordstranslationcredentials)
         )
-        viewModel =
+        _viewModel =
             ViewModelProvider(this, factory).get(AddVocabularyItemSheetViewModel::class.java)
     }
 
     private fun setStyles() {
         if (Constants.isTablet) {
-            binding.addButton.style(R.style.buttonStyleTablet)
-            binding.googleTranslateButton.style(R.style.buttonStyleTablet)
-            binding.googleTranslateButton.setCompoundDrawablesWithIntrinsicBounds(
+            _binding.addButton.style(R.style.buttonStyleTablet)
+            _binding.googleTranslateButton.style(R.style.buttonStyleTablet)
+            _binding.googleTranslateButton.setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.baseline_g_translate_white_36,
                 0,
                 0,
                 0
             )
 
-            binding.enWordTitleTextView.style(R.style.wm_labelStyleTablet)
-            binding.enWordEditText.style(R.style.wm_labelStyleTablet)
-            binding.itWordTitleTextView.style(R.style.wm_labelStyleTablet)
-            binding.itWordEditText.style(R.style.wm_labelStyleTablet)
+            _binding.enWordTitleTextView.style(R.style.wm_labelStyleTablet)
+            _binding.enWordEditText.style(R.style.wm_labelStyleTablet)
+            _binding.itWordTitleTextView.style(R.style.wm_labelStyleTablet)
+            _binding.itWordEditText.style(R.style.wm_labelStyleTablet)
         }
     }
 
     private fun setEditTextsFilter() {
         val filter = TranslateInputFilter()
-        binding.enWordEditText.filters = arrayOf(filter)
-        binding.itWordEditText.filters = arrayOf(filter)
+        _binding.enWordEditText.filters = arrayOf(filter)
+        _binding.itWordEditText.filters = arrayOf(filter)
     }
 
     private fun setupButtons() {
-        binding.addButton.setOnClickListener {
-            viewModel.saveVocabularyItem()
+        _binding.addButton.setOnClickListener {
+            _viewModel.saveVocabularyItem()
             dismiss()
         }
-        binding.googleTranslateButton.setOnClickListener {
+        _binding.googleTranslateButton.setOnClickListener {
             if (activity != null) {
                 lifecycleScope.launch {
                     if (checkInternetConnection(requireActivity())) {
-                        viewModel.translate()
+                        _viewModel.translate()
                     }
                 }
             }
         }
 
-        binding.enWordEditText.afterTextChanged { s ->
-            binding.addButton.isEnabled = s.isNotEmpty() && binding.itWordEditText.text.isNotEmpty()
-            binding.googleTranslateButton.isEnabled = s.isNotEmpty()
+        _binding.enWordEditText.afterTextChanged { s ->
+            _binding.addButton.isEnabled = s.isNotEmpty() && _binding.itWordEditText.text.isNotEmpty()
+            _binding.googleTranslateButton.isEnabled = s.isNotEmpty()
         }
-        binding.itWordEditText.afterTextChanged { s ->
-            binding.addButton.isEnabled = s.isNotEmpty() && binding.enWordEditText.text.isNotEmpty()
+        _binding.itWordEditText.afterTextChanged { s ->
+            _binding.addButton.isEnabled = s.isNotEmpty() && _binding.enWordEditText.text.isNotEmpty()
         }
     }
 }

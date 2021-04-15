@@ -40,13 +40,13 @@ class EnVocabularyViewModel(private val dbDao: EnVocabularyDao) : ViewModel() {
 }
 
 class EnVocabularyViewModelFactory(
-    private val dataSource: EnVocabularyDao
+    private val _dataSource: EnVocabularyDao
 ) : ViewModelProvider.Factory {
     @InternalCoroutinesApi
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(EnVocabularyViewModel::class.java)) {
-            return EnVocabularyViewModel(dataSource) as T
+            return EnVocabularyViewModel(_dataSource) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

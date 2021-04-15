@@ -23,8 +23,8 @@ import kotlinx.coroutines.launch
 
 class PlayFragment : Fragment() {
 
-    private lateinit var viewModel: PlayFragmentViewModel
-    private lateinit var binding: FragmentPlayBinding
+    private lateinit var _viewModel: PlayFragmentViewModel
+    private lateinit var _binding: FragmentPlayBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,24 +36,24 @@ class PlayFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPlayBinding.inflate(inflater)
+        _binding = FragmentPlayBinding.inflate(inflater)
 
         createViewModel()
 
-        binding.playViewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        _binding.playViewModel = _viewModel
+        _binding.lifecycleOwner = viewLifecycleOwner
 
         setStyles()
         setupEditText()
         setupVocabularyButtonListener()
         setupObservers()
 
-        return binding.root
+        return _binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.setPlayWord()
+        _viewModel.setPlayWord()
     }
 
     @InternalCoroutinesApi
@@ -62,36 +62,36 @@ class PlayFragment : Fragment() {
         val dbDao = VocabularyDatabase.getInstance(application).enVocabularyDao()
 
         val factory = PlayFragmentViewModelFactory(dbDao)
-        viewModel = ViewModelProvider(this, factory).get(PlayFragmentViewModel::class.java)
+        _viewModel = ViewModelProvider(this, factory).get(PlayFragmentViewModel::class.java)
     }
 
     private fun setStyles() {
         if (Constants.isTablet) {
-            binding.acceptTranslationButton.style(R.style.buttonStyleTablet)
-            binding.vocabularyButton.setImageResource(R.drawable.outline_library_books_white_36)
+            _binding.acceptTranslationButton.style(R.style.buttonStyleTablet)
+            _binding.vocabularyButton.setImageResource(R.drawable.outline_library_books_white_36)
 
-            binding.randomWordTitleTextView.style(R.style.wm_labelStyleTablet)
-            binding.randomWordTextView.style(R.style.wm_labelStyleTablet)
-            binding.translationEditTextTitle.style(R.style.wm_labelStyleTablet)
-            binding.translationEditText.style(R.style.wm_labelStyleTablet)
-            binding.recentAttemptsTextView.style(R.style.wm_recentAttemptsLabelStyleTablet)
+            _binding.randomWordTitleTextView.style(R.style.wm_labelStyleTablet)
+            _binding.randomWordTextView.style(R.style.wm_labelStyleTablet)
+            _binding.translationEditTextTitle.style(R.style.wm_labelStyleTablet)
+            _binding.translationEditText.style(R.style.wm_labelStyleTablet)
+            _binding.recentAttemptsTextView.style(R.style.wm_recentAttemptsLabelStyleTablet)
 
-            binding.topBar.style(R.style.topBarStyleTablet)
-            binding.topBarTitle.style(R.style.topBarTitleTablet)
+            _binding.topBar.style(R.style.topBarStyleTablet)
+            _binding.topBarTitle.style(R.style.topBarTitleTablet)
         }
     }
 
     private fun setupEditText() {
         val filter = TranslateInputFilter()
-        binding.translationEditText.filters = arrayOf(filter)
-        binding.translationEditText.afterTextChanged { s ->
-            binding.acceptTranslationButton.isEnabled =
-                binding.randomWordTextView.text.isNotEmpty() && s.isNotEmpty()
+        _binding.translationEditText.filters = arrayOf(filter)
+        _binding.translationEditText.afterTextChanged { s ->
+            _binding.acceptTranslationButton.isEnabled =
+                _binding.randomWordTextView.text.isNotEmpty() && s.isNotEmpty()
         }
     }
 
     private fun setupVocabularyButtonListener() {
-        binding.vocabularyButton.setOnClickListener {
+        _binding.vocabularyButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_playFragment_to_enVocabularyFragment)
 
             val view = activity?.currentFocus
@@ -103,7 +103,7 @@ class PlayFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.isTranslationOk.observe(
+        _viewModel.isTranslationOk.observe(
             viewLifecycleOwner,
             {
                 val text: String =
@@ -115,10 +115,10 @@ class PlayFragment : Fragment() {
                 changeBackgroundColor(it)
             })
 
-        viewModel.vocabularyList.observe(
+        _viewModel.vocabularyList.observe(
             viewLifecycleOwner,
             {
-                viewModel.setPlayWord()
+                _viewModel.setPlayWord()
             })
     }
 
@@ -129,14 +129,14 @@ class PlayFragment : Fragment() {
         ) else Color.RED
 
         lifecycleScope.launch {
-            binding.container.setBackgroundColor(
+            _binding.container.setBackgroundColor(
                 ColorUtils.setAlphaComponent(
                     color,
                     200
                 )
             )
             delay(170)
-            binding.container.setBackgroundColor(Color.TRANSPARENT)
+            _binding.container.setBackgroundColor(Color.TRANSPARENT)
         }
     }
 
