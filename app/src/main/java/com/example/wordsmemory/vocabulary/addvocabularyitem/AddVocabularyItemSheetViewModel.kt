@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary
+package com.example.wordsmemory.vocabulary.addvocabularyitem
 
 import android.os.StrictMode
 import android.util.Log
@@ -6,11 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.wordsmemory.EnVocabulary
-import com.example.wordsmemory.EnVocabularyDao
+import com.example.wordsmemory.Constants
+import com.example.wordsmemory.VocabularyItem
+import com.example.wordsmemory.VocabularyDao
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -18,25 +20,32 @@ import java.io.InputStream
 import java.util.*
 
 class AddVocabularyItemSheetViewModel(
-    private val _dbDao: EnVocabularyDao,
+    private val _dbDao: VocabularyDao,
     credentials: InputStream
 ) : ViewModel() {
 
+    private var _translate: Translate? = null
+
     val enText = MutableLiveData<String>()
     val itText = MutableLiveData<String>()
-    private var _translate: Translate? = null
+    val categories = _dbDao.getCategories()
+    var category = Constants.defaultCategory
 
     init {
         getTranslateService(credentials)
     }
 
     fun saveVocabularyItem() {
-        viewModelScope.launch {
-            _dbDao.insert(
-                EnVocabulary(
-                    enText.value!!.toLowerCase(Locale.getDefault()), itText.value!!.toLowerCase(
-                        Locale.getDefault()
-                    )
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.i("cat", "TEO: cat vm - $category")
+            val categoryId = _dbDao.getCategoryId(category)
+            Log.i("cat", "TEO: cat vm id - $categoryId")
+
+            _dbDao.insertVocabularyItem(
+                VocabularyItem(
+                    enText.value!!.toLowerCase(Locale.getDefault()),
+                    itText.value!!.toLowerCase(Locale.getDefault()),
+                    categoryId
                 )
             )
         }
@@ -82,7 +91,7 @@ class AddVocabularyItemSheetViewModel(
 }
 
 class AddVocabularyItemSheetViewModelFactory(
-    private val _dataSource: EnVocabularyDao,
+    private val _dataSource: VocabularyDao,
     private val _credentials: InputStream
 ) : ViewModelProvider.Factory {
     @InternalCoroutinesApi

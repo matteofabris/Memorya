@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.allwords
+package com.example.wordsmemory.vocabulary
 
 import android.content.Context
 import android.graphics.*

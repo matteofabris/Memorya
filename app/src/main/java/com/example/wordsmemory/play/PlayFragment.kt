@@ -16,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.*
-import com.example.wordsmemory.databinding.FragmentPlayBinding
+import com.example.wordsmemory.databinding.PlayFragmentBinding
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 class PlayFragment : Fragment() {
 
     private lateinit var _viewModel: PlayFragmentViewModel
-    private lateinit var _binding: FragmentPlayBinding
+    private lateinit var _binding: PlayFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,13 +36,10 @@ class PlayFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPlayBinding.inflate(inflater)
-
-        createViewModel()
-
-        _binding.playViewModel = _viewModel
+        _binding = PlayFragmentBinding.inflate(inflater)
         _binding.lifecycleOwner = viewLifecycleOwner
 
+        createViewModel()
         setStyles()
         setupEditText()
         setupVocabularyButtonListener()
@@ -59,10 +56,11 @@ class PlayFragment : Fragment() {
     @InternalCoroutinesApi
     private fun createViewModel() {
         val application = requireNotNull(this.activity).application
-        val dbDao = VocabularyDatabase.getInstance(application).enVocabularyDao()
+        val dbDao = VocabularyDatabase.getInstance(application).vocabularyDao()
 
         val factory = PlayFragmentViewModelFactory(dbDao)
         _viewModel = ViewModelProvider(this, factory).get(PlayFragmentViewModel::class.java)
+        _binding.playViewModel = _viewModel
     }
 
     private fun setStyles() {
@@ -139,24 +137,5 @@ class PlayFragment : Fragment() {
             _binding.container.setBackgroundColor(Color.TRANSPARENT)
         }
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        super.onCreateOptionsMenu(menu, inflater)
-//        inflater.inflate(R.menu.main_menu, menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (NavigationUI.onNavDestinationSelected(item, requireView().findNavController())) {
-//            val view = activity?.currentFocus
-//            if (view != null) {
-//                val imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-//                imm.hideSoftInputFromWindow(view.windowToken, 0)
-//            }
-//
-//            return true
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
 }
 

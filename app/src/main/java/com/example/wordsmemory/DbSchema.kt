@@ -3,43 +3,75 @@ package com.example.wordsmemory
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.room.ForeignKey.CASCADE
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
+import kotlinx.coroutines.launch
 
-@Entity(tableName = "en_vocabulary")
-data class EnVocabulary(
+
+@Entity(
+    tableName = "vocabulary_item", foreignKeys = [ForeignKey(
+        entity = Category::class,
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("category"),
+        onDelete = CASCADE
+    )]
+)
+data class VocabularyItem(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
 
     @ColumnInfo(name = "en_word")
     val enWord: String,
     @ColumnInfo(name = "it_word")
-    val itWord: String
+    val itWord: String,
+    @ColumnInfo(name = "category")
+    val category: Int
 ) {
-    constructor (enWord: String, itWord: String) : this(0, enWord, itWord)
+    constructor (enWord: String, itWord: String) : this(0, enWord, itWord, 0)
+    constructor (enWord: String, itWord: String, category: Int) : this(0, enWord, itWord, category)
+}
+
+@Entity(tableName = "category")
+data class Category(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+
+    @ColumnInfo(name = "category")
+    val category: String
+) {
+    constructor (category: String) : this(0, category)
 }
 
 @Dao
-interface EnVocabularyDao {
+interface VocabularyDao {
     @Insert
-    suspend fun insert(word: EnVocabulary)
+    suspend fun insertVocabularyItem(word: VocabularyItem)
+
+    @Insert
+    suspend fun insertCategory(category: Category)
 
     @Update
-    suspend fun update(vararg words: EnVocabulary)
+    suspend fun update(vararg words: VocabularyItem)
 
     @Delete
-    suspend fun delete(word: EnVocabulary)
+    suspend fun delete(word: VocabularyItem)
 
-    @Query("SELECT * FROM en_vocabulary")
-    fun getAllAsLiveData(): LiveData<List<EnVocabulary>>
+    @Query("SELECT * FROM vocabulary_item")
+    fun getVocabularyItems(): LiveData<List<VocabularyItem>>
 
-    @Query("SELECT * FROM en_vocabulary")
-    suspend fun getAll(): List<EnVocabulary>
+    @Query("SELECT * FROM category")
+    fun getCategories(): LiveData<List<Category>>
+
+    @Query("SELECT id FROM category WHERE category == :category")
+    fun getCategoryId(category: String): Int
 }
 
-@Database(entities = [EnVocabulary::class], version = 1, exportSchema = false)
+@Database(entities = [VocabularyItem::class, Category::class], version = 1, exportSchema = false)
 abstract class VocabularyDatabase : RoomDatabase() {
-    abstract fun enVocabularyDao(): EnVocabularyDao
+    abstract fun vocabularyDao(): VocabularyDao
 
     companion object {
         @Volatile
@@ -58,8 +90,19 @@ abstract class VocabularyDatabase : RoomDatabase() {
                         .build()
 
                     INSTANCE = instance
+
+                    insertDefaultCategory()
                 }
+
                 return instance
+            }
+        }
+
+        private fun insertDefaultCategory() {
+            val dao = INSTANCE!!.vocabularyDao()
+            GlobalScope.launch(Dispatchers.IO) {
+                if (dao.getCategoryId(Constants.defaultCategory) == 0)
+                    dao.insertCategory(Category(0, Constants.defaultCategory))
             }
         }
     }

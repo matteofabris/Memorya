@@ -25,7 +25,7 @@
 
                 <TextView
                     android:id="@+id/topBarTitle"
-                    style="@style/topBarTitlePhone"
+                    style="@style/top_bar_title_phone"
                     android:text="@string/app_title"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +85,7 @@
                 <TextView
                     android:id="@+id/randomWordTextView"
                     style="@style/wm_labelStylePhone"
-                    android:text="@{playViewModel.vocabularyItem.enWord}"
+                    android:text="@{playViewModel.vocabularyItemItem.enWord}"
                     app:layout_constraintBottom_toTopOf="@+id/translationEditText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.12"

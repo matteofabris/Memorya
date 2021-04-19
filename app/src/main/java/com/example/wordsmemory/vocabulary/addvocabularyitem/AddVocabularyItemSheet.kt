@@ -1,22 +1,28 @@
 package com.example.wordsmemory.vocabulary.addvocabularyitem
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.*
 import com.example.wordsmemory.databinding.AddVocabularyItemSheetBinding
-import com.example.wordsmemory.vocabulary.AddVocabularyItemSheetViewModel
-import com.example.wordsmemory.vocabulary.AddVocabularyItemSheetViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
-class AddVocabularyItemSheet : BottomSheetDialogFragment() {
+class AddVocabularyItemSheet : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
+
+    companion object {
+        fun newInstance(): AddVocabularyItemSheet =
+            AddVocabularyItemSheet().apply {}
+    }
 
     private lateinit var _viewModel: AddVocabularyItemSheetViewModel
     private lateinit var _binding: AddVocabularyItemSheetBinding
@@ -29,22 +35,17 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment() {
         _binding.lifecycleOwner = viewLifecycleOwner
 
         createViewModel()
-        _binding.addItemViewModel = _viewModel
         setStyles()
         setEditTextsFilter()
         setupButtons()
+        setCategoriesSpinner()
 
         return _binding.root
     }
 
-    companion object {
-        fun newInstance(): AddVocabularyItemSheet =
-            AddVocabularyItemSheet().apply {}
-    }
-
     private fun createViewModel() {
         val application = requireNotNull(this.activity).application
-        val dbDao = VocabularyDatabase.getInstance(application).enVocabularyDao()
+        val dbDao = VocabularyDatabase.getInstance(application).vocabularyDao()
 
         val factory = AddVocabularyItemSheetViewModelFactory(
             dbDao,
@@ -52,6 +53,7 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment() {
         )
         _viewModel =
             ViewModelProvider(this, factory).get(AddVocabularyItemSheetViewModel::class.java)
+        _binding.addItemViewModel = _viewModel
     }
 
     private fun setStyles() {
@@ -94,11 +96,47 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment() {
         }
 
         _binding.enWordEditText.afterTextChanged { s ->
-            _binding.addButton.isEnabled = s.isNotEmpty() && _binding.itWordEditText.text.isNotEmpty()
+            _binding.addButton.isEnabled =
+                s.isNotEmpty() && _binding.itWordEditText.text.isNotEmpty()
             _binding.googleTranslateButton.isEnabled = s.isNotEmpty()
         }
         _binding.itWordEditText.afterTextChanged { s ->
-            _binding.addButton.isEnabled = s.isNotEmpty() && _binding.enWordEditText.text.isNotEmpty()
+            _binding.addButton.isEnabled =
+                s.isNotEmpty() && _binding.enWordEditText.text.isNotEmpty()
         }
+    }
+
+    private fun setCategoriesSpinner() {
+        _viewModel.categories.observe(viewLifecycleOwner, {
+            it.let {
+                val categories = it.map { c -> c.category }.toTypedArray()
+
+                it.forEach { c ->
+                    Log.i(
+                        "categories",
+                        "Category: id - ${c.id}, name - ${c.category}"
+                    )
+                }
+
+                val arrayAdapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    categories
+                )
+                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                _binding.categorySpinner.adapter = arrayAdapter
+            }
+        })
+
+        _binding.categorySpinner.onItemSelectedListener
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        _viewModel.category = parent?.getItemAtPosition(position).toString()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        _viewModel.category = Constants.defaultCategory
     }
 }
