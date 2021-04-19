@@ -13,10 +13,17 @@
         <action
             android:id="@+id/action_playFragment_to_enVocabularyFragment"
             app:destination="@id/enVocabularyFragment" />
+        <action
+            android:id="@+id/action_playFragment_to_vocabularyFragment"
+            app:destination="@id/vocabularyFragment" />
     </fragment>
     <fragment
         android:id="@+id/enVocabularyFragment"
-        android:name="com.example.wordsmemory.vocabulary.EnVocabularyFragment"
+        android:name="com.example.wordsmemory.vocabulary.allwords.EnVocabularyFragment"
         android:label="EnVocabularyFragment"
         tools:layout="@layout/fragment_en_vocabulary"/>
+    <fragment
+        android:id="@+id/vocabularyFragment"
+        android:name="com.example.wordsmemory.vocabulary.VocabularyFragment"
+        android:label="VocabularyFragment" />
 </navigation>
