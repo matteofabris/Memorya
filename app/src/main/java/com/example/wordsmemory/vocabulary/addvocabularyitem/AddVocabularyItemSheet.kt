@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary
+package com.example.wordsmemory.vocabulary.addvocabularyitem
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.*
 import com.example.wordsmemory.databinding.AddVocabularyItemSheetBinding
+import com.example.wordsmemory.vocabulary.AddVocabularyItemSheetViewModel
+import com.example.wordsmemory.vocabulary.AddVocabularyItemSheetViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch

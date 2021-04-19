@@ -10,78 +10,23 @@
             type="com.example.wordsmemory.vocabulary.EnVocabularyViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        tools:context=".vocabulary.allwords.EnVocabularyFragment">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/topBar"
-            style="@style/topBarStylePhone">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/topBarTitle"
-                    style="@style/topBarTitlePhone"
-                    android:text="@string/english_vocabulary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".vocabulary.EnVocabularyFragment">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/vocabularyList"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toTopOf="@id/addButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/addButton"
-                style="@style/buttonStylePhone"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/wm_primary"
-                android:src="@drawable/outline_add_white_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/vocabularyList"
-                tools:ignore="ContentDescription" />
-<!--
-            <Button
-                android:id="@+id/deleteButton"
-                style="@style/buttonStylePhone"
-                android:backgroundTint="@color/wm_primary"
-                android:enabled="false"
-                android:onClick="@{() -> enVocabularyViewModel.onRemoveClicked()}"
-                android:text="Mock"
-                app:layout_constraintBottom_toBottomOf="@id/addButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/addButton"
-                app:layout_constraintTop_toTopOf="@+id/addButton"
-                tools:ignore="ContentDescription" />
--->
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/vocabularyList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

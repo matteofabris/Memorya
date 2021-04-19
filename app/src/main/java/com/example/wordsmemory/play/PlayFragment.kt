@@ -92,7 +92,7 @@ class PlayFragment : Fragment() {
 
     private fun setupVocabularyButtonListener() {
         _binding.vocabularyButton.setOnClickListener {
-            it.findNavController().navigate(R.id.action_playFragment_to_enVocabularyFragment)
+            it.findNavController().navigate(R.id.action_playFragment_to_vocabularyFragment)
 
             val view = activity?.currentFocus
             if (view != null) {

@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/add_word_background"
-        tools:context=".vocabulary.AddVocabularyItemSheet">
+        tools:context=".vocabulary.addvocabularyitem.AddVocabularyItemSheet">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/editTextContainer"
