@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary
+package com.example.wordsmemory.vocabulary.words
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.EnVocabulary
+import com.example.wordsmemory.VocabularyItem
 import com.example.wordsmemory.R
 import com.example.wordsmemory.databinding.VocabularyHeaderBinding
 import com.example.wordsmemory.databinding.VocabularyItemBinding
@@ -25,7 +25,7 @@ class VocabularyItemAdapter :
         }
     }
 
-    fun addHeaderAndSubmitList(list: List<EnVocabulary>?) {
+    fun addHeaderAndSubmitList(list: List<VocabularyItem>?) {
         val items = when (list) {
             null -> listOf(DataItem.Header)
             else -> listOf(DataItem.Header) + list.map { DataItem.EnVocabularyItem(it) }
@@ -37,7 +37,7 @@ class VocabularyItemAdapter :
         when (holder) {
             is ViewHolder -> {
                 val item = getItem(position) as DataItem.EnVocabularyItem
-                holder.setLayout(item._vocabulary)
+                holder.setLayout(item._vocabularyItem)
             }
             is HeaderViewHolder -> {
                 holder.setStyles()
@@ -77,7 +77,7 @@ class ViewHolder private constructor(private val _binding: VocabularyItemBinding
         }
     }
 
-    fun setLayout(item: EnVocabulary) {
+    fun setLayout(item: VocabularyItem) {
         if (Constants.isTablet) {
             _binding.enWordTextView.style(R.style.wm_labelStyleTablet)
             _binding.itWordTextView.style(R.style.wm_labelStyleTablet)
@@ -110,8 +110,8 @@ class HeaderViewHolder private constructor(private val _binding: VocabularyHeade
 sealed class DataItem {
     abstract val id: Int
 
-    data class EnVocabularyItem(val _vocabulary: EnVocabulary) : DataItem() {
-        override val id = _vocabulary.id
+    data class EnVocabularyItem(val _vocabularyItem: VocabularyItem) : DataItem() {
+        override val id = _vocabularyItem.id
     }
 
     object Header : DataItem() {

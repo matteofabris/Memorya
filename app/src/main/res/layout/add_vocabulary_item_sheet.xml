@@ -7,7 +7,7 @@
 
         <variable
             name="addItemViewModel"
-            type="com.example.wordsmemory.vocabulary.AddVocabularyItemSheetViewModel" />
+            type="com.example.wordsmemory.vocabulary.addvocabularyitem.AddVocabularyItemSheetViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,7 +60,7 @@
                 style="@style/wm_labelStylePhone"
                 android:text="@string/italian_word"
                 android:textAlignment="textStart"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/categoryTitleTextView"
                 app:layout_constraintEnd_toEndOf="@id/enWordTitleTextView"
                 app:layout_constraintStart_toStartOf="@id/enWordTitleTextView"
                 app:layout_constraintTop_toBottomOf="@id/enWordTitleTextView"
@@ -78,6 +78,26 @@
                 app:layout_constraintStart_toStartOf="@id/enWordEditText"
                 app:layout_constraintTop_toTopOf="@id/itWordTitleTextView"
                 tools:ignore="LabelFor" />
+
+            <TextView
+                android:id="@+id/categoryTitleTextView"
+                style="@style/wm_labelStylePhone"
+                android:text="@string/category"
+                android:textAlignment="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/itWordTitleTextView"
+                app:layout_constraintStart_toStartOf="@id/itWordTitleTextView"
+                app:layout_constraintTop_toBottomOf="@id/itWordTitleTextView"
+                app:layout_constraintWidth_percent="0.3" />
+
+            <Spinner
+                android:id="@+id/categorySpinner"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/categoryTitleTextView"
+                app:layout_constraintEnd_toEndOf="@+id/itWordEditText"
+                app:layout_constraintStart_toStartOf="@id/itWordEditText"
+                app:layout_constraintTop_toTopOf="@id/categoryTitleTextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

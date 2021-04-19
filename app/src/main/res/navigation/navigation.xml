@@ -9,21 +9,21 @@
         android:id="@+id/playFragment"
         android:name="com.example.wordsmemory.play.PlayFragment"
         android:label="PlayFragment"
-        tools:layout="@layout/fragment_play">
-        <action
-            android:id="@+id/action_playFragment_to_enVocabularyFragment"
-            app:destination="@id/enVocabularyFragment" />
+        tools:layout="@layout/play_fragment">
         <action
             android:id="@+id/action_playFragment_to_vocabularyFragment"
             app:destination="@id/vocabularyFragment" />
     </fragment>
     <fragment
-        android:id="@+id/enVocabularyFragment"
-        android:name="com.example.wordsmemory.vocabulary.allwords.EnVocabularyFragment"
-        android:label="EnVocabularyFragment"
-        tools:layout="@layout/fragment_en_vocabulary"/>
-    <fragment
         android:id="@+id/vocabularyFragment"
         android:name="com.example.wordsmemory.vocabulary.VocabularyFragment"
-        android:label="VocabularyFragment" />
+        android:label="VocabularyFragment" >
+        <action
+            android:id="@+id/action_vocabularyFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.wordsmemory.vocabulary.category.CategoryFragment"
+        android:label="CategoryFragment" />
 </navigation>

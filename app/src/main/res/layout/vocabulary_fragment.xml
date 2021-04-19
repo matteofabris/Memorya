@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="vocabularyViewModel"
+            name="vocabulary_viewmodel"
             type="com.example.wordsmemory.vocabulary.VocabularyViewModel" />
     </data>
 
@@ -25,7 +25,7 @@
 
                 <TextView
                     android:id="@+id/topBarTitle"
-                    style="@style/topBarTitlePhone"
+                    style="@style/top_bar_title_phone"
                     android:text="@string/english_vocabulary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
                 android:layout_height="0dp"
                 android:layout_marginBottom="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toTopOf="@id/addButton"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tabLayout" />
@@ -60,20 +60,8 @@
                 app:layout_constraintBottom_toTopOf="@id/viewPager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/addButton"
-                style="@style/buttonStylePhone"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/wm_primary"
-                android:src="@drawable/outline_add_white_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewPager"
-                tools:ignore="ContentDescription" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabTextAppearance="@style/tabViewText" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </layout>

@@ -5,11 +5,11 @@ import androidx.databinding.BindingAdapter
 
 
 @BindingAdapter("enWord")
-fun TextView.setDataToEnWord(item: EnVocabulary) {
+fun TextView.setDataToEnWord(item: VocabularyItem) {
     text = item.enWord
 }
 
 @BindingAdapter("itWord")
-fun TextView.setDataToItWord(item: EnVocabulary) {
+fun TextView.setDataToItWord(item: VocabularyItem) {
     text = item.itWord
 }

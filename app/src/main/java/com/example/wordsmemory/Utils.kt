@@ -72,3 +72,23 @@ class TranslateInputFilter : InputFilter {
         return source
     }
 }
+
+class AddCategoryInputFilter : InputFilter {
+    override fun filter(
+        source: CharSequence?,
+        start: Int,
+        end: Int,
+        dest: Spanned?,
+        dstart: Int,
+        dend: Int
+    ): CharSequence {
+        if (source == null) return ""
+
+        for (i in start until end) {
+            if (!Character.isLetter(source[i]))
+                return ""
+        }
+
+        return source
+    }
+}

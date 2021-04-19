@@ -4,34 +4,32 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.wordsmemory.EnVocabulary
-import com.example.wordsmemory.EnVocabularyDao
+import com.example.wordsmemory.VocabularyItem
+import com.example.wordsmemory.VocabularyDao
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlin.random.Random
 
-class PlayFragmentViewModel(dbDao: EnVocabularyDao) : ViewModel() {
-
-    var vocabularyList = dbDao.getAllAsLiveData()
-    private var _allAttempts = 0
-    private var _correctAttempts = 0
-
-    private val _vocabularyItem = MutableLiveData<EnVocabulary>()
-    val vocabularyItem: LiveData<EnVocabulary>
-        get() = _vocabularyItem
-
-    val translationText = MutableLiveData<String>()
-
-    val recentAttemptsText =
-        MutableLiveData(getRecentAttemptsText())
-
-    private val _isTranslationOk = MutableLiveData<Boolean>()
-    val isTranslationOk: LiveData<Boolean>
-        get() = _isTranslationOk
+class PlayFragmentViewModel(dbDao: VocabularyDao) : ViewModel() {
 
     companion object {
         const val correctString = " correct"
         const val recentAttemptsString = "Recent attempts: "
     }
+
+    private var _allAttempts = 0
+    private var _correctAttempts = 0
+
+    var vocabularyList = dbDao.getVocabularyItems()
+    val translationText = MutableLiveData<String>()
+    val recentAttemptsText = MutableLiveData(getRecentAttemptsText())
+
+    private val _vocabularyItem = MutableLiveData<VocabularyItem>()
+    val vocabularyItemItem: LiveData<VocabularyItem>
+        get() = _vocabularyItem
+
+    private val _isTranslationOk = MutableLiveData<Boolean>()
+    val isTranslationOk: LiveData<Boolean>
+        get() = _isTranslationOk
 
     fun setPlayWord() {
         if (vocabularyList.value != null) {
@@ -39,7 +37,7 @@ class PlayFragmentViewModel(dbDao: EnVocabularyDao) : ViewModel() {
                 val randomIndex = Random.nextInt(vocabularyList.value!!.size)
                 _vocabularyItem.value = vocabularyList.value!![randomIndex]
             } else {
-                _vocabularyItem.value = EnVocabulary("", "")
+                _vocabularyItem.value = VocabularyItem("", "")
             }
         }
     }
@@ -64,7 +62,7 @@ class PlayFragmentViewModel(dbDao: EnVocabularyDao) : ViewModel() {
 }
 
 class PlayFragmentViewModelFactory(
-    private val _dataSource: EnVocabularyDao
+    private val _dataSource: VocabularyDao
 ) : ViewModelProvider.Factory {
     @InternalCoroutinesApi
     @Suppress("unchecked_cast")
