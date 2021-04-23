@@ -67,6 +67,9 @@ interface VocabularyDao {
 
     @Query("SELECT id FROM category WHERE category == :category")
     fun getCategoryId(category: String): Int
+
+    @Query("SELECT category FROM category WHERE id == :id")
+    fun getCategoryName(id: Int): String
 }
 
 @Database(entities = [VocabularyItem::class, Category::class], version = 1, exportSchema = false)

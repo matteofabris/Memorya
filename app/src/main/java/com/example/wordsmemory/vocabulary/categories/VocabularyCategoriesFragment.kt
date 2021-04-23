@@ -13,6 +13,7 @@ import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.databinding.VocabularyCategoriesFragmentBinding
+import com.example.wordsmemory.vocabulary.VocabularyFragmentDirections
 import com.example.wordsmemory.vocabulary.addcategory.AddCategorySheet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -51,7 +52,11 @@ class VocabularyCategoriesFragment : Fragment() {
 
     private fun setupVocabularyList() {
         val categoryAdapter =
-            CategoryItemAdapter { findNavController().navigate(R.id.action_vocabularyFragment_to_categoryFragment) }
+            CategoryItemAdapter {
+                val action =
+                    VocabularyFragmentDirections.actionVocabularyFragmentToCategoryFragment(it)
+                findNavController().navigate(action)
+            }
         _binding.categoriesList.adapter = categoryAdapter
 
         _viewModel.categories.observe(

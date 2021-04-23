@@ -25,5 +25,9 @@
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.example.wordsmemory.vocabulary.category.CategoryFragment"
-        android:label="CategoryFragment" />
+        android:label="CategoryFragment" >
+        <argument
+            android:name="categoryId"
+            app:argType="integer" />
+    </fragment>
 </navigation>
