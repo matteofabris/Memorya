@@ -129,7 +129,7 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment(), AdapterView.OnItemSe
             }
         })
 
-        _binding.categorySpinner.onItemSelectedListener
+        _binding.categorySpinner.onItemSelectedListener = this
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

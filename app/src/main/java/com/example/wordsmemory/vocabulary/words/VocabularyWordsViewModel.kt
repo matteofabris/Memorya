@@ -1,16 +1,24 @@
 package com.example.wordsmemory.vocabulary.words
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.wordsmemory.VocabularyItem
 import com.example.wordsmemory.VocabularyDao
+import com.example.wordsmemory.VocabularyItem
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
-class VocabularyWordsViewModel(private val _dbDao: VocabularyDao) : ViewModel() {
+class VocabularyWordsViewModel(
+    private val _dbDao: VocabularyDao,
+    private val _categoryId: Int = 0
+) : ViewModel() {
 
-    var vocabularyList = _dbDao.getVocabularyItems()
+    var vocabularyList = initVocabularyList()
+
+    private fun initVocabularyList(): LiveData<List<VocabularyItem>> {
+        return if (_categoryId > 0) _dbDao.getVocabularyItemsByCategory(_categoryId) else _dbDao.getVocabularyItems()
+    }
 
     fun mockWords() {
         val a = VocabularyItem("house", "casa")
@@ -35,14 +43,15 @@ class VocabularyWordsViewModel(private val _dbDao: VocabularyDao) : ViewModel() 
     }
 }
 
-class EnVocabularyViewModelFactory(
-    private val _dataSource: VocabularyDao
+class VocabularyWordsViewModelFactory(
+    private val _dataSource: VocabularyDao,
+    private val _categoryId: Int = 0
 ) : ViewModelProvider.Factory {
     @InternalCoroutinesApi
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(VocabularyWordsViewModel::class.java)) {
-            return VocabularyWordsViewModel(_dataSource) as T
+            return VocabularyWordsViewModel(_dataSource, _categoryId) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
