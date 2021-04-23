@@ -5,7 +5,7 @@
     <data>
 
         <variable
-            name="category_viewmodel"
+            name="categoryViewmodel"
             type="com.example.wordsmemory.vocabulary.category.CategoryViewModel" />
     </data>
 
@@ -25,7 +25,6 @@
                 <TextView
                     android:id="@+id/top_bar_title"
                     style="@style/top_bar_title_phone"
-                    android:text="Prova-Placeholder"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

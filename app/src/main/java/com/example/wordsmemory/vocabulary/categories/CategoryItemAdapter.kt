@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordsmemory.Category
 import com.example.wordsmemory.databinding.CategoryItemBinding
 
-class CategoryItemAdapter(private val _itemClickListener: (View) -> Unit) :
+class CategoryItemAdapter(private val _navigateToCategoryFragment: (Int) -> Unit) :
     ListAdapter<Category, RecyclerView.ViewHolder>(CategoryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -20,8 +20,11 @@ class CategoryItemAdapter(private val _itemClickListener: (View) -> Unit) :
         when (holder) {
             is ViewHolder -> {
                 val item = getItem(position) as Category
+                val onItemClickedAction: (View) -> Unit = {
+                    _navigateToCategoryFragment.invoke(item.id)
+                }
                 holder.setLayout(item)
-                holder.itemView.setOnClickListener(_itemClickListener)
+                holder.itemView.setOnClickListener(onItemClickedAction)
             }
         }
     }
