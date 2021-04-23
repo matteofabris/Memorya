@@ -17,7 +17,7 @@ import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.databinding.VocabularyWordsFragmentBinding
-import com.example.wordsmemory.vocabulary.*
+import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
 import com.example.wordsmemory.vocabulary.addvocabularyitem.AddVocabularyItemSheet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -25,7 +25,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
-class VocabularyWordsFragment : Fragment() {
+class VocabularyWordsFragment(private val _categoryId: Int = 0) : Fragment() {
 
     private lateinit var _viewModel: VocabularyWordsViewModel
     private lateinit var _binding: VocabularyWordsFragmentBinding
@@ -50,7 +50,7 @@ class VocabularyWordsFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val dbDao = VocabularyDatabase.getInstance(application).vocabularyDao()
 
-        val factory = EnVocabularyViewModelFactory(dbDao)
+        val factory = VocabularyWordsViewModelFactory(dbDao, _categoryId)
         _viewModel = ViewModelProvider(this, factory).get(VocabularyWordsViewModel::class.java)
 
         _binding.vocabularyWordsViewmodel = _viewModel

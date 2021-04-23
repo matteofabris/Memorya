@@ -37,9 +37,11 @@ class AddVocabularyItemSheetViewModel(
 
     fun saveVocabularyItem() {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.i("cat", "TEO: cat vm - $category")
             val categoryId = _dbDao.getCategoryId(category)
-            Log.i("cat", "TEO: cat vm id - $categoryId")
+            Log.i(
+                "save_item",
+                "Save vocabulary item: en - ${enText.value}, it - ${itText.value}, cat - $categoryId"
+            )
 
             _dbDao.insertVocabularyItem(
                 VocabularyItem(

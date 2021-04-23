@@ -62,6 +62,9 @@ interface VocabularyDao {
     @Query("SELECT * FROM vocabulary_item")
     fun getVocabularyItems(): LiveData<List<VocabularyItem>>
 
+    @Query("SELECT * FROM vocabulary_item WHERE category == :categoryId")
+    fun getVocabularyItemsByCategory(categoryId: Int): LiveData<List<VocabularyItem>>
+
     @Query("SELECT * FROM category")
     fun getCategories(): LiveData<List<Category>>
 

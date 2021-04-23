@@ -23,12 +23,14 @@ class CategoryFragment : Fragment() {
     private lateinit var _dbDao: VocabularyDao
     private lateinit var _viewModel: CategoryViewModel
     private lateinit var _binding: CategoryFragmentBinding
-    private val args: CategoryFragmentArgs by navArgs()
+    private val _args: CategoryFragmentArgs by navArgs()
+    private var _categoryId = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _categoryId = _args.categoryId
         _binding = CategoryFragmentBinding.inflate(inflater)
         _dbDao = getDbDao()
 
@@ -36,7 +38,7 @@ class CategoryFragment : Fragment() {
         setTopBarTitle()
 
         childFragmentManager.beginTransaction()
-            .replace(R.id.category_vocabulary_container, VocabularyWordsFragment())
+            .replace(R.id.category_vocabulary_container, VocabularyWordsFragment(_categoryId))
             .commit()
 
         return _binding.root
@@ -50,7 +52,7 @@ class CategoryFragment : Fragment() {
 
     private fun setTopBarTitle() {
         lifecycleScope.launch(Dispatchers.IO) {
-            val cat = _dbDao.getCategoryName(args.categoryId)
+            val cat = _dbDao.getCategoryName(_categoryId)
             lifecycleScope.launch(Dispatchers.Main) { _binding.topBarTitle.text = cat }
         }
     }
