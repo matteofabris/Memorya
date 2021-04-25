@@ -159,6 +159,27 @@
                 app:layout_constraintTop_toBottomOf="@+id/acceptTranslationButton"
                 app:srcCompat="@mipmap/ic_launcher" />
 
+            <TextView
+                android:id="@+id/categoryTextView"
+                style="@style/wm_labelStylePhone"
+                android:layout_marginStart="22dp"
+                android:text="@string/category"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+                app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.78" />
+
+            <Spinner
+                android:id="@+id/categorySpinner"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="22dp"
+                app:layout_constraintBottom_toBottomOf="@+id/categoryTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/categoryTextView"
+                app:layout_constraintTop_toTopOf="@+id/categoryTextView" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </layout>

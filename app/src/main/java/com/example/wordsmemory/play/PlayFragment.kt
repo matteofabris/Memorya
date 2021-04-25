@@ -3,11 +3,14 @@ package com.example.wordsmemory.play
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
@@ -21,7 +24,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PlayFragment : Fragment() {
+class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private lateinit var _viewModel: PlayFragmentViewModel
     private lateinit var _binding: PlayFragmentBinding
@@ -44,6 +47,7 @@ class PlayFragment : Fragment() {
         setupEditText()
         setupVocabularyButtonListener()
         setupObservers()
+        setCategoriesSpinner()
 
         return _binding.root
     }
@@ -120,6 +124,32 @@ class PlayFragment : Fragment() {
             })
     }
 
+    private fun setCategoriesSpinner() {
+        _viewModel.categories.observe(viewLifecycleOwner, {
+            it.let {
+                val categories = it.map { c -> c.category }.toTypedArray()
+
+                it.forEach { c ->
+                    Log.i(
+                        "categories",
+                        "Category: id - ${c.id}, name - ${c.category}"
+                    )
+                }
+
+                val arrayAdapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    categories
+                )
+                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                _binding.categorySpinner.adapter = arrayAdapter
+            }
+        })
+
+        _binding.categorySpinner.onItemSelectedListener = this
+    }
+
     private fun changeBackgroundColor(rightAnswer: Boolean) {
         val color = if (rightAnswer) resources.getColor(
             R.color.wm_primaryVariant,
@@ -136,6 +166,14 @@ class PlayFragment : Fragment() {
             delay(170)
             _binding.container.setBackgroundColor(Color.TRANSPARENT)
         }
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        _viewModel.resetGamePlay(parent?.getItemAtPosition(position).toString())
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        _viewModel.resetGamePlay(Constants.defaultCategory)
     }
 }
 
