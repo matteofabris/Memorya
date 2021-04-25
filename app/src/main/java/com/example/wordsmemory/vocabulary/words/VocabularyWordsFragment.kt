@@ -18,7 +18,7 @@ import com.example.wordsmemory.R
 import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.databinding.VocabularyWordsFragmentBinding
 import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
-import com.example.wordsmemory.vocabulary.addvocabularyitem.AddVocabularyItemSheet
+import com.example.wordsmemory.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -30,6 +30,20 @@ class VocabularyWordsFragment(private val _categoryId: Int = 0) : Fragment() {
     private lateinit var _viewModel: VocabularyWordsViewModel
     private lateinit var _binding: VocabularyWordsFragmentBinding
     private var _addClicked = false
+    private val _showAddOrEditVocabularyItemSheet: (Int?) -> Boolean = {
+        if (!_addClicked) {
+            _addClicked = true
+
+            val addOrEditVocabularyItemSheet = AddOrEditVocabularyItemSheet(it)
+            addOrEditVocabularyItemSheet.show(parentFragmentManager, "add_word")
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                delay(500)
+                _addClicked = false
+            }
+            true
+        } else false
+    }
 
     @SuppressLint("InflateParams")
     override fun onCreateView(
@@ -57,7 +71,7 @@ class VocabularyWordsFragment(private val _categoryId: Int = 0) : Fragment() {
     }
 
     private fun setupVocabularyList() {
-        val vocabularyAdapter = VocabularyItemAdapter()
+        val vocabularyAdapter = VocabularyItemAdapter(_showAddOrEditVocabularyItemSheet)
         _binding.vocabularyList.adapter = vocabularyAdapter
 
         setListDivider()
@@ -76,17 +90,7 @@ class VocabularyWordsFragment(private val _categoryId: Int = 0) : Fragment() {
 
     private fun setupAddButtonListener() {
         _binding.addButton.setOnClickListener {
-            if (!_addClicked) {
-                _addClicked = true
-
-                val addVocabularyItemBottomFragment = AddVocabularyItemSheet.newInstance()
-                addVocabularyItemBottomFragment.show(parentFragmentManager, "add_word")
-
-                lifecycleScope.launch(Dispatchers.IO) {
-                    delay(500)
-                    _addClicked = false
-                }
-            }
+            _showAddOrEditVocabularyItemSheet.invoke(null)
         }
     }
 

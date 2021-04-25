@@ -7,16 +7,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.VocabularyItem
 import com.example.wordsmemory.R
+import com.example.wordsmemory.VocabularyItem
 import com.example.wordsmemory.databinding.VocabularyHeaderBinding
 import com.example.wordsmemory.databinding.VocabularyItemBinding
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
 
-class VocabularyItemAdapter :
+class VocabularyItemAdapter(private val _onItemLongClickAction: (Int) -> Boolean) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(EnVocabularyDiffCallback()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder.from(parent)
@@ -38,6 +39,9 @@ class VocabularyItemAdapter :
             is ViewHolder -> {
                 val item = getItem(position) as DataItem.EnVocabularyItem
                 holder.setLayout(item._vocabularyItem)
+                holder.itemView.setOnLongClickListener {
+                    _onItemLongClickAction.invoke(item.id)
+                }
             }
             is HeaderViewHolder -> {
                 holder.setStyles()
