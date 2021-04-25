@@ -57,7 +57,10 @@ interface VocabularyDao {
     suspend fun update(vararg words: VocabularyItem)
 
     @Delete
-    suspend fun delete(word: VocabularyItem)
+    suspend fun deleteVocabularyItem(word: VocabularyItem)
+
+    @Delete
+    suspend fun deleteCategory(category: Category)
 
     @Query("SELECT * FROM vocabulary_item")
     fun getVocabularyItems(): LiveData<List<VocabularyItem>>

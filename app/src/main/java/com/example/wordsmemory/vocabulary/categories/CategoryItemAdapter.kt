@@ -52,7 +52,10 @@ class ViewHolder private constructor(private val _binding: CategoryItemBinding) 
         }
     }
 
+    var itemId: Int = -1
+
     fun setLayout(item: Category) {
+        itemId = item.id
         _binding.categoryTextView.text = item.category
         _binding.executePendingBindings()
     }
