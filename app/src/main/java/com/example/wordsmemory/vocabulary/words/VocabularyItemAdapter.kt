@@ -66,8 +66,6 @@ class EnVocabularyDiffCallback : DiffUtil.ItemCallback<DataItem>() {
 class ViewHolder private constructor(private val _binding: VocabularyItemBinding) :
     RecyclerView.ViewHolder(_binding.root) {
 
-    var itemId: Int = -1
-
     companion object {
         fun from(parent: ViewGroup): ViewHolder {
             val layoutInflater =
@@ -76,6 +74,8 @@ class ViewHolder private constructor(private val _binding: VocabularyItemBinding
             return ViewHolder(binding)
         }
     }
+
+    var itemId: Int = -1
 
     fun setLayout(item: VocabularyItem) {
         if (Constants.isTablet) {

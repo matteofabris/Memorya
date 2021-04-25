@@ -5,12 +5,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.wordsmemory.Category
 import com.example.wordsmemory.VocabularyDao
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
 class VocabularyCategoriesViewModel(private val _dbDao: VocabularyDao) : ViewModel() {
 
     var categories = _dbDao.getCategories()
+
+    fun removeItem(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _dbDao.deleteCategory(categories.value!!.first { it.id == id })
+        }
+    }
 
     //init {
     //mockCategories()

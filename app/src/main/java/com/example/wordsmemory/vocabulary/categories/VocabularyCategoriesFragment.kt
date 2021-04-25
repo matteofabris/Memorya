@@ -8,11 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.databinding.VocabularyCategoriesFragmentBinding
+import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
 import com.example.wordsmemory.vocabulary.VocabularyFragmentDirections
 import com.example.wordsmemory.vocabulary.addcategory.AddCategorySheet
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +37,7 @@ class VocabularyCategoriesFragment : Fragment() {
         _binding = VocabularyCategoriesFragmentBinding.inflate(inflater)
 
         createViewModel()
-        setupVocabularyList()
+        setupCategoriesList()
         setStyles()
         setupAddButtonListener()
 
@@ -50,7 +53,7 @@ class VocabularyCategoriesFragment : Fragment() {
         _binding.enVocabularyViewModel = _viewModel
     }
 
-    private fun setupVocabularyList() {
+    private fun setupCategoriesList() {
         val categoryAdapter =
             CategoryItemAdapter {
                 val action =
@@ -58,6 +61,8 @@ class VocabularyCategoriesFragment : Fragment() {
                 findNavController().navigate(action)
             }
         _binding.categoriesList.adapter = categoryAdapter
+
+        setSwipeGesture()
 
         _viewModel.categories.observe(
             viewLifecycleOwner,
@@ -89,5 +94,15 @@ class VocabularyCategoriesFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setSwipeGesture() {
+        val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                _viewModel.removeItem((viewHolder as ViewHolder).itemId)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(_binding.categoriesList)
     }
 }

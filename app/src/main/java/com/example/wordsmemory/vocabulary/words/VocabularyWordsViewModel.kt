@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.wordsmemory.VocabularyDao
 import com.example.wordsmemory.VocabularyItem
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
@@ -37,8 +38,8 @@ class VocabularyWordsViewModel(
     }
 
     fun removeItem(id: Int) {
-        viewModelScope.launch {
-            _dbDao.delete(vocabularyList.value!!.first { it.id == id })
+        viewModelScope.launch(Dispatchers.IO) {
+            _dbDao.deleteVocabularyItem(vocabularyList.value!!.first { it.id == id })
         }
     }
 }
