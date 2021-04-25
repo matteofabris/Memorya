@@ -85,7 +85,7 @@
 
     <style name="topBarStylePhone">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_height">45dp</item>
         <item name="android:backgroundTint">@color/wm_primaryVariant</item>
     </style>
 

@@ -69,7 +69,7 @@ interface VocabularyDao {
     fun getCategories(): LiveData<List<Category>>
 
     @Query("SELECT id FROM category WHERE category == :category")
-    fun getCategoryId(category: String): Int
+    suspend fun getCategoryId(category: String): Int
 
     @Query("SELECT category FROM category WHERE id == :id")
     fun getCategoryName(id: Int): String

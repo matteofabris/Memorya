@@ -1,15 +1,16 @@
 package com.example.wordsmemory.play
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import com.example.wordsmemory.Constants
 import com.example.wordsmemory.VocabularyItem
 import com.example.wordsmemory.VocabularyDao
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
-class PlayFragmentViewModel(dbDao: VocabularyDao) : ViewModel() {
+class PlayFragmentViewModel(private val _dbDao: VocabularyDao) : ViewModel() {
 
     companion object {
         const val correctString = " correct"
@@ -18,10 +19,13 @@ class PlayFragmentViewModel(dbDao: VocabularyDao) : ViewModel() {
 
     private var _allAttempts = 0
     private var _correctAttempts = 0
+    private var categoryId = Constants.defaultCategoryId
 
-    var vocabularyList = dbDao.getVocabularyItems()
+    var vocabularyList = _dbDao.getVocabularyItems()
     val translationText = MutableLiveData<String>()
     val recentAttemptsText = MutableLiveData(getRecentAttemptsText())
+    val categories = _dbDao.getCategories()
+
 
     private val _vocabularyItem = MutableLiveData<VocabularyItem>()
     val vocabularyItemItem: LiveData<VocabularyItem>
@@ -34,8 +38,16 @@ class PlayFragmentViewModel(dbDao: VocabularyDao) : ViewModel() {
     fun setPlayWord() {
         if (vocabularyList.value != null) {
             if (vocabularyList.value!!.isNotEmpty()) {
-                val randomIndex = Random.nextInt(vocabularyList.value!!.size)
-                _vocabularyItem.value = vocabularyList.value!![randomIndex]
+                val filteredList = if (categoryId == Constants.defaultCategoryId) {
+                    vocabularyList.value!!
+                } else {
+                    vocabularyList.value!!.filter {
+                        it.category == categoryId
+                    }
+                }
+
+                val randomIndex = Random.nextInt(filteredList.size)
+                _vocabularyItem.value = filteredList[randomIndex]
             } else {
                 _vocabularyItem.value = VocabularyItem("", "")
             }
@@ -58,6 +70,26 @@ class PlayFragmentViewModel(dbDao: VocabularyDao) : ViewModel() {
 
     private fun getRecentAttemptsText(): String {
         return "$recentAttemptsString$_correctAttempts/$_allAttempts$correctString"
+    }
+
+    fun resetGamePlay(categoryName: String) {
+        viewModelScope.launch {
+            setCategoryId(categoryName)
+            resetRecentAttempts()
+            setPlayWord()
+        }
+    }
+
+    private suspend fun setCategoryId(categoryName: String) {
+        return withContext(Dispatchers.IO) {
+            categoryId = _dbDao.getCategoryId(categoryName)
+        }
+    }
+
+    private fun resetRecentAttempts() {
+        _correctAttempts = 0
+        _allAttempts = 0
+        recentAttemptsText.value = getRecentAttemptsText()
     }
 }
 
