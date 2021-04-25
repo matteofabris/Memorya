@@ -24,11 +24,11 @@ data class VocabularyItem(
     val id: Int,
 
     @ColumnInfo(name = "en_word")
-    val enWord: String,
+    var enWord: String,
     @ColumnInfo(name = "it_word")
-    val itWord: String,
+    var itWord: String,
     @ColumnInfo(name = "category")
-    val category: Int
+    var category: Int
 ) {
     constructor (enWord: String, itWord: String) : this(0, enWord, itWord, 0)
     constructor (enWord: String, itWord: String, category: Int) : this(0, enWord, itWord, category)
@@ -48,22 +48,25 @@ data class Category(
 @Dao
 interface VocabularyDao {
     @Insert
-    suspend fun insertVocabularyItem(word: VocabularyItem)
+    suspend fun insertVocabularyItem(item: VocabularyItem)
 
     @Insert
     suspend fun insertCategory(category: Category)
 
     @Update
-    suspend fun update(vararg words: VocabularyItem)
+    suspend fun updateVocabularyItem(item: VocabularyItem)
 
     @Delete
-    suspend fun deleteVocabularyItem(word: VocabularyItem)
+    suspend fun deleteVocabularyItem(item: VocabularyItem)
 
     @Delete
     suspend fun deleteCategory(category: Category)
 
     @Query("SELECT * FROM vocabulary_item")
     fun getVocabularyItems(): LiveData<List<VocabularyItem>>
+
+    @Query("SELECT * FROM vocabulary_item WHERE id == :id")
+    suspend fun getVocabularyItemById(id: Int): VocabularyItem
 
     @Query("SELECT * FROM vocabulary_item WHERE category == :categoryId")
     fun getVocabularyItemsByCategory(categoryId: Int): LiveData<List<VocabularyItem>>

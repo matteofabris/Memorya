@@ -1,11 +1,8 @@
-package com.example.wordsmemory.vocabulary.addvocabularyitem
+package com.example.wordsmemory.vocabulary.addoreditvocabularyitem
 
 import android.os.StrictMode
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.VocabularyItem
 import com.example.wordsmemory.VocabularyDao
@@ -19,23 +16,36 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.*
 
-class AddVocabularyItemSheetViewModel(
+class AddOrEditVocabularyItemSheetViewModel(
     private val _dbDao: VocabularyDao,
-    credentials: InputStream
+    credentials: InputStream,
+    private val _selectedVocabularyItemId: Int? = null
 ) : ViewModel() {
 
     private var _translate: Translate? = null
 
+    val addButtonText = MutableLiveData("Add")
     val enText = MutableLiveData<String>()
     val itText = MutableLiveData<String>()
     val categories = _dbDao.getCategories()
+    var selectedCategoryId = MutableLiveData(1)
     var category = Constants.defaultCategory
+    private lateinit var _vocabularyItem: VocabularyItem
 
     init {
-        getTranslateService(credentials)
+        viewModelScope.launch {
+            getTranslateService(credentials)
+
+            if (_selectedVocabularyItemId != null) {
+                _vocabularyItem = _dbDao.getVocabularyItemById(_selectedVocabularyItemId)
+                enText.value = _vocabularyItem.enWord
+                itText.value = _vocabularyItem.itWord
+                addButtonText.value = "Update"
+            }
+        }
     }
 
-    fun saveVocabularyItem() {
+    fun insertOrUpdateVocabularyItem() {
         viewModelScope.launch(Dispatchers.IO) {
             val categoryId = _dbDao.getCategoryId(category)
             Log.i(
@@ -43,13 +53,19 @@ class AddVocabularyItemSheetViewModel(
                 "Save vocabulary item: en - ${enText.value}, it - ${itText.value}, cat - $categoryId"
             )
 
-            _dbDao.insertVocabularyItem(
-                VocabularyItem(
+            if (_selectedVocabularyItemId != null) {
+                _vocabularyItem.enWord = enText.value!!.toLowerCase(Locale.getDefault())
+                _vocabularyItem.itWord = itText.value!!.toLowerCase(Locale.getDefault())
+                _vocabularyItem.category = categoryId
+                _dbDao.updateVocabularyItem(_vocabularyItem)
+            } else {
+                val itemToInsert = VocabularyItem(
                     enText.value!!.toLowerCase(Locale.getDefault()),
                     itText.value!!.toLowerCase(Locale.getDefault()),
                     categoryId
                 )
-            )
+                _dbDao.insertVocabularyItem(itemToInsert)
+            }
         }
     }
 
@@ -90,17 +106,28 @@ class AddVocabularyItemSheetViewModel(
             Log.d("Translation", "TEO: $translatedText")
         }
     }
+
+    fun setCategory() {
+        if (_selectedVocabularyItemId != null) {
+            selectedCategoryId.value = _vocabularyItem.category
+        }
+    }
 }
 
 class AddVocabularyItemSheetViewModelFactory(
     private val _dataSource: VocabularyDao,
-    private val _credentials: InputStream
+    private val _credentials: InputStream,
+    private val _vocabularyItemId: Int? = null
 ) : ViewModelProvider.Factory {
     @InternalCoroutinesApi
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddVocabularyItemSheetViewModel::class.java)) {
-            return AddVocabularyItemSheetViewModel(_dataSource, _credentials) as T
+        if (modelClass.isAssignableFrom(AddOrEditVocabularyItemSheetViewModel::class.java)) {
+            return AddOrEditVocabularyItemSheetViewModel(
+                _dataSource,
+                _credentials,
+                _vocabularyItemId
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

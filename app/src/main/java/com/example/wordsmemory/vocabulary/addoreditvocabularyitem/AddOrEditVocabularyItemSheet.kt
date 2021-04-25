@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.addvocabularyitem
+package com.example.wordsmemory.vocabulary.addoreditvocabularyitem
 
 import android.os.Bundle
 import android.util.Log
@@ -11,27 +11,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.*
-import com.example.wordsmemory.databinding.AddVocabularyItemSheetBinding
+import com.example.wordsmemory.databinding.AddOrEditVocabularyItemSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
-class AddVocabularyItemSheet : BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
+class AddOrEditVocabularyItemSheet(private val _selectedVocabularyItemId: Int? = null) :
+    BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
 
-    companion object {
-        fun newInstance(): AddVocabularyItemSheet =
-            AddVocabularyItemSheet().apply {}
-    }
-
-    private lateinit var _viewModel: AddVocabularyItemSheetViewModel
-    private lateinit var _binding: AddVocabularyItemSheetBinding
+    private lateinit var _viewModel: AddOrEditVocabularyItemSheetViewModel
+    private lateinit var _binding: AddOrEditVocabularyItemSheetBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = AddVocabularyItemSheetBinding.inflate(inflater)
+        _binding = AddOrEditVocabularyItemSheetBinding.inflate(inflater)
         _binding.lifecycleOwner = viewLifecycleOwner
 
         createViewModel()
@@ -49,11 +45,12 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment(), AdapterView.OnItemSe
 
         val factory = AddVocabularyItemSheetViewModelFactory(
             dbDao,
-            resources.openRawResource(R.raw.wordstranslationcredentials)
+            resources.openRawResource(R.raw.wordstranslationcredentials),
+            _selectedVocabularyItemId
         )
         _viewModel =
-            ViewModelProvider(this, factory).get(AddVocabularyItemSheetViewModel::class.java)
-        _binding.addItemViewModel = _viewModel
+            ViewModelProvider(this, factory).get(AddOrEditVocabularyItemSheetViewModel::class.java)
+        _binding.addOrEditItemViewModel = _viewModel
     }
 
     private fun setStyles() {
@@ -82,7 +79,7 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment(), AdapterView.OnItemSe
 
     private fun setupButtons() {
         _binding.addButton.setOnClickListener {
-            _viewModel.saveVocabularyItem()
+            _viewModel.insertOrUpdateVocabularyItem()
             dismiss()
         }
         _binding.googleTranslateButton.setOnClickListener {
@@ -108,24 +105,32 @@ class AddVocabularyItemSheet : BottomSheetDialogFragment(), AdapterView.OnItemSe
 
     private fun setCategoriesSpinner() {
         _viewModel.categories.observe(viewLifecycleOwner, {
-            it.let {
-                val categories = it.map { c -> c.category }.toTypedArray()
+            val categories = it.map { c -> c.category }.toTypedArray()
 
-                it.forEach { c ->
-                    Log.i(
-                        "categories",
-                        "Category: id - ${c.id}, name - ${c.category}"
-                    )
-                }
-
-                val arrayAdapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item,
-                    categories
+            it.forEach { c ->
+                Log.i(
+                    "categories",
+                    "Category: id - ${c.id}, name - ${c.category}"
                 )
-                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
 
-                _binding.categorySpinner.adapter = arrayAdapter
+            val arrayAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                categories
+            )
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+            _binding.categorySpinner.adapter = arrayAdapter
+            _viewModel.setCategory()
+        })
+
+        _viewModel.selectedCategoryId.observe(viewLifecycleOwner, {
+            val categories = _viewModel.categories.value
+            if (categories != null) {
+                val selectedCategory = categories.first { c -> c.id == it }
+                val index = categories.indexOf(selectedCategory)
+                _binding.categorySpinner.setSelection(index)
             }
         })
 

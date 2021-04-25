@@ -6,15 +6,15 @@
     <data>
 
         <variable
-            name="addItemViewModel"
-            type="com.example.wordsmemory.vocabulary.addvocabularyitem.AddVocabularyItemSheetViewModel" />
+            name="addOrEditItemViewModel"
+            type="com.example.wordsmemory.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheetViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/add_word_background"
-        tools:context=".vocabulary.addvocabularyitem.AddVocabularyItemSheet">
+        tools:context=".vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/editTextContainer"
@@ -48,7 +48,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
-                android:text="@={addItemViewModel.enText}"
+                android:text="@={addOrEditItemViewModel.enText}"
                 app:layout_constraintBottom_toTopOf="@id/itWordEditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/enWordTitleTextView"
@@ -72,7 +72,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
-                android:text="@={addItemViewModel.itText}"
+                android:text="@={addOrEditItemViewModel.itText}"
                 app:layout_constraintBottom_toBottomOf="@id/itWordTitleTextView"
                 app:layout_constraintEnd_toEndOf="@+id/enWordEditText"
                 app:layout_constraintStart_toStartOf="@id/enWordEditText"
@@ -107,7 +107,7 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_background"
             android:enabled="false"
-            android:text="@string/add"
+            android:text="@{addOrEditItemViewModel.addButtonText}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/googleTranslateButton"
             app:layout_constraintStart_toStartOf="parent"
