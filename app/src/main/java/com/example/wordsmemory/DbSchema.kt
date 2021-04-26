@@ -119,8 +119,14 @@ abstract class VocabularyDatabase : RoomDatabase() {
         private fun insertDefaultCategory() {
             val dao = INSTANCE!!.vocabularyDao()
             GlobalScope.launch(Dispatchers.IO) {
-                if (dao.getCategories().value?.count() == 0)
-                    dao.insertCategory(Category(0, Constants.defaultCategory))
+                val categories = dao.getCategories()
+                if (categories.value?.count() == 0)
+                    dao.insertCategory(
+                        Category(
+                            0,
+                            Constants.defaultCategory
+                        )
+                    )
             }
         }
     }

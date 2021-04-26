@@ -12,4 +12,5 @@
     <color name="wm_primaryVariant">#0c270c</color>
     <color name="wm_widgetsBackground">#9fdf9f</color>
     <color name="wm_widgetsBackgroundShadow">#79d279</color>
+    <color name="delete_list_item_color">#f44336</color>
 </resources>
