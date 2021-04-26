@@ -17,7 +17,7 @@ import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.databinding.VocabularyCategoriesFragmentBinding
 import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
 import com.example.wordsmemory.vocabulary.VocabularyFragmentDirections
-import com.example.wordsmemory.vocabulary.addcategory.AddCategorySheet
+import com.example.wordsmemory.vocabulary.addoreditcategory.AddOrEditCategorySheet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -29,6 +29,25 @@ class VocabularyCategoriesFragment : Fragment() {
     private lateinit var _viewModel: VocabularyCategoriesViewModel
     private lateinit var _binding: VocabularyCategoriesFragmentBinding
     private var _addClicked = false
+    private val _showAddOrEditCategorySheet: (Int?) -> Boolean = {
+        if (!_addClicked) {
+            _addClicked = true
+
+            val addOrEditCategorySheet = AddOrEditCategorySheet(it)
+            addOrEditCategorySheet.show(parentFragmentManager, "add_category")
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                delay(500)
+                _addClicked = false
+            }
+            true
+        } else false
+    }
+    private val _showSelectedCategoryFragment: (Int) -> Unit = {
+        val action =
+            VocabularyFragmentDirections.actionVocabularyFragmentToCategoryFragment(it)
+        findNavController().navigate(action)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,11 +74,7 @@ class VocabularyCategoriesFragment : Fragment() {
 
     private fun setupCategoriesList() {
         val categoryAdapter =
-            CategoryItemAdapter {
-                val action =
-                    VocabularyFragmentDirections.actionVocabularyFragmentToCategoryFragment(it)
-                findNavController().navigate(action)
-            }
+            CategoryItemAdapter(_showSelectedCategoryFragment, _showAddOrEditCategorySheet)
         _binding.categoriesList.adapter = categoryAdapter
 
         setSwipeGesture()
@@ -82,17 +97,7 @@ class VocabularyCategoriesFragment : Fragment() {
 
     private fun setupAddButtonListener() {
         _binding.addButton.setOnClickListener {
-            if (!_addClicked) {
-                _addClicked = true
-
-                val addCategoryBottomFragment = AddCategorySheet.newInstance()
-                addCategoryBottomFragment.show(parentFragmentManager, "add_category")
-
-                lifecycleScope.launch(Dispatchers.IO) {
-                    delay(500)
-                    _addClicked = false
-                }
-            }
+            _showAddOrEditCategorySheet.invoke(null)
         }
     }
 

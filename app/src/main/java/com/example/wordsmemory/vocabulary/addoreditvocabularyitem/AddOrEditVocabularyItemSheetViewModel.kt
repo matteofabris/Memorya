@@ -23,6 +23,7 @@ class AddOrEditVocabularyItemSheetViewModel(
 ) : ViewModel() {
 
     private var _translate: Translate? = null
+    private lateinit var _vocabularyItem: VocabularyItem
 
     val addButtonText = MutableLiveData("Add")
     val enText = MutableLiveData<String>()
@@ -30,7 +31,6 @@ class AddOrEditVocabularyItemSheetViewModel(
     val categories = _dbDao.getCategories()
     var selectedCategoryId = MutableLiveData(1)
     var category = Constants.defaultCategory
-    private lateinit var _vocabularyItem: VocabularyItem
 
     init {
         viewModelScope.launch {

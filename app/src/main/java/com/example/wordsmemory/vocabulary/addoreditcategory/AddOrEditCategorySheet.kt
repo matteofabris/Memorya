@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.addcategory
+package com.example.wordsmemory.vocabulary.addoreditcategory
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,12 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.InternalCoroutinesApi
 
 @InternalCoroutinesApi
-class AddCategorySheet : BottomSheetDialogFragment() {
-
-    companion object {
-        fun newInstance(): AddCategorySheet =
-            AddCategorySheet().apply {}
-    }
+class AddOrEditCategorySheet(private val _selectedCategoryId: Int? = null) : BottomSheetDialogFragment() {
 
     private lateinit var _viewModel: AddCategorySheetViewModel
     private lateinit var _binding: AddCategorySheetFragmentBinding
@@ -41,7 +36,7 @@ class AddCategorySheet : BottomSheetDialogFragment() {
         val application = requireNotNull(this.activity).application
         val dbDao = VocabularyDatabase.getInstance(application).vocabularyDao()
 
-        val factory = AddCategorySheetViewModelFactory(dbDao)
+        val factory = AddCategorySheetViewModelFactory(dbDao, _selectedCategoryId)
         _viewModel =
             ViewModelProvider(this, factory).get(AddCategorySheetViewModel::class.java)
         _binding.addCategoryViewModel = _viewModel
@@ -63,7 +58,7 @@ class AddCategorySheet : BottomSheetDialogFragment() {
 
     private fun setupButtons() {
         _binding.addButton.setOnClickListener {
-            _viewModel.saveCategory()
+            _viewModel.insertOrUpdateCategory()
             dismiss()
         }
 
