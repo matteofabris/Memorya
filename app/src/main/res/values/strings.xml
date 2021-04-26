@@ -21,4 +21,8 @@
     <string name="all_words">ALL WORDS</string>
     <string name="categories">CATEGORIES</string>
     <string name="category">CATEGORY:</string>
+    <string name="correct"> correct</string>
+    <string name="recent_attempts">Recent attempts: </string>
+    <string name="default_category">None</string>
+    <string name="update">Update</string>
 </resources>

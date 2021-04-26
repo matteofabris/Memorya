@@ -1,7 +1,9 @@
 package com.example.wordsmemory.play
 
+import android.content.res.Resources
 import androidx.lifecycle.*
 import com.example.wordsmemory.Constants
+import com.example.wordsmemory.R
 import com.example.wordsmemory.VocabularyItem
 import com.example.wordsmemory.VocabularyDao
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +30,7 @@ class PlayFragmentViewModel(private val _dbDao: VocabularyDao) : ViewModel() {
 
 
     private val _vocabularyItem = MutableLiveData<VocabularyItem>()
-    val vocabularyItemItem: LiveData<VocabularyItem>
+    val vocabularyItem: LiveData<VocabularyItem>
         get() = _vocabularyItem
 
     private val _isTranslationOk = MutableLiveData<Boolean>()
