@@ -40,7 +40,7 @@ data class Category(
     val id: Int,
 
     @ColumnInfo(name = "category")
-    val category: String
+    var category: String
 ) {
     constructor (category: String) : this(0, category)
 }
@@ -55,6 +55,9 @@ interface VocabularyDao {
 
     @Update
     suspend fun updateVocabularyItem(item: VocabularyItem)
+
+    @Update
+    suspend fun updateCategory(category: Category)
 
     @Delete
     suspend fun deleteVocabularyItem(item: VocabularyItem)
@@ -79,6 +82,9 @@ interface VocabularyDao {
 
     @Query("SELECT category FROM category WHERE id == :id")
     fun getCategoryName(id: Int): String
+
+    @Query("SELECT * FROM category WHERE id == :id")
+    suspend fun getCategoryById(id: Int): Category
 }
 
 @Database(entities = [VocabularyItem::class, Category::class], version = 1, exportSchema = false)
@@ -113,7 +119,7 @@ abstract class VocabularyDatabase : RoomDatabase() {
         private fun insertDefaultCategory() {
             val dao = INSTANCE!!.vocabularyDao()
             GlobalScope.launch(Dispatchers.IO) {
-                if (dao.getCategoryId(Constants.defaultCategory) == 0)
+                if (dao.getCategories().value?.count() == 0)
                     dao.insertCategory(Category(0, Constants.defaultCategory))
             }
         }

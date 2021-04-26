@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordsmemory.Category
 import com.example.wordsmemory.databinding.CategoryItemBinding
 
-class CategoryItemAdapter(private val _navigateToCategoryFragment: (Int) -> Unit) :
-    ListAdapter<Category, RecyclerView.ViewHolder>(CategoryDiffCallback()) {
+class CategoryItemAdapter(
+    private val _navigateToCategoryFragment: (Int) -> Unit,
+    private val _onCategoryLongClickAction: (Int) -> Boolean
+) : ListAdapter<Category, RecyclerView.ViewHolder>(CategoryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder.from(parent)
@@ -25,6 +27,9 @@ class CategoryItemAdapter(private val _navigateToCategoryFragment: (Int) -> Unit
                 }
                 holder.setLayout(item)
                 holder.itemView.setOnClickListener(onItemClickedAction)
+                holder.itemView.setOnLongClickListener {
+                    _onCategoryLongClickAction.invoke(item.id)
+                }
             }
         }
     }
