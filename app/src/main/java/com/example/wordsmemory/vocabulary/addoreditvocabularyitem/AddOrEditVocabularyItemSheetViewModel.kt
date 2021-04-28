@@ -28,7 +28,7 @@ class AddOrEditVocabularyItemSheetViewModel(
     val addButtonText = MutableLiveData("Add")
     val enText = MutableLiveData<String>()
     val itText = MutableLiveData<String>()
-    val categories = _dbDao.getCategories()
+    val categories = _dbDao.getCategoriesAsLiveData()
     var selectedCategoryId = MutableLiveData(1)
     var category = Constants.defaultCategory
 

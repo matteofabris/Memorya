@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class VocabularyCategoriesViewModel(private val _dbDao: VocabularyDao) : ViewModel() {
 
-    var categories = _dbDao.getCategories()
+    var categories = _dbDao.getCategoriesAsLiveData()
 
     fun removeItem(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {

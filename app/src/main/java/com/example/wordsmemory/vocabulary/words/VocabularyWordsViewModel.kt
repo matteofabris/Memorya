@@ -18,7 +18,7 @@ class VocabularyWordsViewModel(
     var vocabularyList = initVocabularyList()
 
     private fun initVocabularyList(): LiveData<List<VocabularyItem>> {
-        return if (_categoryId > 0) _dbDao.getVocabularyItemsByCategory(_categoryId) else _dbDao.getVocabularyItems()
+        return if (_categoryId > 0) _dbDao.getVocabularyItemsByCategoryAsLiveData(_categoryId) else _dbDao.getVocabularyItemsAsLiveData()
     }
 
     fun mockWords() {

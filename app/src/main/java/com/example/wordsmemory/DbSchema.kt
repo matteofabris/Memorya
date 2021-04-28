@@ -66,16 +66,19 @@ interface VocabularyDao {
     suspend fun deleteCategory(category: Category)
 
     @Query("SELECT * FROM vocabulary_item")
-    fun getVocabularyItems(): LiveData<List<VocabularyItem>>
+    fun getVocabularyItemsAsLiveData(): LiveData<List<VocabularyItem>>
 
     @Query("SELECT * FROM vocabulary_item WHERE id == :id")
     suspend fun getVocabularyItemById(id: Int): VocabularyItem
 
     @Query("SELECT * FROM vocabulary_item WHERE category == :categoryId")
-    fun getVocabularyItemsByCategory(categoryId: Int): LiveData<List<VocabularyItem>>
+    fun getVocabularyItemsByCategoryAsLiveData(categoryId: Int): LiveData<List<VocabularyItem>>
 
     @Query("SELECT * FROM category")
-    fun getCategories(): LiveData<List<Category>>
+    fun getCategoriesAsLiveData(): LiveData<List<Category>>
+
+    @Query("SELECT * FROM category")
+    fun getCategories(): List<Category>
 
     @Query("SELECT id FROM category WHERE category == :category")
     suspend fun getCategoryId(category: String): Int
@@ -120,7 +123,7 @@ abstract class VocabularyDatabase : RoomDatabase() {
             val dao = INSTANCE!!.vocabularyDao()
             GlobalScope.launch(Dispatchers.IO) {
                 val categories = dao.getCategories()
-                if (categories.value?.count() == 0)
+                if (categories.isEmpty())
                     dao.insertCategory(
                         Category(
                             0,

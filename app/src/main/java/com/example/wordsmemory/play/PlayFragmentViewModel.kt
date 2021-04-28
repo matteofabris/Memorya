@@ -1,9 +1,7 @@
 package com.example.wordsmemory.play
 
-import android.content.res.Resources
 import androidx.lifecycle.*
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.R
 import com.example.wordsmemory.VocabularyItem
 import com.example.wordsmemory.VocabularyDao
 import kotlinx.coroutines.Dispatchers
@@ -23,10 +21,10 @@ class PlayFragmentViewModel(private val _dbDao: VocabularyDao) : ViewModel() {
     private var _correctAttempts = 0
     private var categoryId = Constants.defaultCategoryId
 
-    var vocabularyList = _dbDao.getVocabularyItems()
+    var vocabularyList = _dbDao.getVocabularyItemsAsLiveData()
     val translationText = MutableLiveData<String>()
     val recentAttemptsText = MutableLiveData(getRecentAttemptsText())
-    val categories = _dbDao.getCategories()
+    val categories = _dbDao.getCategoriesAsLiveData()
 
 
     private val _vocabularyItem = MutableLiveData<VocabularyItem>()
