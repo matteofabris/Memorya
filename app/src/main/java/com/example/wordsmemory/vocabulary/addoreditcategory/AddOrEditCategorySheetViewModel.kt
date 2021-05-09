@@ -33,14 +33,14 @@ class AddCategorySheetViewModel(
     fun insertOrUpdateCategory() {
         viewModelScope.launch {
             if (_selectedCategoryId != null) {
-                _category.category = category.value!!.toLowerCase(Locale.getDefault())
-                    .capitalize(Locale.getDefault())
+                _category.category = category.value!!.lowercase(Locale.getDefault())
+                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                 _dbDao.updateCategory(_category)
             } else {
                 _dbDao.insertCategory(
                     Category(
-                        category.value!!.toLowerCase(Locale.getDefault())
-                            .capitalize(Locale.getDefault())
+                        category.value!!.lowercase(Locale.getDefault())
+                            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                     )
                 )
             }

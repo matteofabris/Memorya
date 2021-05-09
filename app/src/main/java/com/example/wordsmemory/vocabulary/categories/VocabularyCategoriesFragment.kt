@@ -18,15 +18,19 @@ import com.example.wordsmemory.databinding.VocabularyCategoriesFragmentBinding
 import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
 import com.example.wordsmemory.vocabulary.VocabularyFragmentDirections
 import com.example.wordsmemory.vocabulary.addoreditcategory.AddOrEditCategorySheet
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @InternalCoroutinesApi
+@AndroidEntryPoint
 class VocabularyCategoriesFragment : Fragment() {
 
-    private lateinit var _viewModel: VocabularyCategoriesViewModel
+    @Inject
+    lateinit var viewModel: VocabularyCategoriesViewModel
     private lateinit var _binding: VocabularyCategoriesFragmentBinding
     private var _addClicked = false
     private val _showAddOrEditCategorySheet: (Int?) -> Boolean = {
@@ -54,22 +58,13 @@ class VocabularyCategoriesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = VocabularyCategoriesFragmentBinding.inflate(inflater)
+        _binding.enVocabularyViewModel = viewModel
 
-        createViewModel()
         setupCategoriesList()
         setStyles()
         setupAddButtonListener()
 
         return _binding.root
-    }
-
-    private fun createViewModel() {
-        val application = requireNotNull(this.activity).application
-        val dbDao = VocabularyDatabase.getInstance(application).vocabularyDao()
-
-        val factory = VocabularyCategoriesViewModelFactory(dbDao)
-        _viewModel = ViewModelProvider(this, factory).get(VocabularyCategoriesViewModel::class.java)
-        _binding.enVocabularyViewModel = _viewModel
     }
 
     private fun setupCategoriesList() {
@@ -79,7 +74,7 @@ class VocabularyCategoriesFragment : Fragment() {
 
         setSwipeGesture()
 
-        _viewModel.categories.observe(
+        viewModel.categories.observe(
             viewLifecycleOwner,
             {
                 it?.let {
@@ -104,7 +99,7 @@ class VocabularyCategoriesFragment : Fragment() {
     private fun setSwipeGesture() {
         val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                _viewModel.removeItem((viewHolder as ViewHolder).itemId)
+                viewModel.removeItem((viewHolder as ViewHolder).itemId)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)

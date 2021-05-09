@@ -14,19 +14,25 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.airbnb.paris.extensions.style
-import com.example.wordsmemory.*
+import com.example.wordsmemory.Constants
+import com.example.wordsmemory.R
+import com.example.wordsmemory.TranslateInputFilter
+import com.example.wordsmemory.afterTextChanged
 import com.example.wordsmemory.databinding.PlayFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
-    private lateinit var _viewModel: PlayFragmentViewModel
+    @Inject
+    lateinit var viewModel: PlayFragmentViewModel
     private lateinit var _binding: PlayFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,8 +47,8 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
     ): View {
         _binding = PlayFragmentBinding.inflate(inflater)
         _binding.lifecycleOwner = viewLifecycleOwner
+        _binding.playViewModel = viewModel
 
-        createViewModel()
         setStyles()
         setupEditText()
         setupVocabularyButtonListener()
@@ -54,17 +60,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
-        _viewModel.setPlayWord()
-    }
-
-    @InternalCoroutinesApi
-    private fun createViewModel() {
-        val application = requireNotNull(this.activity).application
-        val dbDao = VocabularyDatabase.getInstance(application).vocabularyDao()
-
-        val factory = PlayFragmentViewModelFactory(dbDao)
-        _viewModel = ViewModelProvider(this, factory).get(PlayFragmentViewModel::class.java)
-        _binding.playViewModel = _viewModel
+        viewModel.setPlayWord()
     }
 
     private fun setStyles() {
@@ -105,7 +101,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setupObservers() {
-        _viewModel.isTranslationOk.observe(
+        viewModel.isTranslationOk.observe(
             viewLifecycleOwner,
             {
                 val text: String =
@@ -117,15 +113,15 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 changeBackgroundColor(it)
             })
 
-        _viewModel.vocabularyList.observe(
+        viewModel.vocabularyList.observe(
             viewLifecycleOwner,
             {
-                _viewModel.setPlayWord()
+                viewModel.setPlayWord()
             })
     }
 
     private fun setCategoriesSpinner() {
-        _viewModel.categories.observe(viewLifecycleOwner, {
+        viewModel.categories.observe(viewLifecycleOwner, {
             it.let {
                 val categories = it.map { c -> c.category }.toTypedArray()
 
@@ -169,11 +165,11 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        _viewModel.resetGamePlay(parent?.getItemAtPosition(position).toString())
+        viewModel.resetGamePlay(parent?.getItemAtPosition(position).toString())
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        _viewModel.resetGamePlay(Constants.defaultCategory)
+        viewModel.resetGamePlay(Constants.defaultCategory)
     }
 }
 

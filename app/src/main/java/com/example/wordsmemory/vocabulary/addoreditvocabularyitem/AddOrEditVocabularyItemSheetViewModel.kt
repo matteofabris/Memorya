@@ -54,14 +54,14 @@ class AddOrEditVocabularyItemSheetViewModel(
             )
 
             if (_selectedVocabularyItemId != null) {
-                _vocabularyItem.enWord = enText.value!!.toLowerCase(Locale.getDefault())
-                _vocabularyItem.itWord = itText.value!!.toLowerCase(Locale.getDefault())
+                _vocabularyItem.enWord = enText.value!!.lowercase(Locale.getDefault())
+                _vocabularyItem.itWord = itText.value!!.lowercase(Locale.getDefault())
                 _vocabularyItem.category = categoryId
                 _dbDao.updateVocabularyItem(_vocabularyItem)
             } else {
                 val itemToInsert = VocabularyItem(
-                    enText.value!!.toLowerCase(Locale.getDefault()),
-                    itText.value!!.toLowerCase(Locale.getDefault()),
+                    enText.value!!.lowercase(Locale.getDefault()),
+                    itText.value!!.lowercase(Locale.getDefault()),
                     categoryId
                 )
                 _dbDao.insertVocabularyItem(itemToInsert)

@@ -27,7 +27,7 @@ data class VocabularyItem(
     var enWord: String,
     @ColumnInfo(name = "it_word")
     var itWord: String,
-    @ColumnInfo(name = "category")
+    @ColumnInfo(name = "category", index = true)
     var category: Int
 ) {
     constructor (enWord: String, itWord: String) : this(0, enWord, itWord, 0)

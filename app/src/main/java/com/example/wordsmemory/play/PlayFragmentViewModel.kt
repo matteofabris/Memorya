@@ -4,13 +4,15 @@ import androidx.lifecycle.*
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.VocabularyItem
 import com.example.wordsmemory.VocabularyDao
+import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.random.Random
 
-class PlayFragmentViewModel(private val _dbDao: VocabularyDao) : ViewModel() {
+@FragmentScoped
+class PlayFragmentViewModel @Inject constructor(private val _dbDao: VocabularyDao) : ViewModel() {
 
     companion object {
         const val correctString = " correct"
@@ -90,18 +92,5 @@ class PlayFragmentViewModel(private val _dbDao: VocabularyDao) : ViewModel() {
         _correctAttempts = 0
         _allAttempts = 0
         recentAttemptsText.value = getRecentAttemptsText()
-    }
-}
-
-class PlayFragmentViewModelFactory(
-    private val _dataSource: VocabularyDao
-) : ViewModelProvider.Factory {
-    @InternalCoroutinesApi
-    @Suppress("unchecked_cast")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PlayFragmentViewModel::class.java)) {
-            return PlayFragmentViewModel(_dataSource) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

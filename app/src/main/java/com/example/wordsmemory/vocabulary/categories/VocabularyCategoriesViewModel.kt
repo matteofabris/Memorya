@@ -5,11 +5,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.wordsmemory.Category
 import com.example.wordsmemory.VocabularyDao
+import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class VocabularyCategoriesViewModel(private val _dbDao: VocabularyDao) : ViewModel() {
+@FragmentScoped
+class VocabularyCategoriesViewModel @Inject constructor(private val _dbDao: VocabularyDao) :
+    ViewModel() {
 
     var categories = _dbDao.getCategoriesAsLiveData()
 
@@ -32,18 +36,5 @@ class VocabularyCategoriesViewModel(private val _dbDao: VocabularyDao) : ViewMod
         viewModelScope.launch {
             list.forEach { _dbDao.insertCategory(it) }
         }
-    }
-}
-
-class VocabularyCategoriesViewModelFactory(
-    private val _dataSource: VocabularyDao
-) : ViewModelProvider.Factory {
-    @InternalCoroutinesApi
-    @Suppress("unchecked_cast")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(VocabularyCategoriesViewModel::class.java)) {
-            return VocabularyCategoriesViewModel(_dataSource) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

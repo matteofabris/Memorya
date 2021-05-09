@@ -13,15 +13,18 @@ import com.example.wordsmemory.VocabularyDao
 import com.example.wordsmemory.VocabularyDatabase
 import com.example.wordsmemory.databinding.CategoryFragmentBinding
 import com.example.wordsmemory.vocabulary.words.VocabularyWordsFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @InternalCoroutinesApi
+@AndroidEntryPoint
 class CategoryFragment : Fragment() {
 
     private lateinit var _dbDao: VocabularyDao
-    private lateinit var _viewModel: CategoryViewModel
+    @Inject lateinit var viewModel: CategoryViewModel
     private lateinit var _binding: CategoryFragmentBinding
     private val _args: CategoryFragmentArgs by navArgs()
     private var _categoryId = 0
@@ -32,9 +35,9 @@ class CategoryFragment : Fragment() {
     ): View {
         _categoryId = _args.categoryId
         _binding = CategoryFragmentBinding.inflate(inflater)
+        _binding.categoryViewmodel = viewModel
         _dbDao = getDbDao()
 
-        createViewModel()
         setTopBarTitle()
 
         childFragmentManager.beginTransaction()
@@ -42,12 +45,6 @@ class CategoryFragment : Fragment() {
             .commit()
 
         return _binding.root
-    }
-
-    private fun createViewModel() {
-        val factory = CategoryViewModelFactory()
-        _viewModel = ViewModelProvider(this, factory).get(CategoryViewModel::class.java)
-        _binding.categoryViewmodel = _viewModel
     }
 
     private fun setTopBarTitle() {
