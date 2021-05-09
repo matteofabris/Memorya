@@ -4,14 +4,12 @@ import androidx.lifecycle.*
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.VocabularyItem
 import com.example.wordsmemory.VocabularyDao
-import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.random.Random
 
-@FragmentScoped
 class PlayFragmentViewModel @Inject constructor(private val _dbDao: VocabularyDao) : ViewModel() {
 
     companion object {
