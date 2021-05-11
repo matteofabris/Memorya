@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wordsmemory.Category
 import com.example.wordsmemory.VocabularyDao
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class VocabularyCategoriesViewModel @Inject constructor(private val _dbDao: VocabularyDao) :
     ViewModel() {
 

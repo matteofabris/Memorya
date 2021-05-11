@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.wordsmemory.R
@@ -17,14 +17,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @InternalCoroutinesApi
 @AndroidEntryPoint
 class CategoryFragment : Fragment() {
 
     private lateinit var _dbDao: VocabularyDao
-    @Inject lateinit var viewModel: CategoryViewModel
+    private val _viewModel: CategoryViewModel by viewModels()
     private lateinit var _binding: CategoryFragmentBinding
     private val _args: CategoryFragmentArgs by navArgs()
     private var _categoryId = 0
@@ -35,7 +34,7 @@ class CategoryFragment : Fragment() {
     ): View {
         _categoryId = _args.categoryId
         _binding = CategoryFragmentBinding.inflate(inflater)
-        _binding.categoryViewmodel = viewModel
+        _binding.categoryViewmodel = _viewModel
         _dbDao = getDbDao()
 
         setTopBarTitle()
