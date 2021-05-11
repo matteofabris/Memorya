@@ -9,21 +9,25 @@ import com.example.wordsmemory.model.VocabularyItem
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
 import java.util.*
+import javax.inject.Inject
 
-class AddOrEditVocabularyItemSheetViewModel(
+@HiltViewModel
+class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
+    _savedStateHandle: SavedStateHandle,
     private val _dbDao: VocabularyDao,
-    credentials: InputStream,
-    private val _selectedVocabularyItemId: Int? = null
+    private val _credentials: InputStream
 ) : ViewModel() {
 
     private var _translate: Translate? = null
     private lateinit var _vocabularyItem: VocabularyItem
+    private val _selectedVocabularyItemId: Int =
+        _savedStateHandle.get<Int>("selectedVocabularyItemId")!!
 
     val addButtonText = MutableLiveData("Add")
     val enText = MutableLiveData<String>()
@@ -34,9 +38,9 @@ class AddOrEditVocabularyItemSheetViewModel(
 
     init {
         viewModelScope.launch {
-            getTranslateService(credentials)
+            getTranslateService(_credentials)
 
-            if (_selectedVocabularyItemId != null) {
+            if (_selectedVocabularyItemId != -1) {
                 _vocabularyItem = _dbDao.getVocabularyItemById(_selectedVocabularyItemId)
                 enText.value = _vocabularyItem.enWord
                 itText.value = _vocabularyItem.itWord
@@ -53,7 +57,7 @@ class AddOrEditVocabularyItemSheetViewModel(
                 "Save vocabulary item: en - ${enText.value}, it - ${itText.value}, cat - $categoryId"
             )
 
-            if (_selectedVocabularyItemId != null) {
+            if (_selectedVocabularyItemId != -1) {
                 _vocabularyItem.enWord = enText.value!!.lowercase(Locale.getDefault())
                 _vocabularyItem.itWord = itText.value!!.lowercase(Locale.getDefault())
                 _vocabularyItem.category = categoryId
@@ -108,27 +112,8 @@ class AddOrEditVocabularyItemSheetViewModel(
     }
 
     fun setCategory() {
-        if (_selectedVocabularyItemId != null) {
+        if (_selectedVocabularyItemId != -1) {
             selectedCategoryId.value = _vocabularyItem.category
         }
-    }
-}
-
-class AddVocabularyItemSheetViewModelFactory(
-    private val _dataSource: VocabularyDao,
-    private val _credentials: InputStream,
-    private val _vocabularyItemId: Int? = null
-) : ViewModelProvider.Factory {
-    @InternalCoroutinesApi
-    @Suppress("unchecked_cast")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddOrEditVocabularyItemSheetViewModel::class.java)) {
-            return AddOrEditVocabularyItemSheetViewModel(
-                _dataSource,
-                _credentials,
-                _vocabularyItemId
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

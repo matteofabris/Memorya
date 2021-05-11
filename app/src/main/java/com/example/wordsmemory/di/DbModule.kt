@@ -1,4 +1,4 @@
-package com.example.wordsmemory
+package com.example.wordsmemory.di
 
 import android.content.Context
 import com.example.wordsmemory.database.VocabularyDao

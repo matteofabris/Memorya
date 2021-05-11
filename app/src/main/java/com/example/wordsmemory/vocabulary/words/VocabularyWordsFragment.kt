@@ -9,6 +9,7 @@ import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,7 @@ import com.example.wordsmemory.R
 import com.example.wordsmemory.database.VocabularyDatabase
 import com.example.wordsmemory.databinding.VocabularyWordsFragmentBinding
 import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
-import com.example.wordsmemory.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet
+import com.example.wordsmemory.vocabulary.VocabularyFragmentDirections
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -30,12 +31,15 @@ class VocabularyWordsFragment(private val _categoryId: Int = 0) : Fragment() {
     private lateinit var _viewModel: VocabularyWordsViewModel
     private lateinit var _binding: VocabularyWordsFragmentBinding
     private var _addClicked = false
-    private val _showAddOrEditVocabularyItemSheet: (Int?) -> Boolean = {
+    private val _showAddOrEditVocabularyItemSheet: (Int) -> Boolean = {
         if (!_addClicked) {
             _addClicked = true
 
-            val addOrEditVocabularyItemSheet = AddOrEditVocabularyItemSheet(it)
-            addOrEditVocabularyItemSheet.show(parentFragmentManager, "add_word")
+            findNavController().navigate(
+                VocabularyFragmentDirections.actionVocabularyFragmentToAddOrEditVocabularyItemSheet(
+                    it
+                )
+            )
 
             lifecycleScope.launch(Dispatchers.IO) {
                 delay(500)
@@ -90,7 +94,7 @@ class VocabularyWordsFragment(private val _categoryId: Int = 0) : Fragment() {
 
     private fun setupAddButtonListener() {
         _binding.addButton.setOnClickListener {
-            _showAddOrEditVocabularyItemSheet.invoke(null)
+            _showAddOrEditVocabularyItemSheet.invoke(-1)
         }
     }
 

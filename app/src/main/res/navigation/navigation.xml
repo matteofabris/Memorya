@@ -17,17 +17,28 @@
     <fragment
         android:id="@+id/vocabularyFragment"
         android:name="com.example.wordsmemory.vocabulary.VocabularyFragment"
-        android:label="VocabularyFragment" >
+        android:label="VocabularyFragment">
         <action
             android:id="@+id/action_vocabularyFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_vocabularyFragment_to_addOrEditVocabularyItemSheet"
+            app:destination="@id/addOrEditVocabularyItemSheet" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.example.wordsmemory.vocabulary.category.CategoryFragment"
-        android:label="CategoryFragment" >
+        android:label="CategoryFragment">
         <argument
             android:name="categoryId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/addOrEditVocabularyItemSheet"
+        android:name="com.example.wordsmemory.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet"
+        android:label="AddOrEditVocabularyItemSheet">
+        <argument
+            android:name="selectedVocabularyItemId"
             app:argType="integer" />
     </fragment>
 </navigation>

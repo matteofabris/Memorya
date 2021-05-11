@@ -7,21 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.*
-import com.example.wordsmemory.database.VocabularyDatabase
 import com.example.wordsmemory.databinding.AddOrEditVocabularyItemSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
-class AddOrEditVocabularyItemSheet(private val _selectedVocabularyItemId: Int? = null) :
+@AndroidEntryPoint
+class AddOrEditVocabularyItemSheet :
     BottomSheetDialogFragment(), AdapterView.OnItemSelectedListener {
 
-    private lateinit var _viewModel: AddOrEditVocabularyItemSheetViewModel
+    private val _viewModel: AddOrEditVocabularyItemSheetViewModel by viewModels()
     private lateinit var _binding: AddOrEditVocabularyItemSheetBinding
 
     override fun onCreateView(
@@ -30,28 +31,14 @@ class AddOrEditVocabularyItemSheet(private val _selectedVocabularyItemId: Int? =
     ): View {
         _binding = AddOrEditVocabularyItemSheetBinding.inflate(inflater)
         _binding.lifecycleOwner = viewLifecycleOwner
+        _binding.addOrEditItemViewModel = _viewModel
 
-        createViewModel()
         setStyles()
         setEditTextsFilter()
         setupButtons()
         setCategoriesSpinner()
 
         return _binding.root
-    }
-
-    private fun createViewModel() {
-        val application = requireNotNull(this.activity).application
-        val dbDao = VocabularyDatabase.getInstance(application).vocabularyDao()
-
-        val factory = AddVocabularyItemSheetViewModelFactory(
-            dbDao,
-            resources.openRawResource(R.raw.wordstranslationcredentials),
-            _selectedVocabularyItemId
-        )
-        _viewModel =
-            ViewModelProvider(this, factory).get(AddOrEditVocabularyItemSheetViewModel::class.java)
-        _binding.addOrEditItemViewModel = _viewModel
     }
 
     private fun setStyles() {
