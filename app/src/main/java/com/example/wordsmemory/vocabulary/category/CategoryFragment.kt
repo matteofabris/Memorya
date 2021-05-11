@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.wordsmemory.R
-import com.example.wordsmemory.VocabularyDao
-import com.example.wordsmemory.VocabularyDatabase
+import com.example.wordsmemory.database.VocabularyDao
+import com.example.wordsmemory.database.VocabularyDatabase
 import com.example.wordsmemory.databinding.CategoryFragmentBinding
 import com.example.wordsmemory.vocabulary.words.VocabularyWordsFragment
 import dagger.hilt.android.AndroidEntryPoint

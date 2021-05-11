@@ -2,8 +2,8 @@ package com.example.wordsmemory.play
 
 import androidx.lifecycle.*
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.VocabularyItem
-import com.example.wordsmemory.VocabularyDao
+import com.example.wordsmemory.database.VocabularyDao
+import com.example.wordsmemory.model.VocabularyItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

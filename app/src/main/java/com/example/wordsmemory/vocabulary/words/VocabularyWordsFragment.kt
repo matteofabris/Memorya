@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
-import com.example.wordsmemory.VocabularyDatabase
+import com.example.wordsmemory.database.VocabularyDatabase
 import com.example.wordsmemory.databinding.VocabularyWordsFragmentBinding
 import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
 import com.example.wordsmemory.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet

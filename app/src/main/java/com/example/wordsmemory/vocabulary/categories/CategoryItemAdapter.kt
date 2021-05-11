@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wordsmemory.Category
 import com.example.wordsmemory.databinding.CategoryItemBinding
+import com.example.wordsmemory.model.Category
 
 class CategoryItemAdapter(
     private val _navigateToCategoryFragment: (Int) -> Unit,

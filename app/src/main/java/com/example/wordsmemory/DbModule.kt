@@ -1,6 +1,8 @@
 package com.example.wordsmemory
 
 import android.content.Context
+import com.example.wordsmemory.database.VocabularyDao
+import com.example.wordsmemory.database.VocabularyDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -2,8 +2,8 @@ package com.example.wordsmemory.vocabulary.categories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.wordsmemory.Category
-import com.example.wordsmemory.VocabularyDao
+import com.example.wordsmemory.database.VocabularyDao
+import com.example.wordsmemory.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

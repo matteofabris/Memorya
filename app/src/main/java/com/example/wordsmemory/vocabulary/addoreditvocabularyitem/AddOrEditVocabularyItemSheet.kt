@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.*
+import com.example.wordsmemory.database.VocabularyDatabase
 import com.example.wordsmemory.databinding.AddOrEditVocabularyItemSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.InternalCoroutinesApi

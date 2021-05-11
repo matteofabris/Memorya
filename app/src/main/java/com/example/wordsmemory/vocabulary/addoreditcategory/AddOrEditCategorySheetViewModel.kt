@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.wordsmemory.Category
-import com.example.wordsmemory.VocabularyDao
+import com.example.wordsmemory.database.VocabularyDao
+import com.example.wordsmemory.model.Category
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.util.*

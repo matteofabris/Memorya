@@ -4,8 +4,8 @@ import android.os.StrictMode
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.VocabularyItem
-import com.example.wordsmemory.VocabularyDao
+import com.example.wordsmemory.database.VocabularyDao
+import com.example.wordsmemory.model.VocabularyItem
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
