@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -16,30 +16,36 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
-import com.example.wordsmemory.database.VocabularyDatabase
 import com.example.wordsmemory.databinding.VocabularyWordsFragmentBinding
 import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
+import com.example.wordsmemory.vocabulary.VocabularyFragment
 import com.example.wordsmemory.vocabulary.VocabularyFragmentDirections
+import com.example.wordsmemory.vocabulary.category.CategoryFragmentDirections
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
-class VocabularyWordsFragment(private val _categoryId: Int = 0) : Fragment() {
+@AndroidEntryPoint
+class VocabularyWordsFragment : Fragment() {
 
-    private lateinit var _viewModel: VocabularyWordsViewModel
+    private val _viewModel: VocabularyWordsViewModel by viewModels()
     private lateinit var _binding: VocabularyWordsFragmentBinding
     private var _addClicked = false
     private val _showAddOrEditVocabularyItemSheet: (Int) -> Boolean = {
         if (!_addClicked) {
             _addClicked = true
 
-            findNavController().navigate(
-                VocabularyFragmentDirections.actionVocabularyFragmentToAddOrEditVocabularyItemSheet(
+            val navDirection =
+                if (parentFragment is VocabularyFragment) VocabularyFragmentDirections.actionVocabularyFragmentToAddOrEditVocabularyItemSheet(
+                    it
+                ) else CategoryFragmentDirections.actionCategoryFragmentToAddOrEditVocabularyItemSheet(
                     it
                 )
-            )
+
+            findNavController().navigate(navDirection)
 
             lifecycleScope.launch(Dispatchers.IO) {
                 delay(500)
@@ -55,23 +61,13 @@ class VocabularyWordsFragment(private val _categoryId: Int = 0) : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = VocabularyWordsFragmentBinding.inflate(inflater)
+        _binding.vocabularyWordsViewmodel = _viewModel
 
-        createViewModel()
         setupVocabularyList()
         setStyles()
         setupAddButtonListener()
 
         return _binding.root
-    }
-
-    private fun createViewModel() {
-        val application = requireNotNull(this.activity).application
-        val dbDao = VocabularyDatabase.getInstance(application).vocabularyDao()
-
-        val factory = VocabularyWordsViewModelFactory(dbDao, _categoryId)
-        _viewModel = ViewModelProvider(this, factory).get(VocabularyWordsViewModel::class.java)
-
-        _binding.vocabularyWordsViewmodel = _viewModel
     }
 
     private fun setupVocabularyList() {

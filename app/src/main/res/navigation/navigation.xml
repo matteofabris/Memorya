@@ -20,10 +20,18 @@
         android:label="VocabularyFragment">
         <action
             android:id="@+id/action_vocabularyFragment_to_categoryFragment"
-            app:destination="@id/categoryFragment" />
+            app:destination="@id/categoryFragment" >
+            <argument
+                android:name="categoryId"
+                android:defaultValue="0" />
+        </action>
         <action
             android:id="@+id/action_vocabularyFragment_to_addOrEditVocabularyItemSheet"
             app:destination="@id/addOrEditVocabularyItemSheet" />
+        <action
+            android:id="@+id/action_vocabularyFragment_to_addOrEditCategorySheet"
+            app:destination="@id/addOrEditCategorySheet"
+            app:popUpTo="com.android.tools.property.panel.api.EnumValue$Companion$LOADING$1@3a499974" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -31,7 +39,11 @@
         android:label="CategoryFragment">
         <argument
             android:name="categoryId"
-            app:argType="integer" />
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_categoryFragment_to_addOrEditVocabularyItemSheet"
+            app:destination="@id/addOrEditVocabularyItemSheet" />
     </fragment>
     <fragment
         android:id="@+id/addOrEditVocabularyItemSheet"
@@ -39,6 +51,14 @@
         android:label="AddOrEditVocabularyItemSheet">
         <argument
             android:name="selectedVocabularyItemId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/addOrEditCategorySheet"
+        android:name="com.example.wordsmemory.vocabulary.addoreditcategory.AddOrEditCategorySheet"
+        android:label="AddOrEditCategorySheet" >
+        <argument
+            android:name="selectedCategoryId"
             app:argType="integer" />
     </fragment>
 </navigation>

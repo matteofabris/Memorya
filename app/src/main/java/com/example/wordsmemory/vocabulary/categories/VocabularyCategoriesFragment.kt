@@ -16,7 +16,6 @@ import com.example.wordsmemory.R
 import com.example.wordsmemory.databinding.VocabularyCategoriesFragmentBinding
 import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
 import com.example.wordsmemory.vocabulary.VocabularyFragmentDirections
-import com.example.wordsmemory.vocabulary.addoreditcategory.AddOrEditCategorySheet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -30,12 +29,15 @@ class VocabularyCategoriesFragment : Fragment() {
     private val _viewModel: VocabularyCategoriesViewModel by viewModels()
     private lateinit var _binding: VocabularyCategoriesFragmentBinding
     private var _addClicked = false
-    private val _showAddOrEditCategorySheet: (Int?) -> Boolean = {
+    private val _showAddOrEditCategorySheet: (Int) -> Boolean = {
         if (!_addClicked) {
             _addClicked = true
 
-            val addOrEditCategorySheet = AddOrEditCategorySheet(it)
-            addOrEditCategorySheet.show(parentFragmentManager, "add_category")
+            findNavController().navigate(
+                VocabularyFragmentDirections.actionVocabularyFragmentToAddOrEditCategorySheet(
+                    it
+                )
+            )
 
             lifecycleScope.launch(Dispatchers.IO) {
                 delay(500)
@@ -89,7 +91,7 @@ class VocabularyCategoriesFragment : Fragment() {
 
     private fun setupAddButtonListener() {
         _binding.addButton.setOnClickListener {
-            _showAddOrEditCategorySheet.invoke(null)
+            _showAddOrEditCategorySheet.invoke(-1)
         }
     }
 
