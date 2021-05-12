@@ -30,8 +30,7 @@
             app:destination="@id/addOrEditVocabularyItemSheet" />
         <action
             android:id="@+id/action_vocabularyFragment_to_addOrEditCategorySheet"
-            app:destination="@id/addOrEditCategorySheet"
-            app:popUpTo="com.android.tools.property.panel.api.EnumValue$Companion$LOADING$1@3a499974" />
+            app:destination="@id/addOrEditCategorySheet" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"

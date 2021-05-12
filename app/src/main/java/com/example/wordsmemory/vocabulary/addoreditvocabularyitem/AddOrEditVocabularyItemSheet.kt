@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.*
 import com.example.wordsmemory.databinding.AddOrEditVocabularyItemSheetBinding
@@ -68,7 +69,7 @@ class AddOrEditVocabularyItemSheet :
     private fun setupButtons() {
         _binding.addButton.setOnClickListener {
             _viewModel.insertOrUpdateVocabularyItem()
-            dismiss()
+            findNavController().popBackStack()
         }
         _binding.googleTranslateButton.setOnClickListener {
             if (activity != null) {

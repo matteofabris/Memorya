@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.airbnb.paris.extensions.style
-import com.example.wordsmemory.*
-import com.example.wordsmemory.database.VocabularyDatabase
+import com.example.wordsmemory.AddCategoryInputFilter
+import com.example.wordsmemory.Constants
+import com.example.wordsmemory.R
+import com.example.wordsmemory.afterTextChanged
 import com.example.wordsmemory.databinding.AddCategorySheetFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,7 +55,7 @@ class AddOrEditCategorySheet : BottomSheetDialogFragment() {
     private fun setupButtons() {
         _binding.addButton.setOnClickListener {
             _viewModel.insertOrUpdateCategory()
-            dismiss()
+            findNavController().popBackStack()
         }
 
         _binding.categoryEditText.afterTextChanged { s ->
