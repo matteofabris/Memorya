@@ -7,14 +7,14 @@
 
         <variable
             name="addOrEditItemViewModel"
-            type="com.example.wordsmemory.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheetViewModel" />
+            type="com.example.wordsmemory.ui.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheetViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/add_word_background"
-        tools:context=".vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet">
+        tools:context=".ui.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/editTextContainer"

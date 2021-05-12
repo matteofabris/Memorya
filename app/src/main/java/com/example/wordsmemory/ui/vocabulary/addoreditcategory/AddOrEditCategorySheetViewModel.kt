@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.addoreditcategory
+package com.example.wordsmemory.ui.vocabulary.addoreditcategory
 
 import androidx.lifecycle.*
 import com.example.wordsmemory.database.VocabularyDao

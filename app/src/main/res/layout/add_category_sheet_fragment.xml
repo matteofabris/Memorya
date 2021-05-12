@@ -7,14 +7,14 @@
 
         <variable
             name="addCategoryViewModel"
-            type="com.example.wordsmemory.vocabulary.addoreditcategory.AddCategorySheetViewModel" />
+            type="com.example.wordsmemory.ui.vocabulary.addoreditcategory.AddCategorySheetViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/add_word_background"
-        tools:context=".vocabulary.addoreditcategory.AddOrEditCategorySheet">
+        tools:context=".ui.vocabulary.addoreditcategory.AddOrEditCategorySheet">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/editTextContainer"

@@ -1,4 +1,4 @@
-package com.example.wordsmemory.play
+package com.example.wordsmemory.ui.play
 
 import androidx.lifecycle.*
 import com.example.wordsmemory.Constants

@@ -6,7 +6,7 @@
 
         <variable
             name="categoryViewmodel"
-            type="com.example.wordsmemory.vocabulary.category.CategoryViewModel" />
+            type="com.example.wordsmemory.ui.vocabulary.category.CategoryViewModel" />
     </data>
 
     <LinearLayout

@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.categories
+package com.example.wordsmemory.ui.vocabulary.categories
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,8 +14,8 @@ import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.databinding.VocabularyCategoriesFragmentBinding
-import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
-import com.example.wordsmemory.vocabulary.VocabularyFragmentDirections
+import com.example.wordsmemory.ui.vocabulary.SwipeToDeleteCallback
+import com.example.wordsmemory.ui.vocabulary.VocabularyFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi

@@ -1,11 +1,10 @@
-package com.example.wordsmemory.vocabulary.words
+package com.example.wordsmemory.ui.vocabulary.words
 
 import androidx.lifecycle.*
 import com.example.wordsmemory.database.VocabularyDao
 import com.example.wordsmemory.model.VocabularyItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

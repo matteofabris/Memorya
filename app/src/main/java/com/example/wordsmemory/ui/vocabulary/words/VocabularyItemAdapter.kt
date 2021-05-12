@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.words
+package com.example.wordsmemory.ui.vocabulary.words
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

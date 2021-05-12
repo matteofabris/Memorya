@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.addoreditcategory
+package com.example.wordsmemory.ui.vocabulary.addoreditcategory
 
 import android.os.Bundle
 import android.view.LayoutInflater

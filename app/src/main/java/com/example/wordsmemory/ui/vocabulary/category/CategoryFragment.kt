@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.category
+package com.example.wordsmemory.ui.vocabulary.category
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.wordsmemory.R
 import com.example.wordsmemory.databinding.CategoryFragmentBinding
-import com.example.wordsmemory.vocabulary.words.VocabularyWordsFragment
+import com.example.wordsmemory.ui.vocabulary.words.VocabularyWordsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 

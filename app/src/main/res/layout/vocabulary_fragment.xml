@@ -7,7 +7,7 @@
 
         <variable
             name="vocabulary_viewmodel"
-            type="com.example.wordsmemory.vocabulary.VocabularyViewModel" />
+            type="com.example.wordsmemory.ui.vocabulary.VocabularyViewModel" />
     </data>
 
     <LinearLayout
@@ -40,7 +40,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".vocabulary.VocabularyFragment">
+            tools:context=".ui.vocabulary.VocabularyFragment">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"

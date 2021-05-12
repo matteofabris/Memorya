@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.words
+package com.example.wordsmemory.ui.vocabulary.words
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -17,10 +17,10 @@ import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.databinding.VocabularyWordsFragmentBinding
-import com.example.wordsmemory.vocabulary.SwipeToDeleteCallback
-import com.example.wordsmemory.vocabulary.VocabularyFragment
-import com.example.wordsmemory.vocabulary.VocabularyFragmentDirections
-import com.example.wordsmemory.vocabulary.category.CategoryFragmentDirections
+import com.example.wordsmemory.ui.vocabulary.SwipeToDeleteCallback
+import com.example.wordsmemory.ui.vocabulary.VocabularyFragment
+import com.example.wordsmemory.ui.vocabulary.VocabularyFragmentDirections
+import com.example.wordsmemory.ui.vocabulary.category.CategoryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi

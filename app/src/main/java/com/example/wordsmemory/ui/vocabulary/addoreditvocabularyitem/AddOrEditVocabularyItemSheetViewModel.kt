@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.addoreditvocabularyitem
+package com.example.wordsmemory.ui.vocabulary.addoreditvocabularyitem
 
 import android.os.StrictMode
 import android.util.Log

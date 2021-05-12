@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.category
+package com.example.wordsmemory.ui.vocabulary.category
 
 import androidx.lifecycle.*
 import com.example.wordsmemory.database.VocabularyDao

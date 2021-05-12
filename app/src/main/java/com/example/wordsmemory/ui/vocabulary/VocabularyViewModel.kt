@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary
+package com.example.wordsmemory.ui.vocabulary
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

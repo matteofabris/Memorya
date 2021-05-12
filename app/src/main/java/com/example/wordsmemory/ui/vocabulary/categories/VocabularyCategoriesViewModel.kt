@@ -1,4 +1,4 @@
-package com.example.wordsmemory.vocabulary.categories
+package com.example.wordsmemory.ui.vocabulary.categories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

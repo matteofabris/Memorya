@@ -7,7 +7,7 @@
 
         <variable
             name="playViewModel"
-            type="com.example.wordsmemory.play.PlayFragmentViewModel" />
+            type="com.example.wordsmemory.ui.play.PlayFragmentViewModel" />
     </data>
 
     <LinearLayout
@@ -55,7 +55,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".play.PlayFragment">
+            tools:context=".ui.play.PlayFragment">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"

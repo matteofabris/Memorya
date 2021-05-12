@@ -1,4 +1,4 @@
-package com.example.wordsmemory.play
+package com.example.wordsmemory.ui.play
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
