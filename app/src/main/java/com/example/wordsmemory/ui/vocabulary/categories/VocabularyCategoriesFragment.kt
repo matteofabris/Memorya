@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
+import com.example.wordsmemory.adpater.CategoryItemAdapter
 import com.example.wordsmemory.databinding.VocabularyCategoriesFragmentBinding
 import com.example.wordsmemory.ui.vocabulary.SwipeToDeleteCallback
 import com.example.wordsmemory.ui.vocabulary.VocabularyFragmentDirections
@@ -28,6 +29,8 @@ class VocabularyCategoriesFragment : Fragment() {
 
     private val _viewModel: VocabularyCategoriesViewModel by viewModels()
     private lateinit var _binding: VocabularyCategoriesFragmentBinding
+    private lateinit var _categoryItemAdapter : CategoryItemAdapter
+
     private var _addClicked = false
     private val _showAddOrEditCategorySheet: (Int) -> Boolean = {
         if (!_addClicked) {
@@ -67,9 +70,16 @@ class VocabularyCategoriesFragment : Fragment() {
     }
 
     private fun setupCategoriesList() {
-        val categoryAdapter =
-            CategoryItemAdapter(_showSelectedCategoryFragment, _showAddOrEditCategorySheet)
-        _binding.categoriesList.adapter = categoryAdapter
+
+        _categoryItemAdapter = CategoryItemAdapter(
+            CategoryItemAdapter.OnClickListener {
+                _showSelectedCategoryFragment.invoke(it.id)
+            },
+            CategoryItemAdapter.OnLongClickListener {
+                _showAddOrEditCategorySheet.invoke(it.id)
+            }
+        )
+        _binding.categoriesList.adapter = _categoryItemAdapter
 
         setSwipeGesture()
 
@@ -78,7 +88,7 @@ class VocabularyCategoriesFragment : Fragment() {
             {
                 it?.let {
                     val filteredList = it.toMutableList().filter { c -> c.id != 1 }
-                    categoryAdapter.submitList(filteredList)
+                    _categoryItemAdapter.submitList(filteredList)
                 }
             })
     }
@@ -98,7 +108,7 @@ class VocabularyCategoriesFragment : Fragment() {
     private fun setSwipeGesture() {
         val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                _viewModel.removeItem((viewHolder as ViewHolder).itemId)
+                _viewModel.removeItem((viewHolder as CategoryItemAdapter.CategoryViewHolder).itemId)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
