@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.airbnb.paris.extensions.style
-import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.databinding.VocabularyFragmentBinding
 import com.google.android.material.tabs.TabLayout
@@ -31,17 +29,9 @@ class VocabularyFragment : Fragment() {
         _binding.vocabularyViewmodel = _viewModel
 
         _binding.viewPager.adapter = VocabularyFragmentsAdapter(this, 2)
-        setStyles()
         setTabLayoutMediator()
 
         return _binding.root
-    }
-
-    private fun setStyles() {
-        if (Constants.isTablet) {
-            _binding.topBar.style(R.style.topBarStyleTablet)
-            _binding.topBarTitle.style(R.style.topBarTitleTablet)
-        }
     }
 
     private fun setTabLayoutMediator() {

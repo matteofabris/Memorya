@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="playViewModel"
+            name="viewModel"
             type="com.example.wordsmemory.ui.play.PlayFragmentViewModel" />
     </data>
 
@@ -17,7 +17,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/topBar"
-            style="@style/topBarStylePhone">
+            style="@style/TopBarStyle">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -25,7 +25,7 @@
 
                 <TextView
                     android:id="@+id/topBarTitle"
-                    style="@style/top_bar_title_phone"
+                    style="@style/TopBarTitleStyle"
                     android:text="@string/app_title"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +58,7 @@
             tools:context=".ui.play.PlayFragment">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout"
+                android:id="@+id/playBoard"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/game_background"
@@ -72,74 +72,74 @@
                 app:layout_constraintWidth_percent="0.9">
 
                 <TextView
-                    android:id="@+id/randomWordTitleTextView"
-                    style="@style/wm_labelStylePhone"
+                    android:id="@+id/randomWordTitle"
+                    style="@style/LabelStyle"
                     android:text="@string/english_word"
                     android:textAlignment="textStart"
-                    app:layout_constraintBottom_toTopOf="@+id/translationEditText"
-                    app:layout_constraintEnd_toStartOf="@id/randomWordTextView"
+                    app:layout_constraintBottom_toTopOf="@+id/translation"
+                    app:layout_constraintEnd_toStartOf="@id/randomWord"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.3" />
 
                 <TextView
-                    android:id="@+id/randomWordTextView"
-                    style="@style/wm_labelStylePhone"
-                    android:text="@{playViewModel.vocabularyItem.enWord}"
-                    app:layout_constraintBottom_toTopOf="@+id/translationEditText"
+                    android:id="@+id/randomWord"
+                    style="@style/LabelStyle"
+                    android:text="@{viewModel.vocabularyItem.enWord}"
+                    app:layout_constraintBottom_toTopOf="@+id/translation"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.12"
-                    app:layout_constraintStart_toEndOf="@id/randomWordTitleTextView"
+                    app:layout_constraintStart_toEndOf="@id/randomWordTitle"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/translationEditTextTitle"
-                    style="@style/wm_labelStylePhone"
+                    android:id="@+id/translationTitle"
+                    style="@style/LabelStyle"
                     android:text="@string/translate"
                     android:textAlignment="textStart"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/randomWordTitleTextView"
-                    app:layout_constraintStart_toStartOf="@id/randomWordTitleTextView"
-                    app:layout_constraintTop_toBottomOf="@id/randomWordTitleTextView"
+                    app:layout_constraintEnd_toEndOf="@id/randomWordTitle"
+                    app:layout_constraintStart_toStartOf="@id/randomWordTitle"
+                    app:layout_constraintTop_toBottomOf="@id/randomWordTitle"
                     app:layout_constraintWidth_percent="0.3" />
 
                 <EditText
-                    android:id="@+id/translationEditText"
-                    style="@style/wm_labelStylePhone"
+                    android:id="@+id/translation"
+                    style="@style/LabelStyle"
                     android:ems="10"
                     android:importantForAutofill="no"
                     android:inputType="textPersonName"
-                    android:text="@={playViewModel.translationText}"
-                    app:layout_constraintBottom_toBottomOf="@id/translationEditTextTitle"
-                    app:layout_constraintEnd_toEndOf="@+id/randomWordTextView"
-                    app:layout_constraintStart_toStartOf="@id/randomWordTextView"
-                    app:layout_constraintTop_toTopOf="@id/translationEditTextTitle"
+                    android:text="@={viewModel.translationText}"
+                    app:layout_constraintBottom_toBottomOf="@id/translationTitle"
+                    app:layout_constraintEnd_toEndOf="@+id/randomWord"
+                    app:layout_constraintStart_toStartOf="@id/randomWord"
+                    app:layout_constraintTop_toTopOf="@id/translationTitle"
                     tools:ignore="LabelFor" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/recentAttemptsTextView"
-                style="@style/wm_recentAttemptsLabelStylePhone"
+                style="@style/RecentAttemptsLabelStyle"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="@={playViewModel.recentAttemptsText}"
-                app:layout_constraintBottom_toTopOf="@+id/acceptTranslationButton"
+                android:text="@={viewModel.recentAttemptsText}"
+                app:layout_constraintBottom_toTopOf="@+id/checkTranslationButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                app:layout_constraintTop_toBottomOf="@+id/playBoard"
                 app:layout_constraintVertical_bias="0.01999998"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <Button
-                android:id="@+id/acceptTranslationButton"
-                style="@style/buttonStylePhone"
+                android:id="@+id/checkTranslationButton"
+                style="@style/ButtonStyle"
                 android:background="@drawable/button_background"
                 android:contentDescription="@string/logo_image"
                 android:enabled="false"
                 android:letterSpacing="0"
-                android:onClick="@{() -> playViewModel.onCheckClicked()}"
+                android:onClick="@{() -> viewModel.onCheckClicked()}"
                 android:text="@string/check_word"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -149,22 +149,22 @@
                 app:layout_constraintVertical_bias="0.060000002" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/appIconImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/app_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/acceptTranslationButton"
+                app:layout_constraintTop_toBottomOf="@+id/checkTranslationButton"
                 app:srcCompat="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/categoryTextView"
-                style="@style/wm_labelStylePhone"
+                style="@style/LabelStyle"
                 android:layout_marginStart="22dp"
                 android:text="@string/category"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+                app:layout_constraintBottom_toTopOf="@+id/playBoard"
                 app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

@@ -11,7 +11,7 @@
 
         <TextView
             android:id="@+id/enColumnTextView"
-            style="@style/wm_labelStylePhone"
+            style="@style/LabelStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
@@ -26,7 +26,7 @@
 
         <TextView
             android:id="@+id/itColumnTextView"
-            style="@style/wm_labelStylePhone"
+            style="@style/LabelStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"

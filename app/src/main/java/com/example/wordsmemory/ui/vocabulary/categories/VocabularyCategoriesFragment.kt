@@ -10,9 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.paris.extensions.style
-import com.example.wordsmemory.Constants
-import com.example.wordsmemory.R
 import com.example.wordsmemory.adpater.CategoryItemAdapter
 import com.example.wordsmemory.databinding.VocabularyCategoriesFragmentBinding
 import com.example.wordsmemory.ui.vocabulary.SwipeToDeleteCallback
@@ -63,7 +60,6 @@ class VocabularyCategoriesFragment : Fragment() {
         _binding.enVocabularyViewModel = _viewModel
 
         setupCategoriesList()
-        setStyles()
         setupAddButtonListener()
 
         return _binding.root
@@ -91,12 +87,6 @@ class VocabularyCategoriesFragment : Fragment() {
                     _categoryItemAdapter.submitList(filteredList)
                 }
             })
-    }
-
-    private fun setStyles() {
-        if (Constants.isTablet) {
-            _binding.addButton.style(R.style.buttonStyleTablet)
-        }
     }
 
     private fun setupAddButtonListener() {

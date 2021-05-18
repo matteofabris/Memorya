@@ -6,10 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.AddCategoryInputFilter
-import com.example.wordsmemory.Constants
-import com.example.wordsmemory.R
 import com.example.wordsmemory.afterTextChanged
 import com.example.wordsmemory.databinding.AddCategorySheetFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -31,20 +28,10 @@ class AddOrEditCategorySheet : BottomSheetDialogFragment() {
         _binding.lifecycleOwner = viewLifecycleOwner
         _binding.addCategoryViewModel = _viewModel
 
-        setStyles()
         setEditTextsFilter()
         setupButtons()
 
         return _binding.root
-    }
-
-    private fun setStyles() {
-        if (Constants.isTablet) {
-            _binding.addButton.style(R.style.buttonStyleTablet)
-
-            _binding.categoryTitleTextView.style(R.style.wm_labelStyleTablet)
-            _binding.categoryEditText.style(R.style.wm_labelStyleTablet)
-        }
     }
 
     private fun setEditTextsFilter() {

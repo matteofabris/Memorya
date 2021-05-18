@@ -1,5 +1,6 @@
 package com.example.wordsmemory
 
+import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -16,31 +17,32 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityMainBinding
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        checkIfIsTablet()
-
-        requestedOrientation = if (Constants.isTablet) {
+        if (isTablet()) {
             Log.i("Orientation", "Tablet mode")
-            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            Constants.isTablet = true
         } else {
             Log.i("Orientation", "Phone mode")
-            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            Constants.isTablet = false
         }
     }
 
-    private fun checkIfIsTablet() {
+    private fun isTablet(): Boolean {
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)
 
         val yInches = metrics.heightPixels / metrics.ydpi
         val xInches = metrics.widthPixels / metrics.xdpi
         val diagonalInches = sqrt((xInches * xInches + yInches * yInches).toDouble())
-        if (diagonalInches >= 7) {
-            Constants.isTablet = true
-        }
+
+        if (diagonalInches >= 7) return true
+        return false
     }
 }

@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.airbnb.paris.extensions.style
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.TranslateInputFilter
@@ -34,11 +33,6 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private val _viewModel: PlayFragmentViewModel by viewModels()
     private lateinit var _binding: PlayFragmentBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     @InternalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,9 +40,8 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
     ): View {
         _binding = PlayFragmentBinding.inflate(inflater)
         _binding.lifecycleOwner = viewLifecycleOwner
-        _binding.playViewModel = _viewModel
+        _binding.viewModel = _viewModel
 
-        setStyles()
         setupEditText()
         setupVocabularyButtonListener()
         setupObservers()
@@ -62,28 +55,12 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _viewModel.setPlayWord()
     }
 
-    private fun setStyles() {
-        if (Constants.isTablet) {
-            _binding.acceptTranslationButton.style(R.style.buttonStyleTablet)
-            _binding.vocabularyButton.setImageResource(R.drawable.outline_library_books_white_36)
-
-            _binding.randomWordTitleTextView.style(R.style.wm_labelStyleTablet)
-            _binding.randomWordTextView.style(R.style.wm_labelStyleTablet)
-            _binding.translationEditTextTitle.style(R.style.wm_labelStyleTablet)
-            _binding.translationEditText.style(R.style.wm_labelStyleTablet)
-            _binding.recentAttemptsTextView.style(R.style.wm_recentAttemptsLabelStyleTablet)
-
-            _binding.topBar.style(R.style.topBarStyleTablet)
-            _binding.topBarTitle.style(R.style.topBarTitleTablet)
-        }
-    }
-
     private fun setupEditText() {
         val filter = TranslateInputFilter()
-        _binding.translationEditText.filters = arrayOf(filter)
-        _binding.translationEditText.afterTextChanged { s ->
-            _binding.acceptTranslationButton.isEnabled =
-                _binding.randomWordTextView.text.isNotEmpty() && s.isNotEmpty()
+        _binding.translation.filters = arrayOf(filter)
+        _binding.translation.afterTextChanged { s ->
+            _binding.checkTranslationButton.isEnabled =
+                _binding.randomWord.text.isNotEmpty() && s.isNotEmpty()
         }
     }
 

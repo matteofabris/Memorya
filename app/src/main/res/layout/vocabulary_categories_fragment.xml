@@ -31,7 +31,7 @@
 
         <Button
             android:id="@+id/addButton"
-            style="@style/buttonStylePhone"
+            style="@style/ButtonStyle"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:backgroundTint="@color/wm_primary"

@@ -33,7 +33,7 @@
 
             <TextView
                 android:id="@+id/categoryTitleTextView"
-                style="@style/wm_labelStylePhone"
+                style="@style/LabelStyle"
                 android:text="@string/category"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +44,7 @@
 
             <EditText
                 android:id="@+id/categoryEditText"
-                style="@style/wm_labelStylePhone"
+                style="@style/LabelStyle"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
@@ -59,7 +59,7 @@
 
         <Button
             android:id="@+id/addButton"
-            style="@style/buttonStylePhone"
+            style="@style/ButtonStyle"
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_background"
             android:enabled="false"

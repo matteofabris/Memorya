@@ -16,7 +16,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/top_bar"
-            style="@style/topBarStylePhone">
+            style="@style/TopBarStyle">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -24,7 +24,7 @@
 
                 <TextView
                     android:id="@+id/top_bar_title"
-                    style="@style/top_bar_title_phone"
+                    style="@style/TopBarTitleStyle"
                     android:text="@{categoryViewmodel.categoryName}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

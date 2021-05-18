@@ -33,7 +33,7 @@
 
             <TextView
                 android:id="@+id/enWordTitleTextView"
-                style="@style/wm_labelStylePhone"
+                style="@style/LabelStyle"
                 android:text="@string/english_word"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toTopOf="@+id/itWordEditText"
@@ -44,7 +44,7 @@
 
             <EditText
                 android:id="@+id/enWordEditText"
-                style="@style/wm_labelStylePhone"
+                style="@style/LabelStyle"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
@@ -57,7 +57,7 @@
 
             <TextView
                 android:id="@+id/itWordTitleTextView"
-                style="@style/wm_labelStylePhone"
+                style="@style/LabelStyle"
                 android:text="@string/italian_word"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toTopOf="@id/categoryTitleTextView"
@@ -68,7 +68,7 @@
 
             <EditText
                 android:id="@+id/itWordEditText"
-                style="@style/wm_labelStylePhone"
+                style="@style/LabelStyle"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
@@ -81,7 +81,7 @@
 
             <TextView
                 android:id="@+id/categoryTitleTextView"
-                style="@style/wm_labelStylePhone"
+                style="@style/LabelStyle"
                 android:text="@string/category"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -103,7 +103,7 @@
 
         <Button
             android:id="@+id/addButton"
-            style="@style/buttonStylePhone"
+            style="@style/ButtonStyle"
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_background"
             android:enabled="false"
@@ -116,7 +116,7 @@
 
         <Button
             android:id="@+id/googleTranslateButton"
-            style="@style/buttonStylePhone"
+            style="@style/ButtonStyle"
             android:background="@drawable/button_background"
             android:enabled="false"
             android:text="@string/g_translate"

@@ -17,7 +17,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/topBar"
-            style="@style/topBarStylePhone">
+            style="@style/TopBarStyle">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -25,7 +25,7 @@
 
                 <TextView
                     android:id="@+id/topBarTitle"
-                    style="@style/top_bar_title_phone"
+                    style="@style/TopBarTitleStyle"
                     android:text="@string/english_vocabulary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +61,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tabTextAppearance="@style/tabViewText" />
+                app:tabTextAppearance="@style/TabViewTextStyle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </layout>

@@ -5,9 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.paris.extensions.style
-import com.example.wordsmemory.Constants
-import com.example.wordsmemory.R
 import com.example.wordsmemory.databinding.VocabularyHeaderBinding
 import com.example.wordsmemory.databinding.VocabularyItemBinding
 import com.example.wordsmemory.model.VocabularyItem
@@ -42,9 +39,6 @@ class VocabularyItemAdapter(private val _onItemLongClickAction: (Int) -> Boolean
                 holder.itemView.setOnLongClickListener {
                     _onItemLongClickAction.invoke(item.id)
                 }
-            }
-            is HeaderViewHolder -> {
-                holder.setStyles()
             }
         }
     }
@@ -82,31 +76,19 @@ class ViewHolder private constructor(private val _binding: VocabularyItemBinding
     var itemId: Int = -1
 
     fun setLayout(item: VocabularyItem) {
-        if (Constants.isTablet) {
-            _binding.enWordTextView.style(R.style.wm_labelStyleTablet)
-            _binding.itWordTextView.style(R.style.wm_labelStyleTablet)
-        }
-
         itemId = item.id
         _binding.vocabularyItem = item
         _binding.executePendingBindings()
     }
 }
 
-class HeaderViewHolder private constructor(private val _binding: VocabularyHeaderBinding) :
+class HeaderViewHolder private constructor(_binding: VocabularyHeaderBinding) :
     RecyclerView.ViewHolder(_binding.root) {
     companion object {
         fun from(parent: ViewGroup): HeaderViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = VocabularyHeaderBinding.inflate(layoutInflater, parent, false)
             return HeaderViewHolder(binding)
-        }
-    }
-
-    fun setStyles() {
-        if (Constants.isTablet) {
-            _binding.enColumnTextView.style(R.style.wm_labelStyleTablet)
-            _binding.itColumnTextView.style(R.style.wm_labelStyleTablet)
         }
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="wm_labelStylePhone">
+    <style name="LabelStyle">
         <item name="android:layout_width">140dp</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:fontFamily">@font/doppio_one</item>
@@ -11,17 +11,7 @@
         <item name="android:textSize">@dimen/medium_font_size</item>
     </style>
 
-    <style name="wm_labelStyleTablet">
-        <item name="android:layout_width">250dp</item>
-        <item name="android:layout_height">70dp</item>
-        <item name="android:fontFamily">@font/doppio_one</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/extra_big_font_size</item>
-    </style>
-
-    <style name="wm_recentAttemptsLabelStylePhone">
+    <style name="RecentAttemptsLabelStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:fontFamily">@font/doppio_one</item>
@@ -31,23 +21,13 @@
         <item name="android:textSize">@dimen/medium_font_size</item>
     </style>
 
-    <style name="wm_recentAttemptsLabelStyleTablet">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">40dp</item>
-        <item name="android:fontFamily">@font/doppio_one</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/extra_big_font_size</item>
-    </style>
-
-    <style name="imageButtonStyle">
+    <style name="ImageButtonStyle">
         <item name="android:layout_width">110dp</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:backgroundTint">@color/white</item>
     </style>
 
-    <style name="buttonStylePhone">
+    <style name="ButtonStyle">
         <item name="android:layout_width">150dp</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:fontFamily">@font/doppio_one</item>
@@ -56,16 +36,7 @@
         <item name="android:textSize">@dimen/medium_font_size</item>
     </style>
 
-    <style name="buttonStyleTablet">
-        <item name="android:layout_width">240dp</item>
-        <item name="android:layout_height">60dp</item>
-        <item name="android:fontFamily">@font/doppio_one</item>
-        <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/extra_big_font_size</item>
-    </style>
-
-    <style name="top_bar_title_phone">
+    <style name="TopBarTitleStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">20dp</item>
@@ -74,34 +45,19 @@
         <item name="android:textSize">@dimen/big_font_size</item>
     </style>
 
-    <style name="topBarTitleTablet">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:fontFamily">@font/doppio_one</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/extra_big_font_size</item>
-    </style>
-
-    <style name="topBarStylePhone">
+    <style name="TopBarStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">45dp</item>
         <item name="android:backgroundTint">@color/wm_primaryVariant</item>
     </style>
 
-    <style name="topBarStyleTablet">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">70dp</item>
-        <item name="android:backgroundTint">@color/wm_primaryVariant</item>
-    </style>
-
-    <style name="tabViewText">
+    <style name="TabViewTextStyle">
         <item name="android:fontFamily">@font/doppio_one</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/small_font_size</item>
     </style>
 
-    <style name="categoryLabelStylePhone">
+    <style name="CategoryLabelStyle">
         <item name="android:layout_width">140dp</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:fontFamily">@font/doppio_one</item>
