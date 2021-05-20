@@ -20,7 +20,6 @@ import androidx.navigation.findNavController
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.TranslateInputFilter
-import com.example.wordsmemory.afterTextChanged
 import com.example.wordsmemory.databinding.PlayFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -41,8 +40,8 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _binding = PlayFragmentBinding.inflate(inflater)
         _binding.lifecycleOwner = viewLifecycleOwner
         _binding.viewModel = _viewModel
+        _binding.translation.filters = arrayOf(TranslateInputFilter())
 
-        setupEditText()
         setupVocabularyButtonListener()
         setupObservers()
         setCategoriesSpinner()
@@ -55,28 +54,34 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _viewModel.setPlayWord()
     }
 
-    private fun setupEditText() {
-        val filter = TranslateInputFilter()
-        _binding.translation.filters = arrayOf(filter)
-        _binding.translation.afterTextChanged { s ->
-            _binding.checkTranslationButton.isEnabled =
-                _binding.randomWord.text.isNotEmpty() && s.isNotEmpty()
-        }
-    }
-
     private fun setupVocabularyButtonListener() {
         _binding.vocabularyButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_playFragment_to_vocabularyFragment)
 
             val view = activity?.currentFocus
             if (view != null) {
-                val imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
+                val inputMethodManager =
+                    activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
             }
         }
     }
 
     private fun setupObservers() {
+        _viewModel.translationText.observe(viewLifecycleOwner, { s ->
+            _binding.checkTranslationButton.isEnabled =
+                _binding.randomWord.text.isNotEmpty() && s.isNotEmpty()
+        })
+
+        _viewModel.allAttempts.observe(viewLifecycleOwner, { allAttempts ->
+            val recentAttempts = getString(R.string.recent_attempts)
+            val correctAttempts = _viewModel.correctAttempts
+            val correct = getString(R.string.correct)
+
+            ("$recentAttempts $correctAttempts/$allAttempts $correct")
+                .also { _binding.recentAttemptsTextView.text = it }
+        })
+
         _viewModel.isTranslationOk.observe(
             viewLifecycleOwner,
             {

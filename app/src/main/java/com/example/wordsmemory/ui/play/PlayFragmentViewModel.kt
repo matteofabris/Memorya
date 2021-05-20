@@ -14,20 +14,19 @@ import kotlin.random.Random
 @HiltViewModel
 class PlayFragmentViewModel @Inject constructor(private val _dbDao: VocabularyDao) : ViewModel() {
 
-    companion object {
-        const val correctString = " correct"
-        const val recentAttemptsString = "Recent attempts: "
-    }
+    private var _categoryId = Constants.defaultCategoryId
 
-    private var _allAttempts = 0
-    private var _correctAttempts = 0
-    private var categoryId = Constants.defaultCategoryId
-
-    var vocabularyList = _dbDao.getVocabularyItemsAsLiveData()
+    val vocabularyList = _dbDao.getVocabularyItemsAsLiveData()
     val translationText = MutableLiveData<String>()
-    val recentAttemptsText = MutableLiveData(getRecentAttemptsText())
     val categories = _dbDao.getCategoriesAsLiveData()
 
+    private var _correctAttempts = 0
+    val correctAttempts: Int
+        get() = _correctAttempts
+
+    private val _allAttempts = MutableLiveData(0)
+    val allAttempts: LiveData<Int>
+        get() = _allAttempts
 
     private val _vocabularyItem = MutableLiveData<VocabularyItem>()
     val vocabularyItem: LiveData<VocabularyItem>
@@ -40,11 +39,11 @@ class PlayFragmentViewModel @Inject constructor(private val _dbDao: VocabularyDa
     fun setPlayWord() {
         if (vocabularyList.value != null) {
             if (vocabularyList.value!!.isNotEmpty()) {
-                val filteredList = if (categoryId == Constants.defaultCategoryId) {
+                val filteredList = if (_categoryId == Constants.defaultCategoryId) {
                     vocabularyList.value!!
                 } else {
                     vocabularyList.value!!.filter {
-                        it.category == categoryId
+                        it.category == _categoryId
                     }
                 }
 
@@ -56,8 +55,7 @@ class PlayFragmentViewModel @Inject constructor(private val _dbDao: VocabularyDa
         }
     }
 
-    fun onCheckClicked() {
-        _allAttempts++
+    fun onCheckTranslationButtonClicked() {
         _isTranslationOk.value =
             translationText.value!!.equals(_vocabularyItem.value!!.itWord, ignoreCase = true)
 
@@ -67,11 +65,7 @@ class PlayFragmentViewModel @Inject constructor(private val _dbDao: VocabularyDa
             translationText.value = ""
         }
 
-        recentAttemptsText.value = getRecentAttemptsText()
-    }
-
-    private fun getRecentAttemptsText(): String {
-        return "$recentAttemptsString$_correctAttempts/$_allAttempts$correctString"
+        _allAttempts.value = _allAttempts.value?.plus(1)
     }
 
     fun resetGamePlay(categoryName: String) {
@@ -84,13 +78,12 @@ class PlayFragmentViewModel @Inject constructor(private val _dbDao: VocabularyDa
 
     private suspend fun setCategoryId(categoryName: String) {
         return withContext(Dispatchers.IO) {
-            categoryId = _dbDao.getCategoryId(categoryName)
+            _categoryId = _dbDao.getCategoryId(categoryName)
         }
     }
 
     private fun resetRecentAttempts() {
         _correctAttempts = 0
-        _allAttempts = 0
-        recentAttemptsText.value = getRecentAttemptsText()
+        _allAttempts.value = 0
     }
 }
