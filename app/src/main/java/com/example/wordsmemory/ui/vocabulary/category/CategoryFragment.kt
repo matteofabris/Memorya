@@ -24,7 +24,7 @@ class CategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = CategoryFragmentBinding.inflate(inflater)
-        _binding.categoryViewmodel = _viewModel
+        _binding.viewModel = _viewModel
 
         childFragmentManager.beginTransaction()
             .replace(R.id.category_vocabulary_container, VocabularyWordsFragment())
