@@ -9,6 +9,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 @InternalCoroutinesApi
 class VocabularyFragmentsAdapter(fragment: Fragment, private val itemsCount: Int) :
     FragmentStateAdapter(fragment) {
+
     override fun getItemCount(): Int {
         return itemsCount
     }
