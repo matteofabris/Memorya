@@ -17,26 +17,11 @@ class VocabularyWordsViewModel @Inject constructor(
     private val _categoryId: Int =
         _savedStateHandle.get<Int>("categoryId") ?: 0
 
-    var vocabularyList = initVocabularyList()
+    val vocabularyList = initVocabularyList()
 
     private fun initVocabularyList(): LiveData<List<VocabularyItem>> {
-        return if (_categoryId > 0) _dbDao.getVocabularyItemsByCategoryAsLiveData(_categoryId) else _dbDao.getVocabularyItemsAsLiveData()
-    }
-
-    fun mockWords() {
-        val a = VocabularyItem("house", "casa")
-        val b = VocabularyItem("room", "stanza")
-        val c = VocabularyItem("table", "tavolo")
-        val d = VocabularyItem("pen", "penna")
-        val e = VocabularyItem("country", "stato")
-        val f = VocabularyItem("book", "libro")
-        val g = VocabularyItem("phone", "telefono")
-        val h = VocabularyItem("station", "stazione")
-        val i = VocabularyItem("friday", "venerdì")
-        val list = listOf(a, b, c, d, e, f, g, h, i)
-        viewModelScope.launch {
-            list.forEach { _dbDao.insertVocabularyItem(it) }
-        }
+        return if (_categoryId > 0) _dbDao.getVocabularyItemsByCategoryAsLiveData(_categoryId) else
+            _dbDao.getVocabularyItemsAsLiveData()
     }
 
     fun removeItem(id: Int) {

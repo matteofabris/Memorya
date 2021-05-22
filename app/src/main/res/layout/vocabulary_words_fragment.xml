@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="vocabulary_words_viewmodel"
+            name="viewModel"
             type="com.example.wordsmemory.ui.vocabulary.words.VocabularyWordsViewModel" />
     </data>
 

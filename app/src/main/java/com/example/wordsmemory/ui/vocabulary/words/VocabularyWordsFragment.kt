@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -37,9 +37,11 @@ class VocabularyWordsFragment : Fragment() {
             _addClicked = true
 
             val navDirection =
-                if (parentFragment is VocabularyFragment) VocabularyFragmentDirections.actionVocabularyFragmentToAddOrEditVocabularyItemSheet(
-                    it
-                ) else CategoryFragmentDirections.actionCategoryFragmentToAddOrEditVocabularyItemSheet(
+                if (parentFragment is VocabularyFragment)
+                    VocabularyFragmentDirections.actionVocabularyFragmentToAddOrEditVocabularyItemSheet(
+                        it
+                    )
+                else CategoryFragmentDirections.actionCategoryFragmentToAddOrEditVocabularyItemSheet(
                     it
                 )
 
@@ -59,7 +61,7 @@ class VocabularyWordsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = VocabularyWordsFragmentBinding.inflate(inflater)
-        _binding.vocabularyWordsViewmodel = _viewModel
+        _binding.viewModel = _viewModel
 
         setupVocabularyList()
         setupAddButtonListener()
@@ -86,13 +88,13 @@ class VocabularyWordsFragment : Fragment() {
     }
 
     private fun setListDivider() {
+        if (context == null) return
+
         val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        itemDecoration.setDrawable(
-            getDrawable(
-                requireContext(),
-                R.drawable.vocabulary_list_divider
-            )!!
-        )
+        val listDivider = ContextCompat.getDrawable(requireContext(), R.drawable.vocabulary_list_divider)
+            ?: return
+
+        itemDecoration.setDrawable(listDivider)
         _binding.vocabularyList.addItemDecoration(itemDecoration)
     }
 
