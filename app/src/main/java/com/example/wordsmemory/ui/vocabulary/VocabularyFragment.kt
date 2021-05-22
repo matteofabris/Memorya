@@ -26,7 +26,7 @@ class VocabularyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = VocabularyFragmentBinding.inflate(inflater)
-        _binding.vocabularyViewmodel = _viewModel
+        _binding.viewModel = _viewModel
         _binding.viewPager.adapter = VocabularyFragmentsAdapter(this, 2)
 
         setTabLayoutMediator()
