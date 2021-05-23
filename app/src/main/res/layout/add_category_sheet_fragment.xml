@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="addCategoryViewModel"
+            name="viewModel"
             type="com.example.wordsmemory.ui.vocabulary.addoreditcategory.AddCategorySheetViewModel" />
     </data>
 
@@ -17,7 +17,7 @@
         tools:context=".ui.vocabulary.addoreditcategory.AddOrEditCategorySheet">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/editTextContainer"
+            android:id="@+id/categoryContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -32,26 +32,26 @@
             app:layout_constraintWidth_percent="0.9">
 
             <TextView
-                android:id="@+id/categoryTitleTextView"
+                android:id="@+id/categoryTitle"
                 style="@style/LabelStyle"
                 android:text="@string/category"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/categoryEditText"
+                app:layout_constraintEnd_toStartOf="@id/category"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.3" />
 
             <EditText
-                android:id="@+id/categoryEditText"
+                android:id="@+id/category"
                 style="@style/LabelStyle"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
-                android:text="@={addCategoryViewModel.category}"
+                android:text="@={viewModel.category}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/categoryTitleTextView"
+                app:layout_constraintStart_toEndOf="@id/categoryTitle"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="LabelFor" />
 
@@ -63,11 +63,11 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_background"
             android:enabled="false"
-            android:text="@{addCategoryViewModel.addButtonText}"
+            android:text="@string/add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextContainer"
+            app:layout_constraintTop_toBottomOf="@+id/categoryContainer"
             tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.wordsmemory.AddCategoryInputFilter
-import com.example.wordsmemory.afterTextChanged
+import com.example.wordsmemory.R
+import com.example.wordsmemory.TranslateInputFilter
 import com.example.wordsmemory.databinding.AddCategorySheetFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,27 +26,29 @@ class AddOrEditCategorySheet : BottomSheetDialogFragment() {
     ): View {
         _binding = AddCategorySheetFragmentBinding.inflate(inflater)
         _binding.lifecycleOwner = viewLifecycleOwner
-        _binding.addCategoryViewModel = _viewModel
+        _binding.viewModel = _viewModel
+        _binding.category.filters = arrayOf(TranslateInputFilter())
 
-        setEditTextsFilter()
-        setupButtons()
+        setupAddButtonOnClickListener()
+        setupObservers()
 
         return _binding.root
     }
 
-    private fun setEditTextsFilter() {
-        val filter = AddCategoryInputFilter()
-        _binding.categoryEditText.filters = arrayOf(filter)
-    }
-
-    private fun setupButtons() {
+    private fun setupAddButtonOnClickListener() {
         _binding.addButton.setOnClickListener {
             _viewModel.insertOrUpdateCategory()
             findNavController().popBackStack()
         }
+    }
 
-        _binding.categoryEditText.afterTextChanged { s ->
+    private fun setupObservers() {
+        _viewModel.category.observe(viewLifecycleOwner, { s ->
             _binding.addButton.isEnabled = s.isNotEmpty()
-        }
+        })
+
+        _viewModel.categoryItem.observe(viewLifecycleOwner, {
+            _binding.addButton.text = getString(R.string.update)
+        })
     }
 }

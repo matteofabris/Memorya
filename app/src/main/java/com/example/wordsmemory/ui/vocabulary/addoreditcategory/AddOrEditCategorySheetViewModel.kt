@@ -14,29 +14,29 @@ class AddCategorySheetViewModel @Inject constructor(
     private val _dbDao: VocabularyDao
 ) : ViewModel() {
 
-    private lateinit var _category: Category
-    private val _selectedCategoryId: Int =
-        _savedStateHandle.get<Int>("selectedCategoryId")!!
-
     val addButtonText = MutableLiveData("Add")
     val category = MutableLiveData<String>()
 
+    private val _categoryItem = MutableLiveData<Category>()
+    val categoryItem: LiveData<Category>
+        get() = _categoryItem
+
     init {
         viewModelScope.launch {
-            if (_selectedCategoryId != -1) {
-                _category = _dbDao.getCategoryById(_selectedCategoryId)
-                category.value = _category.category
-                addButtonText.value = "Update"
+            val selectedCategoryId = _savedStateHandle.get<Int>("selectedCategoryId")
+            if (selectedCategoryId != null && selectedCategoryId != -1) {
+                _categoryItem.value = _dbDao.getCategoryById(selectedCategoryId)
+                category.value = _categoryItem.value?.category
             }
         }
     }
 
     fun insertOrUpdateCategory() {
         viewModelScope.launch {
-            if (_selectedCategoryId != -1) {
-                _category.category = category.value!!.lowercase(Locale.getDefault())
+            if (_categoryItem.value != null) {
+                _categoryItem.value!!.category = category.value!!.lowercase(Locale.getDefault())
                     .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-                _dbDao.updateCategory(_category)
+                _dbDao.updateCategory(_categoryItem.value!!)
             } else {
                 _dbDao.insertCategory(
                     Category(
