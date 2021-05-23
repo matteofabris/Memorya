@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.wordsmemory.R
 import com.example.wordsmemory.TranslateInputFilter
+import com.example.wordsmemory.afterTextChanged
 import com.example.wordsmemory.databinding.AddCategorySheetFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,12 +44,12 @@ class AddOrEditCategorySheet : BottomSheetDialogFragment() {
     }
 
     private fun setupObservers() {
-        _viewModel.category.observe(viewLifecycleOwner, { s ->
+        _binding.category.afterTextChanged { s ->
             _binding.addButton.isEnabled = s.isNotEmpty()
-        })
+        }
 
         _viewModel.categoryItem.observe(viewLifecycleOwner, {
-            _binding.addButton.text = getString(R.string.update)
+            if (_viewModel.isEdit) _binding.addButton.text = getString(R.string.update)
         })
     }
 }

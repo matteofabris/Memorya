@@ -2,8 +2,10 @@ package com.example.wordsmemory.ui.vocabulary.addoreditvocabularyitem
 
 import android.os.StrictMode
 import android.util.Log
-import androidx.lifecycle.*
-import com.example.wordsmemory.Constants
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.wordsmemory.database.VocabularyDao
 import com.example.wordsmemory.model.VocabularyItem
 import com.google.auth.oauth2.GoogleCredentials
@@ -14,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,46 +27,40 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
 
     private var _translate = getTranslateService(_credentials)
 
-    val enText = MutableLiveData<String>()
-    val itText = MutableLiveData<String>()
     val categories = _dbDao.getCategoriesAsLiveData()
-    var category = Constants.defaultCategory
+    var isEdit = false
+    val vocabularyItem = MutableLiveData<VocabularyItem>()
 
-    private val _vocabularyItem = MutableLiveData<VocabularyItem>()
-    val vocabularyItem: LiveData<VocabularyItem>
-        get() = _vocabularyItem
-
-    fun getVocabularyItem() {
+    fun initVocabularyItem() {
         viewModelScope.launch {
             val selectedVocabularyItemId = _savedStateHandle.get<Int>("selectedVocabularyItemId")
             if (selectedVocabularyItemId != null && selectedVocabularyItemId != -1) {
-                _vocabularyItem.value = _dbDao.getVocabularyItemById(selectedVocabularyItemId)
-                enText.value = _vocabularyItem.value?.enWord
-                itText.value = _vocabularyItem.value?.itWord
+                isEdit = true
+                vocabularyItem.value = _dbDao.getVocabularyItemById(selectedVocabularyItemId)
+            } else {
+                vocabularyItem.value = VocabularyItem("", "", 1)
             }
         }
     }
 
+    fun setVocabularyItemCategory(category: String) {
+        vocabularyItem.value?.category =
+            categories.value?.find { c -> c.category == category }?.id ?: 0
+    }
+
     fun insertOrUpdateVocabularyItem() {
         viewModelScope.launch(Dispatchers.IO) {
-            val categoryId = _dbDao.getCategoryId(category)
             Log.i(
                 "save_item",
-                "Save vocabulary item: en - ${enText.value}, it - ${itText.value}, category - $categoryId"
+                "Save vocabulary item: en - ${vocabularyItem.value?.enWord}, " +
+                        "it - ${vocabularyItem.value?.itWord}, " +
+                        "category - ${vocabularyItem.value?.category}"
             )
 
-            if (_vocabularyItem.value != null) {
-                _vocabularyItem.value!!.enWord = enText.value!!.lowercase(Locale.getDefault())
-                _vocabularyItem.value!!.itWord = itText.value!!.lowercase(Locale.getDefault())
-                _vocabularyItem.value!!.category = categoryId
-                _dbDao.updateVocabularyItem(_vocabularyItem.value!!)
+            if (isEdit) {
+                _dbDao.updateVocabularyItem(vocabularyItem.value!!)
             } else {
-                val itemToInsert = VocabularyItem(
-                    enText.value!!.lowercase(Locale.getDefault()),
-                    itText.value!!.lowercase(Locale.getDefault()),
-                    categoryId
-                )
-                _dbDao.insertVocabularyItem(itemToInsert)
+                _dbDao.insertVocabularyItem(vocabularyItem.value!!)
             }
         }
     }
@@ -95,7 +90,7 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
         if (_translate == null) return
 
         //Get input text to be translated:
-        val textToTranslate = enText.value
+        val textToTranslate = vocabularyItem.value?.enWord
         val translation = _translate?.translate(
             textToTranslate,
             Translate.TranslateOption.targetLanguage("it"),
@@ -104,7 +99,7 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
 
         if (translation != null) {
             val translatedText = translation.translatedText
-            itText.value = translatedText
+            vocabularyItem.value?.itWord = translatedText
             //Translated text and original text are set to TextViews:
             Log.d("Translation", "TEO: $translatedText")
         }

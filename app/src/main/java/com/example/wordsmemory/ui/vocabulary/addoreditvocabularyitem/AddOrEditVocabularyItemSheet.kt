@@ -9,10 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.wordsmemory.Constants
-import com.example.wordsmemory.R
-import com.example.wordsmemory.TranslateInputFilter
-import com.example.wordsmemory.checkInternetConnection
+import com.example.wordsmemory.*
 import com.example.wordsmemory.databinding.AddOrEditVocabularyItemSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +32,7 @@ class AddOrEditVocabularyItemSheet :
         _binding.lifecycleOwner = viewLifecycleOwner
         _binding.viewModel = _viewModel
 
-        setEditTextsFilter()
+        setEditTextsFilters()
         setButtonsOnClickListeners()
         setupObservers()
 
@@ -44,7 +41,7 @@ class AddOrEditVocabularyItemSheet :
         return _binding.root
     }
 
-    private fun setEditTextsFilter() {
+    private fun setEditTextsFilters() {
         val filter = TranslateInputFilter()
         _binding.enWord.filters = arrayOf(filter)
         _binding.itWord.filters = arrayOf(filter)
@@ -67,16 +64,16 @@ class AddOrEditVocabularyItemSheet :
     }
 
     private fun setupObservers() {
-        _viewModel.enText.observe(viewLifecycleOwner, { s ->
+        _binding.enWord.afterTextChanged { s ->
             _binding.addButton.isEnabled =
                 s.isNotEmpty() && _binding.itWord.text.isNotEmpty()
             _binding.googleTranslateButton.isEnabled = s.isNotEmpty()
-        })
+        }
 
-        _viewModel.itText.observe(viewLifecycleOwner, { s ->
+        _binding.itWord.afterTextChanged { s ->
             _binding.addButton.isEnabled =
                 s.isNotEmpty() && _binding.enWord.text.isNotEmpty()
-        })
+        }
 
         _viewModel.categories.observe(viewLifecycleOwner, {
             val categories = it.map { c -> c.category }.toTypedArray()
@@ -89,11 +86,11 @@ class AddOrEditVocabularyItemSheet :
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
             _binding.categorySpinner.adapter = arrayAdapter
-            _viewModel.getVocabularyItem()
+            _viewModel.initVocabularyItem()
         })
 
         _viewModel.vocabularyItem.observe(viewLifecycleOwner, {
-            _binding.addButton.text = getString(R.string.update)
+            if (_viewModel.isEdit) _binding.addButton.text = getString(R.string.update)
 
             val categories = _viewModel.categories.value
             if (categories != null) {
@@ -105,10 +102,10 @@ class AddOrEditVocabularyItemSheet :
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        _viewModel.category = parent?.getItemAtPosition(position).toString()
+        _viewModel.setVocabularyItemCategory(parent?.getItemAtPosition(position).toString())
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        _viewModel.category = Constants.defaultCategory
+        _viewModel.setVocabularyItemCategory(Constants.defaultCategory)
     }
 }
