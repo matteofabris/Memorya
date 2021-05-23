@@ -26,8 +26,6 @@ class VocabularyCategoriesFragment : Fragment() {
 
     private val _viewModel: VocabularyCategoriesViewModel by viewModels()
     private lateinit var _binding: VocabularyCategoriesFragmentBinding
-    private lateinit var _categoryItemAdapter : CategoryItemAdapter
-
     private var _addClicked = false
     private val _showAddOrEditCategorySheet: (Int) -> Boolean = {
         if (!_addClicked) {
@@ -57,7 +55,7 @@ class VocabularyCategoriesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = VocabularyCategoriesFragmentBinding.inflate(inflater)
-        _binding.enVocabularyViewModel = _viewModel
+        _binding.viewModel = _viewModel
 
         setupCategoriesList()
         setupAddButtonListener()
@@ -66,8 +64,7 @@ class VocabularyCategoriesFragment : Fragment() {
     }
 
     private fun setupCategoriesList() {
-
-        _categoryItemAdapter = CategoryItemAdapter(
+        val categoryItemAdapter = CategoryItemAdapter(
             CategoryItemAdapter.OnClickListener {
                 _showSelectedCategoryFragment.invoke(it.id)
             },
@@ -75,7 +72,7 @@ class VocabularyCategoriesFragment : Fragment() {
                 _showAddOrEditCategorySheet.invoke(it.id)
             }
         )
-        _binding.categoriesList.adapter = _categoryItemAdapter
+        _binding.categoriesList.adapter = categoryItemAdapter
 
         setSwipeGesture()
 
@@ -84,7 +81,7 @@ class VocabularyCategoriesFragment : Fragment() {
             {
                 it?.let {
                     val filteredList = it.toMutableList().filter { c -> c.id != 1 }
-                    _categoryItemAdapter.submitList(filteredList)
+                    categoryItemAdapter.submitList(filteredList)
                 }
             })
     }
