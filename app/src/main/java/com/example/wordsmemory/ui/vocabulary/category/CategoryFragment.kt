@@ -24,6 +24,7 @@ class CategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = CategoryFragmentBinding.inflate(inflater)
+        _binding.lifecycleOwner = viewLifecycleOwner
         _binding.viewModel = _viewModel
 
         childFragmentManager.beginTransaction()

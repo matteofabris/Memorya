@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="addOrEditItemViewModel"
+            name="viewModel"
             type="com.example.wordsmemory.ui.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheetViewModel" />
     </data>
 
@@ -17,7 +17,7 @@
         tools:context=".ui.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/editTextContainer"
+            android:id="@+id/vocabularyItemContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -32,72 +32,72 @@
             app:layout_constraintWidth_percent="0.9">
 
             <TextView
-                android:id="@+id/enWordTitleTextView"
+                android:id="@+id/enWordTitle"
                 style="@style/LabelStyle"
                 android:text="@string/english_word"
                 android:textAlignment="textStart"
-                app:layout_constraintBottom_toTopOf="@+id/itWordEditText"
-                app:layout_constraintEnd_toStartOf="@id/enWordEditText"
+                app:layout_constraintBottom_toTopOf="@+id/itWord"
+                app:layout_constraintEnd_toStartOf="@id/enWord"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.3" />
 
             <EditText
-                android:id="@+id/enWordEditText"
+                android:id="@+id/enWord"
                 style="@style/LabelStyle"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
-                android:text="@={addOrEditItemViewModel.enText}"
-                app:layout_constraintBottom_toTopOf="@id/itWordEditText"
+                android:text="@={viewModel.enText}"
+                app:layout_constraintBottom_toTopOf="@id/itWord"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/enWordTitleTextView"
+                app:layout_constraintStart_toEndOf="@id/enWordTitle"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="LabelFor" />
 
             <TextView
-                android:id="@+id/itWordTitleTextView"
+                android:id="@+id/itWordTitle"
                 style="@style/LabelStyle"
                 android:text="@string/italian_word"
                 android:textAlignment="textStart"
-                app:layout_constraintBottom_toTopOf="@id/categoryTitleTextView"
-                app:layout_constraintEnd_toEndOf="@id/enWordTitleTextView"
-                app:layout_constraintStart_toStartOf="@id/enWordTitleTextView"
-                app:layout_constraintTop_toBottomOf="@id/enWordTitleTextView"
+                app:layout_constraintBottom_toTopOf="@id/categoryTitle"
+                app:layout_constraintEnd_toEndOf="@id/enWordTitle"
+                app:layout_constraintStart_toStartOf="@id/enWordTitle"
+                app:layout_constraintTop_toBottomOf="@id/enWordTitle"
                 app:layout_constraintWidth_percent="0.3" />
 
             <EditText
-                android:id="@+id/itWordEditText"
+                android:id="@+id/itWord"
                 style="@style/LabelStyle"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
-                android:text="@={addOrEditItemViewModel.itText}"
-                app:layout_constraintBottom_toBottomOf="@id/itWordTitleTextView"
-                app:layout_constraintEnd_toEndOf="@+id/enWordEditText"
-                app:layout_constraintStart_toStartOf="@id/enWordEditText"
-                app:layout_constraintTop_toTopOf="@id/itWordTitleTextView"
+                android:text="@={viewModel.itText}"
+                app:layout_constraintBottom_toBottomOf="@id/itWordTitle"
+                app:layout_constraintEnd_toEndOf="@+id/enWord"
+                app:layout_constraintStart_toStartOf="@id/enWord"
+                app:layout_constraintTop_toTopOf="@id/itWordTitle"
                 tools:ignore="LabelFor" />
 
             <TextView
-                android:id="@+id/categoryTitleTextView"
+                android:id="@+id/categoryTitle"
                 style="@style/LabelStyle"
                 android:text="@string/category"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/itWordTitleTextView"
-                app:layout_constraintStart_toStartOf="@id/itWordTitleTextView"
-                app:layout_constraintTop_toBottomOf="@id/itWordTitleTextView"
+                app:layout_constraintEnd_toEndOf="@id/itWordTitle"
+                app:layout_constraintStart_toStartOf="@id/itWordTitle"
+                app:layout_constraintTop_toBottomOf="@id/itWordTitle"
                 app:layout_constraintWidth_percent="0.3" />
 
             <Spinner
                 android:id="@+id/categorySpinner"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="@id/categoryTitleTextView"
-                app:layout_constraintEnd_toEndOf="@+id/itWordEditText"
-                app:layout_constraintStart_toStartOf="@id/itWordEditText"
-                app:layout_constraintTop_toTopOf="@id/categoryTitleTextView" />
+                app:layout_constraintBottom_toBottomOf="@id/categoryTitle"
+                app:layout_constraintEnd_toEndOf="@+id/itWord"
+                app:layout_constraintStart_toStartOf="@id/itWord"
+                app:layout_constraintTop_toTopOf="@id/categoryTitle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -107,11 +107,11 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_background"
             android:enabled="false"
-            android:text="@{addOrEditItemViewModel.addButtonText}"
+            android:text="@string/add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/googleTranslateButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextContainer"
+            app:layout_constraintTop_toBottomOf="@+id/vocabularyItemContainer"
             tools:ignore="ContentDescription" />
 
         <Button

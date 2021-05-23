@@ -19,32 +19,29 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
-    _savedStateHandle: SavedStateHandle,
+    private val _savedStateHandle: SavedStateHandle,
     private val _dbDao: VocabularyDao,
-    private val _credentials: InputStream
+    _credentials: InputStream
 ) : ViewModel() {
 
-    private var _translate: Translate? = null
-    private lateinit var _vocabularyItem: VocabularyItem
-    private val _selectedVocabularyItemId: Int =
-        _savedStateHandle.get<Int>("selectedVocabularyItemId")!!
+    private var _translate = getTranslateService(_credentials)
 
-    val addButtonText = MutableLiveData("Add")
     val enText = MutableLiveData<String>()
     val itText = MutableLiveData<String>()
     val categories = _dbDao.getCategoriesAsLiveData()
-    var selectedCategoryId = MutableLiveData(1)
     var category = Constants.defaultCategory
 
-    init {
-        viewModelScope.launch {
-            getTranslateService(_credentials)
+    private val _vocabularyItem = MutableLiveData<VocabularyItem>()
+    val vocabularyItem: LiveData<VocabularyItem>
+        get() = _vocabularyItem
 
-            if (_selectedVocabularyItemId != -1) {
-                _vocabularyItem = _dbDao.getVocabularyItemById(_selectedVocabularyItemId)
-                enText.value = _vocabularyItem.enWord
-                itText.value = _vocabularyItem.itWord
-                addButtonText.value = "Update"
+    fun getVocabularyItem() {
+        viewModelScope.launch {
+            val selectedVocabularyItemId = _savedStateHandle.get<Int>("selectedVocabularyItemId")
+            if (selectedVocabularyItemId != null && selectedVocabularyItemId != -1) {
+                _vocabularyItem.value = _dbDao.getVocabularyItemById(selectedVocabularyItemId)
+                enText.value = _vocabularyItem.value?.enWord
+                itText.value = _vocabularyItem.value?.itWord
             }
         }
     }
@@ -54,14 +51,14 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
             val categoryId = _dbDao.getCategoryId(category)
             Log.i(
                 "save_item",
-                "Save vocabulary item: en - ${enText.value}, it - ${itText.value}, cat - $categoryId"
+                "Save vocabulary item: en - ${enText.value}, it - ${itText.value}, category - $categoryId"
             )
 
-            if (_selectedVocabularyItemId != -1) {
-                _vocabularyItem.enWord = enText.value!!.lowercase(Locale.getDefault())
-                _vocabularyItem.itWord = itText.value!!.lowercase(Locale.getDefault())
-                _vocabularyItem.category = categoryId
-                _dbDao.updateVocabularyItem(_vocabularyItem)
+            if (_vocabularyItem.value != null) {
+                _vocabularyItem.value!!.enWord = enText.value!!.lowercase(Locale.getDefault())
+                _vocabularyItem.value!!.itWord = itText.value!!.lowercase(Locale.getDefault())
+                _vocabularyItem.value!!.category = categoryId
+                _dbDao.updateVocabularyItem(_vocabularyItem.value!!)
             } else {
                 val itemToInsert = VocabularyItem(
                     enText.value!!.lowercase(Locale.getDefault()),
@@ -73,7 +70,7 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
         }
     }
 
-    private fun getTranslateService(credentials: InputStream) {
+    private fun getTranslateService(credentials: InputStream): Translate? {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
 
@@ -85,11 +82,13 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
                 //Set credentials and get translate service:
                 val translateOptions =
                     TranslateOptions.newBuilder().setCredentials(myCredentials).build()
-                _translate = translateOptions.service
+                return translateOptions.service
             }
         } catch (ioe: IOException) {
             ioe.printStackTrace()
         }
+
+        return null
     }
 
     fun translate() {
@@ -108,12 +107,6 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
             itText.value = translatedText
             //Translated text and original text are set to TextViews:
             Log.d("Translation", "TEO: $translatedText")
-        }
-    }
-
-    fun setCategory() {
-        if (_selectedVocabularyItemId != -1) {
-            selectedCategoryId.value = _vocabularyItem.category
         }
     }
 }

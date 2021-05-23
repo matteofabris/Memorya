@@ -1,7 +1,6 @@
 package com.example.wordsmemory.ui.vocabulary.addoreditvocabularyitem
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.wordsmemory.Constants
+import com.example.wordsmemory.R
 import com.example.wordsmemory.TranslateInputFilter
-import com.example.wordsmemory.afterTextChanged
 import com.example.wordsmemory.checkInternetConnection
 import com.example.wordsmemory.databinding.AddOrEditVocabularyItemSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -34,22 +33,24 @@ class AddOrEditVocabularyItemSheet :
     ): View {
         _binding = AddOrEditVocabularyItemSheetBinding.inflate(inflater)
         _binding.lifecycleOwner = viewLifecycleOwner
-        _binding.addOrEditItemViewModel = _viewModel
+        _binding.viewModel = _viewModel
 
         setEditTextsFilter()
-        setupButtons()
-        setCategoriesSpinner()
+        setButtonsOnClickListeners()
+        setupObservers()
+
+        _binding.categorySpinner.onItemSelectedListener = this
 
         return _binding.root
     }
 
     private fun setEditTextsFilter() {
         val filter = TranslateInputFilter()
-        _binding.enWordEditText.filters = arrayOf(filter)
-        _binding.itWordEditText.filters = arrayOf(filter)
+        _binding.enWord.filters = arrayOf(filter)
+        _binding.itWord.filters = arrayOf(filter)
     }
 
-    private fun setupButtons() {
+    private fun setButtonsOnClickListeners() {
         _binding.addButton.setOnClickListener {
             _viewModel.insertOrUpdateVocabularyItem()
             findNavController().popBackStack()
@@ -63,28 +64,22 @@ class AddOrEditVocabularyItemSheet :
                 }
             }
         }
-
-        _binding.enWordEditText.afterTextChanged { s ->
-            _binding.addButton.isEnabled =
-                s.isNotEmpty() && _binding.itWordEditText.text.isNotEmpty()
-            _binding.googleTranslateButton.isEnabled = s.isNotEmpty()
-        }
-        _binding.itWordEditText.afterTextChanged { s ->
-            _binding.addButton.isEnabled =
-                s.isNotEmpty() && _binding.enWordEditText.text.isNotEmpty()
-        }
     }
 
-    private fun setCategoriesSpinner() {
+    private fun setupObservers() {
+        _viewModel.enText.observe(viewLifecycleOwner, { s ->
+            _binding.addButton.isEnabled =
+                s.isNotEmpty() && _binding.itWord.text.isNotEmpty()
+            _binding.googleTranslateButton.isEnabled = s.isNotEmpty()
+        })
+
+        _viewModel.itText.observe(viewLifecycleOwner, { s ->
+            _binding.addButton.isEnabled =
+                s.isNotEmpty() && _binding.enWord.text.isNotEmpty()
+        })
+
         _viewModel.categories.observe(viewLifecycleOwner, {
             val categories = it.map { c -> c.category }.toTypedArray()
-
-            it.forEach { c ->
-                Log.i(
-                    "categories",
-                    "Category: id - ${c.id}, name - ${c.category}"
-                )
-            }
 
             val arrayAdapter = ArrayAdapter(
                 requireContext(),
@@ -94,19 +89,19 @@ class AddOrEditVocabularyItemSheet :
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
             _binding.categorySpinner.adapter = arrayAdapter
-            _viewModel.setCategory()
+            _viewModel.getVocabularyItem()
         })
 
-        _viewModel.selectedCategoryId.observe(viewLifecycleOwner, {
+        _viewModel.vocabularyItem.observe(viewLifecycleOwner, {
+            _binding.addButton.text = getString(R.string.update)
+
             val categories = _viewModel.categories.value
             if (categories != null) {
-                val selectedCategory = categories.first { c -> c.id == it }
+                val selectedCategory = categories.first { c -> c.id == it.category }
                 val index = categories.indexOf(selectedCategory)
                 _binding.categorySpinner.setSelection(index)
             }
         })
-
-        _binding.categorySpinner.onItemSelectedListener = this
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
