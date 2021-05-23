@@ -27,7 +27,10 @@ class CategoryFragment : Fragment() {
         _binding.viewModel = _viewModel
 
         childFragmentManager.beginTransaction()
-            .replace(R.id.category_vocabulary_container, VocabularyWordsFragment())
+            .replace(
+                R.id.category_vocabulary_container,
+                VocabularyWordsFragment(_viewModel.categoryId)
+            )
             .commit()
 
         return _binding.root

@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 @AndroidEntryPoint
-class VocabularyWordsFragment : Fragment() {
+class VocabularyWordsFragment(private val _categoryId: Int = -1) : Fragment() {
 
     private val _viewModel: VocabularyWordsViewModel by viewModels()
     private lateinit var _binding: VocabularyWordsFragmentBinding
@@ -60,6 +60,7 @@ class VocabularyWordsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _viewModel.initVocabularyList(_categoryId)
         _binding = VocabularyWordsFragmentBinding.inflate(inflater)
         _binding.viewModel = _viewModel
 
@@ -91,8 +92,9 @@ class VocabularyWordsFragment : Fragment() {
         if (context == null) return
 
         val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        val listDivider = ContextCompat.getDrawable(requireContext(), R.drawable.vocabulary_list_divider)
-            ?: return
+        val listDivider =
+            ContextCompat.getDrawable(requireContext(), R.drawable.vocabulary_list_divider)
+                ?: return
 
         itemDecoration.setDrawable(listDivider)
         _binding.vocabularyList.addItemDecoration(itemDecoration)

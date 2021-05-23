@@ -10,23 +10,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VocabularyWordsViewModel @Inject constructor(
-    _savedStateHandle: SavedStateHandle,
     private val _dbDao: VocabularyDao
 ) : ViewModel() {
 
-    private val _categoryId: Int =
-        _savedStateHandle.get<Int>("categoryId") ?: 0
-
-    val vocabularyList = initVocabularyList()
-
-    private fun initVocabularyList(): LiveData<List<VocabularyItem>> {
-        return if (_categoryId > 0) _dbDao.getVocabularyItemsByCategoryAsLiveData(_categoryId) else
-            _dbDao.getVocabularyItemsAsLiveData()
-    }
+    private val _vocabularyList = MutableLiveData<List<VocabularyItem>>()
+    val vocabularyList: LiveData<List<VocabularyItem>>
+        get() = _vocabularyList
 
     fun removeItem(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _dbDao.deleteVocabularyItem(vocabularyList.value!!.first { it.id == id })
+        }
+    }
+
+    fun initVocabularyList(categoryId: Int) {
+        viewModelScope.launch {
+            _vocabularyList.value =
+                if (categoryId > 0) _dbDao.getVocabularyItemsByCategory(categoryId)
+                else _dbDao.getVocabularyItems()
         }
     }
 }

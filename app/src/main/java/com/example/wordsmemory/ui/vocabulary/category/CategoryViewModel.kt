@@ -12,5 +12,6 @@ class CategoryViewModel @Inject constructor(
     _dbDao: VocabularyDao
 ) : ViewModel() {
 
-    val categoryName = _dbDao.getCategoryNameAsLiveData(_savedStateHandle.get<Int>("categoryId")!!)
+    val categoryId = _savedStateHandle.get<Int>("categoryId") ?: 0
+    val categoryName = _dbDao.getCategoryNameAsLiveData(categoryId)
 }
