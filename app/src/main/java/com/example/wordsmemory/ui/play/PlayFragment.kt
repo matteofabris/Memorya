@@ -16,7 +16,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.TranslateInputFilter
@@ -55,8 +55,8 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setupVocabularyButtonListener() {
-        _binding.vocabularyButton.setOnClickListener {
-            it.findNavController().navigate(R.id.action_playFragment_to_vocabularyFragment)
+        _binding.topBar.setVocabularyButtonAction {
+            findNavController().navigate(R.id.action_playFragment_to_vocabularyFragment)
 
             val view = activity?.currentFocus
             if (view != null) {

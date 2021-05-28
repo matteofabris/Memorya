@@ -34,6 +34,10 @@ class CategoryFragment : Fragment() {
             )
             .commit()
 
+        _viewModel.categoryName.observe(viewLifecycleOwner) {
+            _binding.topBar.title = it
+        }
+
         return _binding.root
     }
 }
