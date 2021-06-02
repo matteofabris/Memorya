@@ -9,8 +9,8 @@ import com.example.wordsmemory.databinding.CategoryItemBinding
 import com.example.wordsmemory.model.Category
 
 class CategoryItemAdapter(
-    private val onClickListener : OnClickListener,
-    private val onLongClickListener: OnLongClickListener
+    private val _onClickListener : OnClickListener,
+    private val _onLongClickListener: OnLongClickListener
 ) : ListAdapter<Category, CategoryItemAdapter.CategoryViewHolder>(CategoryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -19,19 +19,19 @@ class CategoryItemAdapter(
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val item = getItem(position)
-        holder.itemView.setOnClickListener { onClickListener.onClick(item) }
-        holder.itemView.setOnLongClickListener { onLongClickListener.onLongClick(item) }
+        holder.itemView.setOnClickListener { _onClickListener.onClick(item) }
+        holder.itemView.setOnLongClickListener { _onLongClickListener.onLongClick(item) }
         holder.bind(item)
     }
 
-    class CategoryViewHolder(private val binding: CategoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class CategoryViewHolder(private val _binding: CategoryItemBinding) : RecyclerView.ViewHolder(_binding.root) {
 
         var itemId : Int = -1
 
         fun bind(item: Category) {
             itemId = item.id;
-            binding.categoryTextView.text = item.category
-            binding.executePendingBindings()
+            _binding.categoryTextView.text = item.category
+            _binding.executePendingBindings()
         }
     }
 

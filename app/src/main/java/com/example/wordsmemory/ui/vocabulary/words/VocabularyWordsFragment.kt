@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordsmemory.R
+import com.example.wordsmemory.adpater.VocabularyItemAdapter
 import com.example.wordsmemory.databinding.VocabularyWordsFragmentBinding
-import com.example.wordsmemory.ui.vocabulary.SwipeToDeleteCallback
+import com.example.wordsmemory.helper.SwipeToDeleteCallback
 import com.example.wordsmemory.ui.vocabulary.VocabularyFragment
 import com.example.wordsmemory.ui.vocabulary.VocabularyFragmentDirections
 import com.example.wordsmemory.ui.vocabulary.category.CategoryFragmentDirections
@@ -71,7 +72,9 @@ class VocabularyWordsFragment(private val _categoryId: Int = -1) : Fragment() {
     }
 
     private fun setupVocabularyList() {
-        val vocabularyAdapter = VocabularyItemAdapter(_showAddOrEditVocabularyItemSheet)
+        val vocabularyAdapter = VocabularyItemAdapter(
+            VocabularyItemAdapter.OnLongClickListener { _showAddOrEditVocabularyItemSheet.invoke(it.id) }
+        )
         _binding.vocabularyList.adapter = vocabularyAdapter
 
         setListDivider()
@@ -103,7 +106,7 @@ class VocabularyWordsFragment(private val _categoryId: Int = -1) : Fragment() {
     private fun setSwipeGesture() {
         val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                _viewModel.removeItem((viewHolder as ViewHolder).itemId)
+                _viewModel.removeItem((viewHolder as VocabularyItemAdapter.VocabularyItemViewHolder).itemId)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)

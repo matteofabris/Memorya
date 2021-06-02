@@ -1,4 +1,4 @@
-package com.example.wordsmemory.ui.vocabulary
+package com.example.wordsmemory.adpater
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

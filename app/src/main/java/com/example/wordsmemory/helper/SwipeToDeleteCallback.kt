@@ -1,4 +1,4 @@
-package com.example.wordsmemory.ui.vocabulary
+package com.example.wordsmemory.helper
 
 import android.content.Context
 import android.graphics.Canvas

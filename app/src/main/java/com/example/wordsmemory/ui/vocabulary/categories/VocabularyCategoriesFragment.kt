@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordsmemory.adpater.CategoryItemAdapter
 import com.example.wordsmemory.databinding.VocabularyCategoriesFragmentBinding
-import com.example.wordsmemory.ui.vocabulary.SwipeToDeleteCallback
+import com.example.wordsmemory.helper.SwipeToDeleteCallback
 import com.example.wordsmemory.ui.vocabulary.VocabularyFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers

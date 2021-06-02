@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.wordsmemory.R
+import com.example.wordsmemory.adpater.VocabularyFragmentsAdapter
 import com.example.wordsmemory.databinding.VocabularyFragmentBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
