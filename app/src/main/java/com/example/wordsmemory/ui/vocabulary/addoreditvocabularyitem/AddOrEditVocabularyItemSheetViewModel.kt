@@ -99,8 +99,13 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
 
         if (translation != null) {
             val translatedText = translation.translatedText
-            vocabularyItem.value?.itWord = translatedText
-            //Translated text and original text are set to TextViews:
+
+            val vocabularyItemTemp = vocabularyItem.value
+            if (vocabularyItemTemp != null) {
+                vocabularyItemTemp.itWord = translatedText
+                vocabularyItem.value = vocabularyItemTemp!!
+            }
+
             Log.d("Translation", "TEO: $translatedText")
         }
     }

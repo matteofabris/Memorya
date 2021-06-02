@@ -90,13 +90,15 @@ class AddOrEditVocabularyItemSheet :
         })
 
         _viewModel.vocabularyItem.observe(viewLifecycleOwner, {
-            if (_viewModel.isEdit) _binding.addButton.text = getString(R.string.update)
+            if (_viewModel.isEdit) {
+                _binding.addButton.text = getString(R.string.update)
 
-            val categories = _viewModel.categories.value
-            if (categories != null) {
-                val selectedCategory = categories.first { c -> c.id == it.category }
-                val index = categories.indexOf(selectedCategory)
-                _binding.categorySpinner.setSelection(index)
+                val categories = _viewModel.categories.value
+                if (categories != null) {
+                    val selectedCategory = categories.first { c -> c.id == it.category }
+                    val index = categories.indexOf(selectedCategory)
+                    _binding.categorySpinner.setSelection(index)
+                }
             }
         })
     }
