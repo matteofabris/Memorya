@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "139830564645",
+    "firebase_url": "https://wordstranslation.firebaseio.com",
+    "project_id": "wordstranslation",
+    "storage_bucket": "wordstranslation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:139830564645:android:adb2f10d68837c6069eccc",
+        "android_client_info": {
+          "package_name": "com.example.wordsmemory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAJIQWu8AYgIpNc33fvs7P6rOU2ZTO3L0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "139830564645-l0bhn69ngshvcl324hp672lurbb3iqp6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

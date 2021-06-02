@@ -9,28 +9,31 @@ import com.google.android.material.appbar.AppBarLayout
 
 class TopBar(context: Context, attrs: AttributeSet) : AppBarLayout(context, attrs) {
 
-    private var _isVocabularyButtonVisible = false
+    var isButtonsVisible: Boolean = false
+        set(value) {
+            field = value
+            findViewById<ImageButton>(R.id.vocabularyButton).visibility =
+                if (value) VISIBLE else INVISIBLE
+            findViewById<ImageButton>(R.id.logoutButton).visibility =
+                if (value) VISIBLE else INVISIBLE
+        }
 
     var title: String = ""
         set(value) {
-            findViewById<TextView>(R.id.topBarTitle).text = value
             field = value
+            findViewById<TextView>(R.id.topBarTitle).text = value
         }
 
     init {
         inflate(context, R.layout.top_bar, this)
-
         obtainStyledAttributes(context, attrs)
-
-        findViewById<ImageButton>(R.id.vocabularyButton).visibility =
-            if (_isVocabularyButtonVisible) VISIBLE else INVISIBLE
     }
 
     private fun obtainStyledAttributes(context: Context, attrs: AttributeSet) {
         context.theme.obtainStyledAttributes(attrs, R.styleable.TopBar, 0, 0).apply {
             try {
-                _isVocabularyButtonVisible =
-                    getBoolean(R.styleable.TopBar_isVocabularyButtonVisible, false)
+                isButtonsVisible =
+                    getBoolean(R.styleable.TopBar_isButtonsVisible, false)
                 title = getString(R.styleable.TopBar_title) ?: ""
             } finally {
                 recycle()
@@ -40,6 +43,12 @@ class TopBar(context: Context, attrs: AttributeSet) : AppBarLayout(context, attr
 
     fun setVocabularyButtonAction(action: () -> Unit) {
         findViewById<ImageButton>(R.id.vocabularyButton).setOnClickListener {
+            action.invoke()
+        }
+    }
+
+    fun setLogoutButtonAction(action: () -> Unit) {
+        findViewById<ImageButton>(R.id.logoutButton).setOnClickListener {
             action.invoke()
         }
     }

@@ -1,6 +1,8 @@
 package com.example.wordsmemory.ui.play
 
+import android.app.Activity
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +14,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,6 +25,8 @@ import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.TranslateInputFilter
 import com.example.wordsmemory.databinding.PlayFragmentBinding
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -31,6 +37,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private val _viewModel: PlayFragmentViewModel by viewModels()
     private lateinit var _binding: PlayFragmentBinding
+    private lateinit var _activityResultLauncher: ActivityResultLauncher<Intent>
 
     @InternalCoroutinesApi
     override fun onCreateView(
@@ -42,9 +49,11 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _binding.viewModel = _viewModel
         _binding.translation.filters = arrayOf(TranslateInputFilter())
 
-        setupVocabularyButtonListener()
+        setTopBarButtonsListeners()
         setupObservers()
         setCategoriesSpinner()
+        registerForAuthActivityResult()
+        requestLogin()
 
         return _binding.root
     }
@@ -54,7 +63,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _viewModel.setPlayWord()
     }
 
-    private fun setupVocabularyButtonListener() {
+    private fun setTopBarButtonsListeners() {
         _binding.topBar.setVocabularyButtonAction {
             findNavController().navigate(R.id.action_playFragment_to_vocabularyFragment)
 
@@ -64,6 +73,14 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
             }
+        }
+
+        _binding.topBar.setLogoutButtonAction {
+            AuthUI.getInstance()
+                .signOut(requireContext())
+
+            setPlayBoardVisible(false)
+            requestLogin()
         }
     }
 
@@ -99,6 +116,8 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
             {
                 _viewModel.setPlayWord()
             })
+
+
     }
 
     private fun setCategoriesSpinner() {
@@ -143,6 +162,41 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
             delay(170)
             _binding.container.setBackgroundColor(Color.TRANSPARENT)
         }
+    }
+
+    private fun registerForAuthActivityResult() {
+        _activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                when (it.resultCode) {
+                    Activity.RESULT_OK -> {
+                        val user = FirebaseAuth.getInstance().currentUser
+                        setPlayBoardVisible(true)
+                    }
+                    else -> {
+                        Log.d("AUTH", "AUTH: authentication failed")
+                    }
+                }
+            }
+    }
+
+    private fun requestLogin() {
+        // Choose authentication providers
+        val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+
+        AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers)
+            .build().apply {
+                _activityResultLauncher.launch(this)
+            }
+    }
+
+    private fun setPlayBoardVisible(visible: Boolean) {
+        _binding.playBoard.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+        _binding.recentAttemptsTextView.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+        _binding.checkTranslationButton.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+        _binding.categoryTextView.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+        _binding.categorySpinner.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+
+        _binding.topBar.isButtonsVisible = visible
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
