@@ -39,6 +39,12 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var _binding: PlayFragmentBinding
     private lateinit var _activityResultLauncher: ActivityResultLauncher<Intent>
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        registerForAuthActivityResult()
+        requestLogin()
+    }
+
     @InternalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,8 +58,9 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         setTopBarButtonsListeners()
         setupObservers()
         setCategoriesSpinner()
-        registerForAuthActivityResult()
-        requestLogin()
+
+        if (_viewModel.isAuthenticated)
+            setPlayBoardVisible(true)
 
         return _binding.root
     }
@@ -79,6 +86,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
             AuthUI.getInstance()
                 .signOut(requireContext())
 
+            _viewModel.isAuthenticated = false
             setPlayBoardVisible(false)
             requestLogin()
         }
@@ -116,8 +124,6 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
             {
                 _viewModel.setPlayWord()
             })
-
-
     }
 
     private fun setCategoriesSpinner() {
@@ -170,6 +176,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 when (it.resultCode) {
                     Activity.RESULT_OK -> {
                         val user = FirebaseAuth.getInstance().currentUser
+                        _viewModel.isAuthenticated = true
                         setPlayBoardVisible(true)
                     }
                     else -> {

@@ -19,6 +19,7 @@ class PlayFragmentViewModel @Inject constructor(private val _dbDao: VocabularyDa
     val vocabularyList = _dbDao.getVocabularyItemsAsLiveData()
     val translationText = MutableLiveData<String>()
     val categories = _dbDao.getCategoriesAsLiveData()
+    var isAuthenticated = false
 
     private var _correctAttempts = 0
     val correctAttempts: Int
