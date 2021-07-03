@@ -1,8 +1,8 @@
 package com.example.wordsmemory.di
 
 import android.content.Context
-import com.example.wordsmemory.database.VocabularyDao
-import com.example.wordsmemory.database.VocabularyDatabase
+import com.example.wordsmemory.database.WMDao
+import com.example.wordsmemory.database.WMDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,12 +16,12 @@ object DbModule {
 
     @InternalCoroutinesApi
     @Provides
-    fun provideDatabase(@ApplicationContext appContext: Context): VocabularyDatabase {
-        return VocabularyDatabase.getInstance(appContext)
+    fun provideDatabase(@ApplicationContext appContext: Context): WMDatabase {
+        return WMDatabase.getInstance(appContext)
     }
 
     @Provides
-    fun provideVocabularyDao(database: VocabularyDatabase): VocabularyDao {
-        return database.vocabularyDao()
+    fun provideVocabularyDao(database: WMDatabase): WMDao {
+        return database.wmDao()
     }
 }

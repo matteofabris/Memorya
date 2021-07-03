@@ -1,7 +1,7 @@
 package com.example.wordsmemory.ui.vocabulary.addoreditcategory
 
 import androidx.lifecycle.*
-import com.example.wordsmemory.database.VocabularyDao
+import com.example.wordsmemory.database.WMDao
 import com.example.wordsmemory.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddCategorySheetViewModel @Inject constructor(
     _savedStateHandle: SavedStateHandle,
-    private val _dbDao: VocabularyDao
+    private val _dbDao: WMDao
 ) : ViewModel() {
 
     val categoryItem = MutableLiveData<Category>()

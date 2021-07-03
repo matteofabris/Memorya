@@ -1,6 +1,5 @@
 package com.example.wordsmemory.ui.play
 
-import android.app.Activity
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.graphics.Color
@@ -25,8 +24,6 @@ import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
 import com.example.wordsmemory.TranslateInputFilter
 import com.example.wordsmemory.databinding.PlayFragmentBinding
-import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -59,9 +56,6 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         setupObservers()
         setCategoriesSpinner()
 
-        if (_viewModel.isAuthenticated)
-            setPlayBoardVisible(true)
-
         return _binding.root
     }
 
@@ -83,12 +77,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
 
         _binding.topBar.setLogoutButtonAction {
-            AuthUI.getInstance()
-                .signOut(requireContext())
-
-            _viewModel.isAuthenticated = false
-            setPlayBoardVisible(false)
-            requestLogin()
+            _viewModel.signOut()
         }
     }
 
@@ -123,6 +112,12 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
             viewLifecycleOwner,
             {
                 _viewModel.setPlayWord()
+            })
+
+        _viewModel.isAuthenticated.observe(viewLifecycleOwner,
+            {
+                setPlayBoardVisible(it)
+                if (!it) requestLogin()
             })
     }
 
@@ -173,27 +168,16 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun registerForAuthActivityResult() {
         _activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                when (it.resultCode) {
-                    Activity.RESULT_OK -> {
-                        val user = FirebaseAuth.getInstance().currentUser
-                        _viewModel.isAuthenticated = true
-                        setPlayBoardVisible(true)
-                    }
-                    else -> {
-                        Log.d("AUTH", "AUTH: authentication failed")
-                    }
-                }
+                _viewModel.manageAuthResult(it)
             }
     }
 
     private fun requestLogin() {
-        // Choose authentication providers
-        val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-
-        AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers)
-            .build().apply {
+        if (!_viewModel.checkAuthState()) {
+            _viewModel.signInClient.signInIntent.apply {
                 _activityResultLauncher.launch(this)
             }
+        }
     }
 
     private fun setPlayBoardVisible(visible: Boolean) {
@@ -214,4 +198,3 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _viewModel.resetGamePlay(Constants.defaultCategory)
     }
 }
-

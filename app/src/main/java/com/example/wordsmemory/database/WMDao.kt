@@ -3,15 +3,19 @@ package com.example.wordsmemory.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.wordsmemory.model.Category
+import com.example.wordsmemory.model.User
 import com.example.wordsmemory.model.VocabularyItem
 
 @Dao
-interface VocabularyDao {
+interface WMDao {
     @Insert
     suspend fun insertVocabularyItem(item: VocabularyItem)
 
     @Insert
     suspend fun insertCategory(category: Category)
+
+    @Insert
+    suspend fun insertUser(user: User)
 
     @Update
     suspend fun updateVocabularyItem(item: VocabularyItem)
@@ -19,11 +23,23 @@ interface VocabularyDao {
     @Update
     suspend fun updateCategory(category: Category)
 
+    @Update
+    suspend fun updateUser(user: User)
+
     @Delete
     suspend fun deleteVocabularyItem(item: VocabularyItem)
 
     @Delete
     suspend fun deleteCategory(category: Category)
+
+    @Delete
+    suspend fun deleteUser(user: User)
+
+    @Query("DELETE FROM user")
+    fun deleteAllUsers(): Unit
+
+    @Query("SELECT * FROM user")
+    fun getUsers(): List<User>
 
     @Query("SELECT * FROM vocabulary_item")
     fun getVocabularyItemsAsLiveData(): LiveData<List<VocabularyItem>>

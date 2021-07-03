@@ -1,31 +1,24 @@
 package com.example.wordsmemory.ui.vocabulary.addoreditvocabularyitem
 
-import android.os.StrictMode
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.wordsmemory.database.VocabularyDao
+import com.example.wordsmemory.api.translate.TranslateService
+import com.example.wordsmemory.database.WMDao
 import com.example.wordsmemory.model.VocabularyItem
-import com.google.auth.oauth2.GoogleCredentials
-import com.google.cloud.translate.Translate
-import com.google.cloud.translate.TranslateOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.IOException
-import java.io.InputStream
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
     private val _savedStateHandle: SavedStateHandle,
-    private val _dbDao: VocabularyDao,
-    _credentials: InputStream
+    private val _dbDao: WMDao
 ) : ViewModel() {
-
-    private var _translate = getTranslateService(_credentials)
 
     val categories = _dbDao.getCategoriesAsLiveData()
     var isEdit = false
@@ -65,48 +58,30 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
         }
     }
 
-    private fun getTranslateService(credentials: InputStream): Translate? {
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
+    fun translate() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val textToTranslate = vocabularyItem.value?.enWord ?: ""
+            val accessToken = _dbDao.getUsers().first().accessToken
 
-        try {
-            credentials.use { `is` ->
-                //Get credentials:
-                val myCredentials = GoogleCredentials.fromStream(`is`)
+            val response = TranslateService.create()
+                .translate("Bearer $accessToken", textToTranslate)
 
-                //Set credentials and get translate service:
-                val translateOptions =
-                    TranslateOptions.newBuilder().setCredentials(myCredentials).build()
-                return translateOptions.service
+            if (response.isSuccessful) {
+                val translatedText = response.body()?.data?.translations?.first()?.translatedText
+                if (!translatedText.isNullOrEmpty()) updateTranslatedText(translatedText)
+
+                Log.d("Translation", "TEO: $translatedText")
             }
-        } catch (ioe: IOException) {
-            ioe.printStackTrace()
         }
-
-        return null
     }
 
-    fun translate() {
-        if (_translate == null) return
-
-        //Get input text to be translated:
-        val textToTranslate = vocabularyItem.value?.enWord
-        val translation = _translate?.translate(
-            textToTranslate,
-            Translate.TranslateOption.targetLanguage("it"),
-            Translate.TranslateOption.model("nmt")
-        )
-
-        if (translation != null) {
-            val translatedText = translation.translatedText
-
+    private suspend fun updateTranslatedText(translatedText: String) {
+        return withContext(Dispatchers.Main) {
             val vocabularyItemTemp = vocabularyItem.value
             if (vocabularyItemTemp != null) {
                 vocabularyItemTemp.itWord = translatedText
                 vocabularyItem.value = vocabularyItemTemp!!
             }
-
-            Log.d("Translation", "TEO: $translatedText")
         }
     }
 }

@@ -6,30 +6,31 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.model.Category
+import com.example.wordsmemory.model.User
 import com.example.wordsmemory.model.VocabularyItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
-@Database(entities = [VocabularyItem::class, Category::class], version = 1, exportSchema = false)
-abstract class VocabularyDatabase : RoomDatabase() {
+@Database(entities = [VocabularyItem::class, Category::class, User::class], version = 1, exportSchema = false)
+abstract class WMDatabase : RoomDatabase() {
 
-    abstract fun vocabularyDao(): VocabularyDao
+    abstract fun wmDao(): WMDao
 
     companion object {
         @Volatile
-        private var INSTANCE: VocabularyDatabase? = null
+        private var INSTANCE: WMDatabase? = null
 
         @InternalCoroutinesApi
-        fun getInstance(context: Context): VocabularyDatabase {
+        fun getInstance(context: Context): WMDatabase {
             kotlinx.coroutines.internal.synchronized(this) {
                 var instance = INSTANCE
 
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
-                        VocabularyDatabase::class.java, "vocabulary_database"
+                        WMDatabase::class.java, "wm_database"
                     ).fallbackToDestructiveMigration()
                         .build()
 
@@ -43,7 +44,7 @@ abstract class VocabularyDatabase : RoomDatabase() {
         }
 
         private fun insertDefaultCategory() {
-            val dao = INSTANCE!!.vocabularyDao()
+            val dao = INSTANCE!!.wmDao()
             GlobalScope.launch(Dispatchers.IO) {
                 val categories = dao.getCategories()
                 if (categories.isEmpty())

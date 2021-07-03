@@ -16,17 +16,12 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAAJIQWu8AYgIpNc33fvs7P6rOU2ZTO3L0"
+          "current_key": "AIzaSyBW8wtyUHtABhORyOan7s_oF1rJOX1N3Mk"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "139830564645-l0bhn69ngshvcl324hp672lurbb3iqp6.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
