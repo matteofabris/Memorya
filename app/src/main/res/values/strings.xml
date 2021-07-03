@@ -25,5 +25,6 @@
     <string name="recent_attempts">Recent attempts:</string>
     <string name="default_category">None</string>
     <string name="update">Update</string>
-    <string name="default_web_client_id" translatable="false">139830564645-l0bhn69ngshvcl324hp672lurbb3iqp6.apps.googleusercontent.com</string>
+    <string name="cloud_platform_scope" translatable="false">https://www.googleapis.com/auth/cloud-platform</string>
+    <string name="cloud_translation_scope" translatable="false">https://www.googleapis.com/auth/cloud-translation</string>
 </resources>

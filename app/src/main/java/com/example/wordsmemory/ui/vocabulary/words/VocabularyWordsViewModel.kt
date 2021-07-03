@@ -1,7 +1,7 @@
 package com.example.wordsmemory.ui.vocabulary.words
 
 import androidx.lifecycle.*
-import com.example.wordsmemory.database.VocabularyDao
+import com.example.wordsmemory.database.WMDao
 import com.example.wordsmemory.model.VocabularyItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VocabularyWordsViewModel @Inject constructor(
-    private val _dbDao: VocabularyDao
+    private val _dbDao: WMDao
 ) : ViewModel() {
 
     private val _vocabularyList = MutableLiveData<List<VocabularyItem>>()
