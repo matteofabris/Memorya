@@ -5,9 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.model.Category
+import com.example.wordsmemory.model.vocabulary.Category
 import com.example.wordsmemory.model.User
-import com.example.wordsmemory.model.VocabularyItem
+import com.example.wordsmemory.model.vocabulary.VocabularyItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi

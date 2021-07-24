@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordsmemory.databinding.VocabularyHeaderBinding
 import com.example.wordsmemory.databinding.VocabularyItemBinding
-import com.example.wordsmemory.model.VocabularyItem
+import com.example.wordsmemory.model.vocabulary.VocabularyItem
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1

@@ -7,4 +7,7 @@ object Constants {
     const val translateBaseUrl = "https://translation.googleapis.com/"
     const val authBaseUrl = "https://oauth2.googleapis.com/"
     const val webClientId = "139830564645-8uo7v2isus2djk2jcqmkbgd0qeig3orm.apps.googleusercontent.com"
+    const val users = "users"
+    const val vocabularyItems = "vocabulary_items"
+    const val categories = "categories"
 }

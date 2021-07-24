@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordsmemory.databinding.CategoryItemBinding
-import com.example.wordsmemory.model.Category
+import com.example.wordsmemory.model.vocabulary.Category
 
 class CategoryItemAdapter(
     private val _onClickListener : OnClickListener,

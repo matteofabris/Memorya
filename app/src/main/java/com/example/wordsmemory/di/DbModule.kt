@@ -3,6 +3,9 @@ package com.example.wordsmemory.di
 import android.content.Context
 import com.example.wordsmemory.database.WMDao
 import com.example.wordsmemory.database.WMDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,5 +26,10 @@ object DbModule {
     @Provides
     fun provideVocabularyDao(database: WMDatabase): WMDao {
         return database.wmDao()
+    }
+
+    @Provides
+    fun provideFirestoreDb(): FirebaseFirestore {
+        return Firebase.firestore
     }
 }
