@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.wordsmemory.R
 import com.example.wordsmemory.TranslateInputFilter
@@ -13,6 +14,7 @@ import com.example.wordsmemory.databinding.AddCategorySheetFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 @AndroidEntryPoint
@@ -38,8 +40,10 @@ class AddOrEditCategorySheet : BottomSheetDialogFragment() {
 
     private fun setupAddButtonOnClickListener() {
         _binding.addButton.setOnClickListener {
-            _viewModel.insertOrUpdateCategory()
-            findNavController().popBackStack()
+            lifecycleScope.launch {
+                _viewModel.insertOrUpdateCategory()
+                findNavController().popBackStack()
+            }
         }
     }
 

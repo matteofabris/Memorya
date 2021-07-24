@@ -9,12 +9,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.api.auth.AuthService
+import com.example.wordsmemory.database.CloudDbSyncHelper
 import com.example.wordsmemory.database.WMDao
 import com.example.wordsmemory.model.User
-import com.example.wordsmemory.model.VocabularyItem
+import com.example.wordsmemory.model.vocabulary.VocabularyItem
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +28,8 @@ import kotlin.random.Random
 class PlayFragmentViewModel @Inject constructor(
     private val _dbDao: WMDao,
     val signInClient: GoogleSignInClient,
-    private var _lastSignedInAccount: GoogleSignInAccount?
+    private var _lastSignedInAccount: GoogleSignInAccount?,
+    private val _firestoreDb: FirebaseFirestore
 ) : ViewModel() {
 
     private var _categoryId = Constants.defaultCategoryId
@@ -118,6 +121,10 @@ class PlayFragmentViewModel @Inject constructor(
                         val accessToken = getAccessToken(authCode)
                         if (accessToken.isNotEmpty() && !googleSignInAccount.id.isNullOrEmpty()) {
                             saveUser(User(googleSignInAccount.id!!, accessToken))
+                            CloudDbSyncHelper.fetchDataFromCloud(
+                                _dbDao,
+                                _firestoreDb
+                            )
                             _isAuthenticated.value = true
                         }
                     }
@@ -145,6 +152,7 @@ class PlayFragmentViewModel @Inject constructor(
     private suspend fun saveUser(user: User) {
         return withContext(Dispatchers.IO) {
             _dbDao.insertUser(user)
+            CloudDbSyncHelper.insertCloudDbUser(_dbDao, _firestoreDb)
         }
     }
 
@@ -159,6 +167,7 @@ class PlayFragmentViewModel @Inject constructor(
 
     fun checkAuthState(): Boolean {
         if (_lastSignedInAccount != null) {
+            CloudDbSyncHelper.fetchDataFromCloud(_dbDao, _firestoreDb)
             _isAuthenticated.value = true
             return true
         }

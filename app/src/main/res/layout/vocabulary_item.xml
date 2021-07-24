@@ -6,7 +6,7 @@
 
         <variable
             name="vocabularyItem"
-            type="com.example.wordsmemory.model.VocabularyItem" />
+            type="com.example.wordsmemory.model.vocabulary.VocabularyItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

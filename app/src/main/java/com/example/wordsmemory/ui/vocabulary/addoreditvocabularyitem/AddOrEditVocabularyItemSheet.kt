@@ -49,8 +49,10 @@ class AddOrEditVocabularyItemSheet :
 
     private fun setButtonsOnClickListeners() {
         _binding.addButton.setOnClickListener {
-            _viewModel.insertOrUpdateVocabularyItem()
-            findNavController().popBackStack()
+            lifecycleScope.launch {
+                _viewModel.insertOrUpdateVocabularyItem()
+                findNavController().popBackStack()
+            }
         }
         _binding.googleTranslateButton.setOnClickListener {
             if (activity != null) {

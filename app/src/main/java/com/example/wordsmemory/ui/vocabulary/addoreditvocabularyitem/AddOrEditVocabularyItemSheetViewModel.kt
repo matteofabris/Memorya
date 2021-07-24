@@ -6,8 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wordsmemory.api.translate.TranslateService
+import com.example.wordsmemory.database.CloudDbSyncHelper
 import com.example.wordsmemory.database.WMDao
-import com.example.wordsmemory.model.VocabularyItem
+import com.example.wordsmemory.model.vocabulary.VocabularyItem
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
     private val _savedStateHandle: SavedStateHandle,
-    private val _dbDao: WMDao
+    private val _dbDao: WMDao,
+    private val _firestoreDb: FirebaseFirestore
 ) : ViewModel() {
 
     val categories = _dbDao.getCategoriesAsLiveData()
@@ -41,8 +44,8 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
             categories.value?.find { c -> c.category == category }?.id ?: 0
     }
 
-    fun insertOrUpdateVocabularyItem() {
-        viewModelScope.launch(Dispatchers.IO) {
+    suspend fun insertOrUpdateVocabularyItem() {
+        return withContext(Dispatchers.IO) {
             Log.i(
                 "save_item",
                 "Save vocabulary item: en - ${vocabularyItem.value?.enWord}, " +
@@ -50,11 +53,14 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
                         "category - ${vocabularyItem.value?.category}"
             )
 
-            if (isEdit) {
+            val itemId: Int = if (isEdit) {
                 _dbDao.updateVocabularyItem(vocabularyItem.value!!)
+                vocabularyItem.value!!.id
             } else {
-                _dbDao.insertVocabularyItem(vocabularyItem.value!!)
+                _dbDao.insertVocabularyItem(vocabularyItem.value!!).toInt()
             }
+
+            CloudDbSyncHelper.updateCloudDbVocabularyItem(_dbDao, _firestoreDb, itemId)
         }
     }
 
