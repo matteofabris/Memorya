@@ -56,12 +56,16 @@ class VocabularyWordsFragment(private val _categoryId: Int = -1) : Fragment() {
         } else false
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        _viewModel.initVocabularyList(_categoryId)
+    }
+
     @SuppressLint("InflateParams")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _viewModel.initVocabularyList(_categoryId)
         _binding = VocabularyWordsFragmentBinding.inflate(inflater)
         _binding.viewModel = _viewModel
 
@@ -76,6 +80,7 @@ class VocabularyWordsFragment(private val _categoryId: Int = -1) : Fragment() {
             VocabularyItemAdapter.OnLongClickListener { _showAddOrEditVocabularyItemSheet.invoke(it.id) }
         )
         _binding.vocabularyList.adapter = vocabularyAdapter
+        vocabularyAdapter.addHeaderAndSubmitList(_viewModel.vocabularyList.value)
 
         setListDivider()
         setSwipeGesture()

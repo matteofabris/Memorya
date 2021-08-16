@@ -15,10 +15,7 @@ class VocabularyWordsViewModel @Inject constructor(
     private val _dbDao: WMDao,
     private val _firestoreDb: FirebaseFirestore
 ) : ViewModel() {
-
-    private val _vocabularyList = MutableLiveData<List<VocabularyItem>>()
-    val vocabularyList: LiveData<List<VocabularyItem>>
-        get() = _vocabularyList
+    lateinit var vocabularyList: LiveData<List<VocabularyItem>>
 
     fun removeItem(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -29,9 +26,9 @@ class VocabularyWordsViewModel @Inject constructor(
 
     fun initVocabularyList(categoryId: Int) {
         viewModelScope.launch {
-            _vocabularyList.value =
-                if (categoryId > 0) _dbDao.getVocabularyItemsByCategory(categoryId)
-                else _dbDao.getVocabularyItems()
+            vocabularyList =
+                if (categoryId > 0) _dbDao.getVocabularyItemsByCategoryAsLiveData(categoryId)
+                else _dbDao.getVocabularyItemsAsLiveData()
         }
     }
 }
