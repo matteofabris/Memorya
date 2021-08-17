@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.wordsmemory.BuildConfig
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.api.auth.AuthService
 import com.example.wordsmemory.database.CloudDbSyncHelper
@@ -140,7 +141,7 @@ class PlayFragmentViewModel @Inject constructor(
         return withContext(Dispatchers.IO) {
             val authResult = AuthService.create().auth(
                 Constants.webClientId,
-                "h8MOs_2EzbEiUjc7i4OFBBLF",
+                BuildConfig.CLIENT_SECRET,
                 authCode
             )
             if (authResult.isSuccessful) {
