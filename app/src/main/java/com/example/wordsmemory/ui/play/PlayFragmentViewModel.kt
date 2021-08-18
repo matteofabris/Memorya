@@ -4,10 +4,7 @@ import android.app.Activity
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.*
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkRequest
-import androidx.work.workDataOf
+import androidx.work.*
 import com.example.wordsmemory.BuildConfig
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.api.auth.AuthService
@@ -24,6 +21,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -153,8 +151,20 @@ class PlayFragmentViewModel @Inject constructor(
     private suspend fun saveUser(user: User) {
         return withContext(Dispatchers.IO) {
             _dbDao.insertUser(user)
-            CloudDbSyncHelper.insertCloudDbUser(_dbDao, _firestoreDb)
+            insertCloudDbUser()
         }
+    }
+
+    private fun insertCloudDbUser() {
+        val workRequest: WorkRequest =
+            OneTimeWorkRequestBuilder<CloudDbSyncWorker>()
+                .setBackoffCriteria(
+                    BackoffPolicy.LINEAR,
+                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                    TimeUnit.MILLISECONDS)
+                .setInputData(workDataOf(Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.InsertUser.name))
+                .build()
+        _workManager.enqueue(workRequest)
     }
 
     fun signOut() {
@@ -179,6 +189,10 @@ class PlayFragmentViewModel @Inject constructor(
     private fun fetchCloudDbData() {
         val workRequest: WorkRequest =
             OneTimeWorkRequestBuilder<CloudDbSyncWorker>()
+                .setBackoffCriteria(
+                    BackoffPolicy.EXPONENTIAL,
+                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                    TimeUnit.MILLISECONDS)
                 .setInputData(workDataOf(Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.Fetch.name))
                 .build()
         _workManager.enqueue(workRequest)

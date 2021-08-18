@@ -1,39 +1,48 @@
 package com.example.wordsmemory.database
 
 import android.util.Log
+import androidx.work.ListenableWorker
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.model.vocabulary.Category
 import com.example.wordsmemory.model.vocabulary.IItem
 import com.example.wordsmemory.model.vocabulary.VocabularyItem
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.util.concurrent.ExecutionException
 
 object CloudDbSyncHelper {
-    fun fetchDataFromCloud(
+    @Suppress("BlockingMethodInNonBlockingContext")
+    suspend fun fetchDataFromCloud(
         dbDao: WMDao,
         firestoreDb: FirebaseFirestore
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val localUser = dbDao.getUsers().first()
-            val cloudUserRef = firestoreDb.collection(Constants.users).document(localUser.userId)
+    ): ListenableWorker.Result {
+        val localUser = dbDao.getUsers().first()
+        val cloudUserRef = firestoreDb.collection(Constants.users).document(localUser.userId)
+        var result = ListenableWorker.Result.success()
 
-            cloudUserRef.get().addOnSuccessListener { cloudUserDoc ->
-                if (cloudUserDoc.exists()) {
-                    Log.d("FIRESTORE", "FIRESTORE: user is in cloud")
+        try {
+            val cloudUserdoc = Tasks.await(cloudUserRef.get())
 
-                    CoroutineScope(Dispatchers.IO).launch {
-                        updateLocalDbVocabularyItems(cloudUserRef, dbDao)
-                        updateLocalDbCategories(cloudUserRef, dbDao)
-                    }
-                }
+            if (cloudUserdoc.exists()) {
+                Log.d("FIRESTORE", "FIRESTORE: user is in cloud")
+
+                updateLocalDbVocabularyItems(cloudUserRef, dbDao)
+                updateLocalDbCategories(cloudUserRef, dbDao)
             }
+        } catch (e: ExecutionException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
+        } catch (e: InterruptedException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
         }
+
+        return result
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun updateLocalDbVocabularyItems(
         cloudUserRef: DocumentReference,
         dbDao: WMDao
@@ -41,21 +50,20 @@ object CloudDbSyncHelper {
         val cloudVocabularyItems = mutableListOf<IItem>()
         val localVocabularyItems = dbDao.getVocabularyItems()
 
-        cloudUserRef.collection(Constants.vocabularyItems).get()
-            .addOnSuccessListener { cloudVocabularyItemsCollection ->
-                if (cloudVocabularyItemsCollection.isEmpty) return@addOnSuccessListener
+        val cloudVocabularyItemsCollection =
+            Tasks.await(cloudUserRef.collection(Constants.vocabularyItems).get())
 
-                cloudVocabularyItemsCollection.forEach { item ->
-                    cloudVocabularyItems.add(item.toObject<VocabularyItem>())
-                }
+        if (cloudVocabularyItemsCollection.isEmpty) return
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    deleteObsoleteLocalItems(cloudVocabularyItems, localVocabularyItems, dbDao)
-                    insertOrUpdateLocalItems(cloudVocabularyItems, localVocabularyItems, dbDao)
-                }
-            }
+        cloudVocabularyItemsCollection.forEach { item ->
+            cloudVocabularyItems.add(item.toObject<VocabularyItem>())
+        }
+
+        deleteObsoleteLocalItems(cloudVocabularyItems, localVocabularyItems, dbDao)
+        insertOrUpdateLocalItems(cloudVocabularyItems, localVocabularyItems, dbDao)
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun updateLocalDbCategories(
         cloudUserRef: DocumentReference,
         dbDao: WMDao
@@ -63,19 +71,17 @@ object CloudDbSyncHelper {
         val cloudCategories = mutableListOf<IItem>()
         val localCategories = dbDao.getCategories()
 
-        cloudUserRef.collection(Constants.categories).get()
-            .addOnSuccessListener { cloudCategoriesCollection ->
-                if (cloudCategoriesCollection.isEmpty) return@addOnSuccessListener
+        val cloudCategoriesCollection =
+            Tasks.await(cloudUserRef.collection(Constants.categories).get())
 
-                cloudCategoriesCollection.forEach { item ->
-                    cloudCategories.add(item.toObject<Category>())
-                }
+        if (cloudCategoriesCollection.isEmpty) return
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    deleteObsoleteLocalItems(cloudCategories, localCategories, dbDao)
-                    insertOrUpdateLocalItems(cloudCategories, localCategories, dbDao)
-                }
-            }
+        cloudCategoriesCollection.forEach { item ->
+            cloudCategories.add(item.toObject<Category>())
+        }
+
+        deleteObsoleteLocalItems(cloudCategories, localCategories, dbDao)
+        insertOrUpdateLocalItems(cloudCategories, localCategories, dbDao)
     }
 
     private suspend fun deleteObsoleteLocalItems(
@@ -116,113 +122,184 @@ object CloudDbSyncHelper {
         }
     }
 
-    fun insertCloudDbUser(
+    @Suppress("BlockingMethodInNonBlockingContext")
+    suspend fun insertCloudDbUser(
         dbDao: WMDao,
         firestoreDb: FirebaseFirestore
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val localUserId = dbDao.getUsers().first().userId
+    ): ListenableWorker.Result {
+        val localUserId = dbDao.getUsers().first().userId
+        var result = ListenableWorker.Result.success()
 
-            firestoreDb.collection(Constants.users).document(localUserId).get()
-                .addOnSuccessListener { cloudUserDoc ->
-                    if (cloudUserDoc.exists()) return@addOnSuccessListener
+        try {
+            val cloudUserDoc =
+                Tasks.await(firestoreDb.collection(Constants.users).document(localUserId).get())
+            if (cloudUserDoc.exists()) return result
 
-                    Log.d("FIRESTORE", "FIRESTORE: add user")
-
-                    firestoreDb.collection(Constants.users).document(localUserId).set(
-                        hashMapOf(
-                            "id" to localUserId
-                        )
-                    )
-                }
+            setCloudDbUserDoc(firestoreDb, localUserId)
+        } catch (e: ExecutionException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
+        } catch (e: InterruptedException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
         }
+
+        return result
     }
 
-    fun updateCloudDbVocabularyItem(
+    private fun setCloudDbUserDoc(
+        firestoreDb: FirebaseFirestore,
+        localUserId: String
+    ) {
+        Log.d("FIRESTORE", "FIRESTORE: add user")
+
+        val task = firestoreDb.collection(Constants.users).document(localUserId).set(
+            hashMapOf(
+                "id" to localUserId
+            )
+        )
+        Tasks.await(task)
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    suspend fun updateCloudDbVocabularyItem(
         dbDao: WMDao,
         firestoreDb: FirebaseFirestore,
         localVocabularyItemId: Int
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val cloudVocabularyItemRef =
-                firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
-                    .collection(Constants.vocabularyItems)
-                    .document(localVocabularyItemId.toString())
-            val localVocabularyItem = dbDao.getVocabularyItemById(localVocabularyItemId)
+    ): ListenableWorker.Result {
+        val cloudVocabularyItemRef =
+            firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
+                .collection(Constants.vocabularyItems)
+                .document(localVocabularyItemId.toString())
+        val localVocabularyItem = dbDao.getVocabularyItemById(localVocabularyItemId)
+        var result = ListenableWorker.Result.success()
 
-            cloudVocabularyItemRef.get().addOnSuccessListener { cloudVocabularyItemDoc ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    if (cloudVocabularyItemDoc.exists()) {
-                        val cloudVocabularyItem = cloudVocabularyItemDoc.toObject<VocabularyItem>()
+        try {
+            val cloudVocabularyItemDoc = Tasks.await(cloudVocabularyItemRef.get())
+            if (cloudVocabularyItemDoc.exists()) {
+                val cloudVocabularyItem = cloudVocabularyItemDoc.toObject<VocabularyItem>()
 
-                        if (cloudVocabularyItem != null) {
-                            if (cloudVocabularyItem.enWord != localVocabularyItem.enWord)
-                                cloudVocabularyItemRef.update("enWord", localVocabularyItem.enWord)
+                if (cloudVocabularyItem != null) {
+                    if (cloudVocabularyItem.enWord != localVocabularyItem.enWord)
+                        Tasks.await(
+                            cloudVocabularyItemRef.update(
+                                "enWord",
+                                localVocabularyItem.enWord
+                            )
+                        )
 
-                            if (cloudVocabularyItem.itWord != localVocabularyItem.itWord)
-                                cloudVocabularyItemRef.update("itWord", localVocabularyItem.itWord)
+                    if (cloudVocabularyItem.itWord != localVocabularyItem.itWord)
+                        Tasks.await(
+                            cloudVocabularyItemRef.update(
+                                "itWord",
+                                localVocabularyItem.itWord
+                            )
+                        )
 
-                            if (cloudVocabularyItem.category != localVocabularyItem.category)
-                                cloudVocabularyItemRef.update(
-                                    "category",
-                                    localVocabularyItem.category
-                                )
-                        }
-                    } else {
-                        cloudVocabularyItemRef.set(localVocabularyItem)
-                    }
+                    if (cloudVocabularyItem.category != localVocabularyItem.category)
+                        Tasks.await(
+                            cloudVocabularyItemRef.update(
+                                "category",
+                                localVocabularyItem.category
+                            )
+                        )
                 }
+            } else {
+                Tasks.await(cloudVocabularyItemRef.set(localVocabularyItem))
             }
+        } catch (e: ExecutionException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
+        } catch (e: InterruptedException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
         }
+
+        return result
     }
 
-    fun updateCloudDbCategory(
+    @Suppress("BlockingMethodInNonBlockingContext")
+    suspend fun updateCloudDbCategory(
         dbDao: WMDao,
         firestoreDb: FirebaseFirestore,
         localCategoryId: Int
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val cloudCategoryRef =
-                firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
-                    .collection(Constants.categories).document(localCategoryId.toString())
-            val localCategory = dbDao.getCategoryById(localCategoryId)
+    ): ListenableWorker.Result {
+        val cloudCategoryRef =
+            firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
+                .collection(Constants.categories).document(localCategoryId.toString())
+        val localCategory = dbDao.getCategoryById(localCategoryId)
+        var result = ListenableWorker.Result.success()
 
-            cloudCategoryRef.get().addOnSuccessListener { cloudCategoryDoc ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    if (cloudCategoryDoc.exists()) {
-                        val cloudCategory = cloudCategoryDoc.toObject<Category>()
+        try {
+            val cloudCategoryDoc = Tasks.await(cloudCategoryRef.get())
+            if (cloudCategoryDoc.exists()) {
+                val cloudCategory = cloudCategoryDoc.toObject<Category>()
 
-                        if (cloudCategory != null) {
-                            if (cloudCategory.category != localCategory.category)
-                                cloudCategoryRef.update(
-                                    "category",
-                                    localCategory.category
-                                )
-                        }
-                    } else {
-                        cloudCategoryRef.set(localCategory)
-                    }
+                if (cloudCategory != null) {
+                    if (cloudCategory.category != localCategory.category)
+                        Tasks.await(cloudCategoryRef.update("category", localCategory.category))
                 }
+            } else {
+                Tasks.await(cloudCategoryRef.set(localCategory))
             }
+        } catch (e: ExecutionException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
+        } catch (e: InterruptedException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
         }
+
+        return result
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun deleteVocabularyItem(
         dbDao: WMDao,
         firestoreDb: FirebaseFirestore,
         localVocabularyItemId: Int
-    ) {
-        firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
-            .collection(Constants.vocabularyItems).document(localVocabularyItemId.toString())
-            .delete()
+    ): ListenableWorker.Result {
+        var result = ListenableWorker.Result.success()
+
+        try {
+            Tasks.await(
+                firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
+                    .collection(Constants.vocabularyItems)
+                    .document(localVocabularyItemId.toString())
+                    .delete()
+            )
+        } catch (e: ExecutionException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
+        } catch (e: InterruptedException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
+        }
+
+        return result
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun deleteCategory(
         dbDao: WMDao,
         firestoreDb: FirebaseFirestore,
         localCategoryId: Int
-    ) {
-        firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
-            .collection(Constants.categories).document(localCategoryId.toString()).delete()
+    ): ListenableWorker.Result {
+        var result = ListenableWorker.Result.success()
+
+        try {
+            Tasks.await(
+                firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
+                    .collection(Constants.categories).document(localCategoryId.toString()).delete()
+            )
+        } catch (e: ExecutionException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
+        } catch (e: InterruptedException) {
+            Log.e("ERROR", e.toString())
+            result = ListenableWorker.Result.retry()
+        }
+
+        return result
     }
 }

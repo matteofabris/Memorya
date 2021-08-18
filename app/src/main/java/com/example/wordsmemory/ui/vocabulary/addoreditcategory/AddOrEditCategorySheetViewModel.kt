@@ -4,10 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkRequest
-import androidx.work.workDataOf
+import androidx.work.*
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.database.WMDao
 import com.example.wordsmemory.model.vocabulary.Category
@@ -17,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -61,6 +59,10 @@ class AddCategorySheetViewModel @Inject constructor(
     private fun updateCloudDbCategory(itemId: Int) {
         val workRequest: WorkRequest =
             OneTimeWorkRequestBuilder<CloudDbSyncWorker>()
+                .setBackoffCriteria(
+                    BackoffPolicy.EXPONENTIAL,
+                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                    TimeUnit.MILLISECONDS)
                 .setInputData(
                     workDataOf(
                         Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.InsertCategory.name,

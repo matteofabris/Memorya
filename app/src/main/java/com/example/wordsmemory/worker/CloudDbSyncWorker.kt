@@ -26,32 +26,34 @@ class CloudDbSyncWorker @AssistedInject constructor(
         val workType =
             Constants.CloudDbSyncWorkType.valueOf(inputData.getString(Constants.WORK_TYPE)!!)
         when (workType) {
-            Constants.CloudDbSyncWorkType.Fetch -> CloudDbSyncHelper.fetchDataFromCloud(
+            Constants.CloudDbSyncWorkType.Fetch -> return CloudDbSyncHelper.fetchDataFromCloud(
                 _dbDao,
                 _firestoreDb
             )
-            Constants.CloudDbSyncWorkType.InsertVocabularyItem -> CloudDbSyncHelper.updateCloudDbVocabularyItem(
+            Constants.CloudDbSyncWorkType.InsertVocabularyItem -> return CloudDbSyncHelper.updateCloudDbVocabularyItem(
                 _dbDao,
                 _firestoreDb,
                 itemId
             )
-            Constants.CloudDbSyncWorkType.InsertCategory -> CloudDbSyncHelper.updateCloudDbCategory(
+            Constants.CloudDbSyncWorkType.InsertCategory -> return CloudDbSyncHelper.updateCloudDbCategory(
                 _dbDao,
                 _firestoreDb,
                 itemId
             )
-            Constants.CloudDbSyncWorkType.DeleteVocabularyItem -> CloudDbSyncHelper.deleteVocabularyItem(
+            Constants.CloudDbSyncWorkType.DeleteVocabularyItem -> return CloudDbSyncHelper.deleteVocabularyItem(
                 _dbDao,
                 _firestoreDb,
                 itemId
             )
-            Constants.CloudDbSyncWorkType.DeleteCategory -> CloudDbSyncHelper.deleteCategory(
+            Constants.CloudDbSyncWorkType.DeleteCategory -> return CloudDbSyncHelper.deleteCategory(
                 _dbDao,
                 _firestoreDb,
                 itemId
+            )
+            Constants.CloudDbSyncWorkType.InsertUser -> return CloudDbSyncHelper.insertCloudDbUser(
+                _dbDao,
+                _firestoreDb
             )
         }
-
-        return Result.success()
     }
 }

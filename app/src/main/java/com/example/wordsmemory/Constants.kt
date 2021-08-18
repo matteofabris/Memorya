@@ -14,6 +14,6 @@ object Constants {
     const val ITEM_ID = "ITEM_ID"
 
     enum class CloudDbSyncWorkType {
-        Fetch, InsertVocabularyItem, InsertCategory, DeleteVocabularyItem, DeleteCategory
+        InsertUser, Fetch, InsertVocabularyItem, InsertCategory, DeleteVocabularyItem, DeleteCategory
     }
 }
