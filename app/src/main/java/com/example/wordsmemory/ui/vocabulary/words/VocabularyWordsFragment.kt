@@ -111,7 +111,7 @@ class VocabularyWordsFragment(private val _categoryId: Int = -1) : Fragment() {
     private fun setSwipeGesture() {
         val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                _viewModel.removeItem((viewHolder as VocabularyItemAdapter.VocabularyItemViewHolder).itemId)
+                _viewModel.deleteItem((viewHolder as VocabularyItemAdapter.VocabularyItemViewHolder).itemId)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)

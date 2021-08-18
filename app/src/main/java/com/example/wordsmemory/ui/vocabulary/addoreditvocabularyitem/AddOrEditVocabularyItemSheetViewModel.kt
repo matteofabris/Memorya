@@ -5,11 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
+import androidx.work.workDataOf
+import com.example.wordsmemory.Constants
 import com.example.wordsmemory.api.translate.TranslateService
-import com.example.wordsmemory.database.CloudDbSyncHelper
 import com.example.wordsmemory.database.WMDao
 import com.example.wordsmemory.model.vocabulary.VocabularyItem
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.wordsmemory.worker.CloudDbSyncWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +24,7 @@ import javax.inject.Inject
 class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
     private val _savedStateHandle: SavedStateHandle,
     private val _dbDao: WMDao,
-    private val _firestoreDb: FirebaseFirestore
+    private val _workManager: WorkManager
 ) : ViewModel() {
 
     val categories = _dbDao.getCategoriesAsLiveData()
@@ -60,8 +64,21 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
                 _dbDao.insertVocabularyItem(vocabularyItem.value!!).toInt()
             }
 
-            CloudDbSyncHelper.updateCloudDbVocabularyItem(_dbDao, _firestoreDb, itemId)
+            updateCloudDbVocabularyItem(itemId)
         }
+    }
+
+    private fun updateCloudDbVocabularyItem(itemId: Int) {
+        val workRequest: WorkRequest =
+            OneTimeWorkRequestBuilder<CloudDbSyncWorker>()
+                .setInputData(
+                    workDataOf(
+                        Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.InsertVocabularyItem.name,
+                        Constants.ITEM_ID to itemId
+                    )
+                )
+                .build()
+        _workManager.enqueue(workRequest)
     }
 
     fun translate() {

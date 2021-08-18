@@ -3,10 +3,11 @@ package com.example.wordsmemory.ui.play
 import android.app.Activity
 import android.util.Log
 import androidx.activity.result.ActivityResult
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
+import androidx.work.workDataOf
 import com.example.wordsmemory.BuildConfig
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.api.auth.AuthService
@@ -14,6 +15,7 @@ import com.example.wordsmemory.database.CloudDbSyncHelper
 import com.example.wordsmemory.database.WMDao
 import com.example.wordsmemory.model.User
 import com.example.wordsmemory.model.vocabulary.VocabularyItem
+import com.example.wordsmemory.worker.CloudDbSyncWorker
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -30,7 +32,8 @@ class PlayFragmentViewModel @Inject constructor(
     private val _dbDao: WMDao,
     val signInClient: GoogleSignInClient,
     private var _lastSignedInAccount: GoogleSignInAccount?,
-    private val _firestoreDb: FirebaseFirestore
+    private val _firestoreDb: FirebaseFirestore,
+    private val _workManager: WorkManager
 ) : ViewModel() {
 
     private var _categoryId = Constants.defaultCategoryId
@@ -122,10 +125,7 @@ class PlayFragmentViewModel @Inject constructor(
                         val accessToken = getAccessToken(authCode)
                         if (accessToken.isNotEmpty() && !googleSignInAccount.id.isNullOrEmpty()) {
                             saveUser(User(googleSignInAccount.id!!, accessToken))
-                            CloudDbSyncHelper.fetchDataFromCloud(
-                                _dbDao,
-                                _firestoreDb
-                            )
+                            fetchCloudDbData()
                             _isAuthenticated.value = true
                         }
                     }
@@ -168,11 +168,19 @@ class PlayFragmentViewModel @Inject constructor(
 
     fun checkAuthState(): Boolean {
         if (_lastSignedInAccount != null) {
-            CloudDbSyncHelper.fetchDataFromCloud(_dbDao, _firestoreDb)
+            fetchCloudDbData()
             _isAuthenticated.value = true
             return true
         }
 
         return false
+    }
+
+    private fun fetchCloudDbData() {
+        val workRequest: WorkRequest =
+            OneTimeWorkRequestBuilder<CloudDbSyncWorker>()
+                .setInputData(workDataOf(Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.Fetch.name))
+                .build()
+        _workManager.enqueue(workRequest)
     }
 }

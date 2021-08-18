@@ -1,10 +1,17 @@
 package com.example.wordsmemory.ui.vocabulary.addoreditcategory
 
-import androidx.lifecycle.*
-import com.example.wordsmemory.database.CloudDbSyncHelper
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
+import androidx.work.workDataOf
+import com.example.wordsmemory.Constants
 import com.example.wordsmemory.database.WMDao
 import com.example.wordsmemory.model.vocabulary.Category
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.wordsmemory.worker.CloudDbSyncWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +23,7 @@ import javax.inject.Inject
 class AddCategorySheetViewModel @Inject constructor(
     _savedStateHandle: SavedStateHandle,
     private val _dbDao: WMDao,
-    private val _firestoreDb: FirebaseFirestore
+    private val _workManager: WorkManager
 ) : ViewModel() {
 
     val categoryItem = MutableLiveData<Category>()
@@ -47,7 +54,20 @@ class AddCategorySheetViewModel @Inject constructor(
                 _dbDao.insertCategory(categoryItem.value!!).toInt()
             }
 
-            CloudDbSyncHelper.updateCloudDbCategory(_dbDao, _firestoreDb, categoryId)
+            updateCloudDbCategory(categoryId)
         }
+    }
+
+    private fun updateCloudDbCategory(itemId: Int) {
+        val workRequest: WorkRequest =
+            OneTimeWorkRequestBuilder<CloudDbSyncWorker>()
+                .setInputData(
+                    workDataOf(
+                        Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.InsertCategory.name,
+                        Constants.ITEM_ID to itemId
+                    )
+                )
+                .build()
+        _workManager.enqueue(workRequest)
     }
 }
