@@ -1,6 +1,7 @@
 package com.example.wordsmemory.di
 
 import android.content.Context
+import androidx.work.WorkManager
 import com.example.wordsmemory.database.WMDao
 import com.example.wordsmemory.database.WMDatabase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,5 +32,10 @@ object DbModule {
     @Provides
     fun provideFirestoreDb(): FirebaseFirestore {
         return Firebase.firestore
+    }
+
+    @Provides
+    fun provideWorkManager(@ApplicationContext appContext: Context): WorkManager {
+        return WorkManager.getInstance(appContext)
     }
 }

@@ -10,4 +10,10 @@ object Constants {
     const val users = "users"
     const val vocabularyItems = "vocabulary_items"
     const val categories = "categories"
+    const val WORK_TYPE = "WORK_TYPE"
+    const val ITEM_ID = "ITEM_ID"
+
+    enum class CloudDbSyncWorkType {
+        Fetch, InsertVocabularyItem, InsertCategory, DeleteVocabularyItem, DeleteCategory
+    }
 }
