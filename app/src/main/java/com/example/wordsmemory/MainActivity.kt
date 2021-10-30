@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.wordsmemory.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlin.math.sqrt
 
 @AndroidEntryPoint
@@ -18,19 +17,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var _binding: ActivityMainBinding
 
     @SuppressLint("SourceLockedOrientationActivity")
-    @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        if (isTablet()) {
+        requestedOrientation = if (isTablet()) {
             Log.i("Orientation", "Tablet mode")
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            Constants.isTablet = true
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         } else {
             Log.i("Orientation", "Phone mode")
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            Constants.isTablet = false
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
     }
 
