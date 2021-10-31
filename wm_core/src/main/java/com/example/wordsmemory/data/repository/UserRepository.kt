@@ -5,4 +5,5 @@ import com.example.wordsmemory.domain.User
 
 class UserRepository(private val _userDataSource: UserDataSource) {
     suspend fun add(user: User) = _userDataSource.add(user)
+    suspend fun removeAll() = _userDataSource.removeAll()
 }

@@ -10,7 +10,6 @@ import com.example.wordsmemory.Constants
 import com.example.wordsmemory.api.auth.AuthService
 import com.example.wordsmemory.framework.Interactors
 import com.example.wordsmemory.framework.room.CategoryDao
-import com.example.wordsmemory.framework.room.UserDao
 import com.example.wordsmemory.framework.room.VocabularyItemDao
 import com.example.wordsmemory.model.UserEntity
 import com.example.wordsmemory.model.vocabulary.VocabularyItem
@@ -28,7 +27,6 @@ import kotlin.random.Random
 class PlayFragmentViewModel @Inject constructor(
     vocabularyItemDao: VocabularyItemDao,
     private val _categoryDao: CategoryDao,
-    private val _userDao: UserDao,
     val signInClient: GoogleSignInClient,
     private var _lastSignedInAccount: GoogleSignInAccount?,
     private val _interactors: Interactors
@@ -136,7 +134,7 @@ class PlayFragmentViewModel @Inject constructor(
         _lastSignedInAccount = null
         _isAuthenticated.value = false
         viewModelScope.launch(Dispatchers.IO) {
-            _userDao.deleteAllUsers()
+            _interactors.removeAllUsers()
         }
     }
 

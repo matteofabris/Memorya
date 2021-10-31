@@ -10,6 +10,7 @@ import com.example.wordsmemory.framework.UserDataSourceImpl
 import com.example.wordsmemory.framework.room.UserDao
 import com.example.wordsmemory.interactors.AddUser
 import com.example.wordsmemory.interactors.FetchCloudDb
+import com.example.wordsmemory.interactors.RemoveAllUsers
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,7 +28,11 @@ object InteractorsModule {
         vocabularyRepository: VocabularyRepository,
         userRepository: UserRepository
     ): Interactors {
-        return Interactors(FetchCloudDb(vocabularyRepository), AddUser(userRepository))
+        return Interactors(
+            FetchCloudDb(vocabularyRepository),
+            AddUser(userRepository),
+            RemoveAllUsers(userRepository)
+        )
     }
 
     @Provides

@@ -32,4 +32,8 @@ class UserDataSourceImpl @Inject constructor(
             _workManager.enqueue(workRequest)
         }
     }
+
+    override suspend fun removeAll() {
+        _userDao.deleteAllUsers()
+    }
 }
