@@ -1,6 +1,5 @@
-package com.example.wordsmemory.api.auth
+package com.example.wordsmemory.framework.api.auth
 
-import com.example.wordsmemory.model.AuthResponse
 import retrofit2.Response
 import retrofit2.http.POST
 import retrofit2.http.Query

@@ -3,11 +3,11 @@ package com.example.wordsmemory.presentation.play
 import android.app.Activity
 import android.util.Log
 import androidx.activity.result.ActivityResult
-import androidx.lifecycle.*
-import androidx.work.*
-import com.example.wordsmemory.BuildConfig
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.api.auth.AuthService
 import com.example.wordsmemory.framework.Interactors
 import com.example.wordsmemory.framework.room.entities.CategoryEntity
 import com.example.wordsmemory.framework.room.entities.UserEntity
@@ -104,7 +104,7 @@ class PlayFragmentViewModel @Inject constructor(
 
                 viewModelScope.launch {
                     if (!authCode.isNullOrEmpty()) {
-                        val accessToken = getAccessToken(authCode)
+                        val accessToken = _interactors.getAccessToken(authCode)
                         if (accessToken.isNotEmpty() && !googleSignInAccount.id.isNullOrEmpty()) {
                             _interactors.addUser(UserEntity(googleSignInAccount.id!!, accessToken))
                             _interactors.fetchCloudDb()
@@ -144,18 +144,5 @@ class PlayFragmentViewModel @Inject constructor(
     private fun resetRecentAttempts() {
         _correctAttempts = 0
         _allAttempts.value = 0
-    }
-
-    private suspend fun getAccessToken(authCode: String): String {
-        return withContext(Dispatchers.IO) {
-            val authResult = AuthService.create().auth(
-                Constants.webClientId,
-                BuildConfig.CLIENT_SECRET,
-                authCode
-            )
-            if (authResult.isSuccessful) {
-                return@withContext authResult.body()?.accessToken ?: ""
-            } else return@withContext ""
-        }
     }
 }

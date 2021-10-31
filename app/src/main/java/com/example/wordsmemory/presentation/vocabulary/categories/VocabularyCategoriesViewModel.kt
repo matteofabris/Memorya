@@ -19,7 +19,7 @@ class VocabularyCategoriesViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    val categories = _categoryDao.getCategories()
+    val categories = _categoryDao.getCategoriesAsLiveData()
 
     fun deleteItem(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {

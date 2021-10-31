@@ -55,8 +55,8 @@ abstract class WMDatabase : RoomDatabase() {
         private fun insertDefaultCategory() {
             val dao = INSTANCE!!.categoryDao()
             GlobalScope.launch(Dispatchers.IO) {
-                val categories = dao.getCategories().value
-                if (categories?.isEmpty() == true)
+                val categories = dao.getCategories()
+                if (categories.isEmpty())
                     dao.insertCategory(
                         CategoryEntity(
                             0,

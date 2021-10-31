@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.api.translate.TranslateService
+import com.example.wordsmemory.framework.api.translate.TranslateService
 import com.example.wordsmemory.framework.room.dao.CategoryDao
 import com.example.wordsmemory.framework.room.dao.UserDao
 import com.example.wordsmemory.framework.room.dao.VocabularyItemDao
@@ -29,7 +29,7 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
     private val _workManager: WorkManager
 ) : ViewModel() {
 
-    val categories = categoryDao.getCategories()
+    val categories = categoryDao.getCategoriesAsLiveData()
     var isEdit = false
     val vocabularyItem = MutableLiveData<VocabularyItemEntity>()
 

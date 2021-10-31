@@ -1,4 +1,4 @@
-package com.example.wordsmemory.model
+package com.example.wordsmemory.framework.api.auth
 
 import com.google.gson.annotations.SerializedName
 

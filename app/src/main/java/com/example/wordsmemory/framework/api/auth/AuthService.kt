@@ -1,4 +1,4 @@
-package com.example.wordsmemory.api.auth
+package com.example.wordsmemory.framework.api.auth
 
 import com.example.wordsmemory.Constants
 import retrofit2.Retrofit

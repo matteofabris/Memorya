@@ -52,7 +52,7 @@ class VocabularyWordsViewModel @Inject constructor(
                 if (categoryId > 0) _vocabularyItemDao.getVocabularyItemsByCategoryAsLiveData(
                     categoryId
                 )
-                else _vocabularyItemDao.getVocabularyItems()
+                else _vocabularyItemDao.getVocabularyItemsAsLiveData()
         }
     }
 }

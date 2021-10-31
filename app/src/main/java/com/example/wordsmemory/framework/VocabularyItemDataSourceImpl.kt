@@ -11,6 +11,6 @@ class VocabularyItemDataSourceImpl @Inject constructor(
 ) : VocabularyItemDataSource {
 
     override fun getVocabularyItems(): LiveData<List<VocabularyItemEntity>> {
-        return _vocabularyItemDao.getVocabularyItems()
+        return _vocabularyItemDao.getVocabularyItemsAsLiveData()
     }
 }

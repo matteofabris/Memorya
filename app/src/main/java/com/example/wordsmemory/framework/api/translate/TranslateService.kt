@@ -1,4 +1,4 @@
-package com.example.wordsmemory.api.translate
+package com.example.wordsmemory.framework.api.translate
 
 import com.example.wordsmemory.Constants
 import retrofit2.Retrofit

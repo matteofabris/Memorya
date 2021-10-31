@@ -11,6 +11,6 @@ class CategoryDataSourceImpl @Inject constructor(
 ) : CategoryDataSource {
 
     override fun getCategories(): LiveData<List<CategoryEntity>> {
-        return _categoryDao.getCategories()
+        return _categoryDao.getCategoriesAsLiveData()
     }
 }

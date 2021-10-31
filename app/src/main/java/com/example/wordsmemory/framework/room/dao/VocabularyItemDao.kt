@@ -16,7 +16,10 @@ interface VocabularyItemDao {
     suspend fun deleteVocabularyItem(itemEntity: VocabularyItemEntity)
 
     @Query("SELECT * FROM vocabulary_item")
-    fun getVocabularyItems(): LiveData<List<VocabularyItemEntity>>
+    fun getVocabularyItemsAsLiveData(): LiveData<List<VocabularyItemEntity>>
+
+    @Query("SELECT * FROM vocabulary_item")
+    suspend fun getVocabularyItems(): List<VocabularyItemEntity>
 
     @Query("SELECT * FROM vocabulary_item WHERE id == :id")
     suspend fun getVocabularyItemById(id: Int): VocabularyItemEntity

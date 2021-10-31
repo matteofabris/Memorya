@@ -54,7 +54,7 @@ object CloudDbSyncHelper {
         categoryDao: CategoryDao
     ) {
         val cloudVocabularyItems = mutableListOf<IItem>()
-        val localVocabularyItems = vocabularyItemDao.getVocabularyItems().value!!
+        val localVocabularyItems = vocabularyItemDao.getVocabularyItems()
 
         val cloudVocabularyItemsCollection =
             Tasks.await(cloudUserRef.collection(Constants.vocabularyItems).get())
@@ -86,7 +86,7 @@ object CloudDbSyncHelper {
         categoryDao: CategoryDao
     ) {
         val cloudCategories = mutableListOf<IItem>()
-        val localCategories = categoryDao.getCategories().value!!
+        val localCategories = categoryDao.getCategories()
 
         val cloudCategoriesCollection =
             Tasks.await(cloudUserRef.collection(Constants.categories).get())

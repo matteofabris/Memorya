@@ -2,8 +2,9 @@ package com.example.wordsmemory.di
 
 import android.content.Context
 import androidx.work.WorkManager
-import com.example.wordsmemory.data.repository.UserRepository
-import com.example.wordsmemory.data.repository.VocabularyRepository
+import com.example.wordsmemory.data.manager.AuthenticationManager
+import com.example.wordsmemory.data.manager.UserManager
+import com.example.wordsmemory.data.manager.VocabularyManager
 import com.example.wordsmemory.framework.*
 import com.example.wordsmemory.framework.room.dao.CategoryDao
 import com.example.wordsmemory.framework.room.dao.UserDao
@@ -23,26 +24,28 @@ object InteractorsModule {
     @Provides
     @Singleton
     fun provideInteractors(
-        vocabularyRepository: VocabularyRepository,
-        userRepository: UserRepository
+        vocabularyManager: VocabularyManager,
+        userManager: UserManager,
+        authenticationManager: AuthenticationManager
     ): Interactors {
         return Interactors(
-            FetchCloudDb(vocabularyRepository),
-            AddUser(userRepository),
-            RemoveAllUsers(userRepository),
-            GetVocabularyItems(vocabularyRepository),
-            GetCategories(vocabularyRepository)
+            FetchCloudDb(vocabularyManager),
+            AddUser(userManager),
+            RemoveAllUsers(userManager),
+            GetVocabularyItems(vocabularyManager),
+            GetCategories(vocabularyManager),
+            GetAccessToken(authenticationManager)
         )
     }
 
     @Provides
     @Singleton
-    fun provideVocabularyRepository(
+    fun provideVocabularyManager(
         workManager: WorkManager,
         vocabularyItemDao: VocabularyItemDao,
         categoryDao: CategoryDao
-    ): VocabularyRepository {
-        return VocabularyRepository(
+    ): VocabularyManager {
+        return VocabularyManager(
             CloudDbServiceImpl(workManager),
             VocabularyItemDataSourceImpl(vocabularyItemDao),
             CategoryDataSourceImpl(categoryDao)
@@ -51,8 +54,14 @@ object InteractorsModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(userDao: UserDao, workManager: WorkManager): UserRepository {
-        return UserRepository(UserDataSourceImpl(userDao, workManager))
+    fun provideUserManager(userDao: UserDao, workManager: WorkManager): UserManager {
+        return UserManager(UserDataSourceImpl(userDao, workManager))
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthenticationManager(): AuthenticationManager {
+        return AuthenticationManager(RESTServiceImpl())
     }
 
     @Provides

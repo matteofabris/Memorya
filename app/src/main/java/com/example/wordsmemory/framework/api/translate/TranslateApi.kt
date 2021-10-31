@@ -1,6 +1,5 @@
-package com.example.wordsmemory.api.translate
+package com.example.wordsmemory.framework.api.translate
 
-import com.example.wordsmemory.model.TranslateResponse
 import retrofit2.Response
 import retrofit2.http.Header
 import retrofit2.http.POST

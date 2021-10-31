@@ -16,7 +16,10 @@ interface CategoryDao {
     suspend fun deleteCategory(categoryEntity: CategoryEntity)
 
     @Query("SELECT * FROM category ORDER BY category")
-    fun getCategories(): LiveData<List<CategoryEntity>>
+    fun getCategoriesAsLiveData(): LiveData<List<CategoryEntity>>
+
+    @Query("SELECT * FROM category ORDER BY category")
+    suspend fun getCategories(): List<CategoryEntity>
 
     @Query("SELECT category FROM category WHERE id == :id")
     suspend fun getCategoryName(id: Int): String
