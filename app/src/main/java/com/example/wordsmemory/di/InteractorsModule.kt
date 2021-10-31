@@ -33,8 +33,10 @@ object InteractorsModule {
             AddUser(userManager),
             RemoveAllUsers(userManager),
             GetVocabularyItems(vocabularyManager),
+            GetCategoriesAsLiveData(vocabularyManager),
             GetCategories(vocabularyManager),
-            GetAccessToken(authenticationManager)
+            GetAccessToken(authenticationManager),
+            AddCategory(vocabularyManager)
         )
     }
 
@@ -48,7 +50,7 @@ object InteractorsModule {
         return VocabularyManager(
             CloudDbServiceImpl(workManager),
             VocabularyItemDataSourceImpl(vocabularyItemDao),
-            CategoryDataSourceImpl(categoryDao)
+            CategoryDataSourceImpl(categoryDao, workManager)
         )
     }
 
