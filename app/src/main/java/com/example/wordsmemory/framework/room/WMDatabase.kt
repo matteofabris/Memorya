@@ -5,16 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.model.vocabulary.Category
-import com.example.wordsmemory.model.UserEntity
-import com.example.wordsmemory.model.vocabulary.VocabularyItem
+import com.example.wordsmemory.framework.room.dao.CategoryDao
+import com.example.wordsmemory.framework.room.dao.UserDao
+import com.example.wordsmemory.framework.room.dao.VocabularyItemDao
+import com.example.wordsmemory.framework.room.entities.CategoryEntity
+import com.example.wordsmemory.framework.room.entities.UserEntity
+import com.example.wordsmemory.framework.room.entities.VocabularyItemEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @Database(
-    entities = [VocabularyItem::class, Category::class, UserEntity::class],
+    entities = [VocabularyItemEntity::class, CategoryEntity::class, UserEntity::class],
     version = 1,
     exportSchema = false
 )
@@ -52,10 +55,10 @@ abstract class WMDatabase : RoomDatabase() {
         private fun insertDefaultCategory() {
             val dao = INSTANCE!!.categoryDao()
             GlobalScope.launch(Dispatchers.IO) {
-                val categories = dao.getCategories()
-                if (categories.isEmpty())
+                val categories = dao.getCategories().value
+                if (categories?.isEmpty() == true)
                     dao.insertCategory(
-                        Category(
+                        CategoryEntity(
                             0,
                             Constants.defaultCategory
                         )

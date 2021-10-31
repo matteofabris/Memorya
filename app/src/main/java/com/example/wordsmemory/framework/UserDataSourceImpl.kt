@@ -4,8 +4,8 @@ import androidx.work.*
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.data.interfaces.UserDataSource
 import com.example.wordsmemory.domain.User
-import com.example.wordsmemory.framework.room.UserDao
-import com.example.wordsmemory.model.UserEntity
+import com.example.wordsmemory.framework.room.dao.UserDao
+import com.example.wordsmemory.framework.room.entities.UserEntity
 import com.example.wordsmemory.worker.CloudDbSyncWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.wordsmemory.ui.play.PlayFragmentViewModel" />
+            type="com.example.wordsmemory.presentation.play.PlayFragmentViewModel" />
     </data>
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.wordsmemory.ui.topbar.TopBar
+        <com.example.wordsmemory.presentation.topbar.TopBar
             android:id="@+id/topBar"
             style="@style/TopBarStyle"
             app:title="@string/app_title" />
@@ -24,7 +24,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.play.PlayFragment">
+            tools:context=".presentation.play.PlayFragment">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/playBoard"
@@ -55,7 +55,7 @@
                 <TextView
                     android:id="@+id/randomWord"
                     style="@style/LabelStyle"
-                    android:text="@{viewModel.vocabularyItem.enWord}"
+                    android:text="@{viewModel.vocabularyItemEntity.enWord}"
                     app:layout_constraintBottom_toTopOf="@+id/translation"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.12"

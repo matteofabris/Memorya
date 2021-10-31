@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/playFragment"
-        android:name="com.example.wordsmemory.ui.play.PlayFragment"
+        android:name="com.example.wordsmemory.presentation.play.PlayFragment"
         android:label="PlayFragment"
         tools:layout="@layout/play_fragment">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/vocabularyFragment"
-        android:name="com.example.wordsmemory.ui.vocabulary.VocabularyFragment"
+        android:name="com.example.wordsmemory.presentation.vocabulary.VocabularyFragment"
         android:label="VocabularyFragment">
         <action
             android:id="@+id/action_vocabularyFragment_to_categoryFragment"
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="com.example.wordsmemory.ui.vocabulary.category.CategoryFragment"
+        android:name="com.example.wordsmemory.presentation.vocabulary.category.CategoryFragment"
         android:label="CategoryFragment">
         <argument
             android:name="categoryId"
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/addOrEditVocabularyItemSheet"
-        android:name="com.example.wordsmemory.ui.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet"
+        android:name="com.example.wordsmemory.presentation.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet"
         android:label="AddOrEditVocabularyItemSheet">
         <argument
             android:name="selectedVocabularyItemId"
@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/addOrEditCategorySheet"
-        android:name="com.example.wordsmemory.ui.vocabulary.addoreditcategory.AddOrEditCategorySheet"
+        android:name="com.example.wordsmemory.presentation.vocabulary.addoreditcategory.AddOrEditCategorySheet"
         android:label="AddOrEditCategorySheet" >
         <argument
             android:name="selectedCategoryId"

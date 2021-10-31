@@ -2,9 +2,9 @@ package com.example.wordsmemory.di
 
 import android.content.Context
 import com.example.wordsmemory.framework.room.WMDatabase
-import com.example.wordsmemory.framework.room.CategoryDao
-import com.example.wordsmemory.framework.room.UserDao
-import com.example.wordsmemory.framework.room.VocabularyItemDao
+import com.example.wordsmemory.framework.room.dao.CategoryDao
+import com.example.wordsmemory.framework.room.dao.UserDao
+import com.example.wordsmemory.framework.room.dao.VocabularyItemDao
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

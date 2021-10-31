@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.wordsmemory.ui.vocabulary.VocabularyViewModel" />
+            type="com.example.wordsmemory.presentation.vocabulary.VocabularyViewModel" />
     </data>
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.wordsmemory.ui.topbar.TopBar
+        <com.example.wordsmemory.presentation.topbar.TopBar
             android:id="@+id/topBar"
             style="@style/TopBarStyle"
             app:title="@string/english_vocabulary" />
@@ -23,7 +23,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.vocabulary.VocabularyFragment">
+            tools:context=".presentation.vocabulary.VocabularyFragment">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"

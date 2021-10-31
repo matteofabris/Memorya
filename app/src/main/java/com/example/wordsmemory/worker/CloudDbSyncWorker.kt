@@ -6,9 +6,9 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.framework.CloudDbSyncHelper
-import com.example.wordsmemory.framework.room.CategoryDao
-import com.example.wordsmemory.framework.room.UserDao
-import com.example.wordsmemory.framework.room.VocabularyItemDao
+import com.example.wordsmemory.framework.room.dao.CategoryDao
+import com.example.wordsmemory.framework.room.dao.UserDao
+import com.example.wordsmemory.framework.room.dao.VocabularyItemDao
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject

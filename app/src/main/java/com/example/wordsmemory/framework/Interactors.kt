@@ -1,11 +1,11 @@
 package com.example.wordsmemory.framework
 
-import com.example.wordsmemory.interactors.AddUser
-import com.example.wordsmemory.interactors.FetchCloudDb
-import com.example.wordsmemory.interactors.RemoveAllUsers
+import com.example.wordsmemory.interactors.*
 
 data class Interactors(
     val fetchCloudDb: FetchCloudDb,
     val addUser: AddUser,
-    val removeAllUsers: RemoveAllUsers
+    val removeAllUsers: RemoveAllUsers,
+    val getVocabularyItems: GetVocabularyItems,
+    val getCategories: GetCategories
 )

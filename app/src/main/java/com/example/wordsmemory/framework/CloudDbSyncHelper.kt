@@ -3,12 +3,12 @@ package com.example.wordsmemory.framework
 import android.util.Log
 import androidx.work.ListenableWorker
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.framework.room.CategoryDao
-import com.example.wordsmemory.framework.room.UserDao
-import com.example.wordsmemory.framework.room.VocabularyItemDao
-import com.example.wordsmemory.model.vocabulary.Category
-import com.example.wordsmemory.model.vocabulary.IItem
-import com.example.wordsmemory.model.vocabulary.VocabularyItem
+import com.example.wordsmemory.domain.IItem
+import com.example.wordsmemory.framework.room.dao.CategoryDao
+import com.example.wordsmemory.framework.room.dao.UserDao
+import com.example.wordsmemory.framework.room.dao.VocabularyItemDao
+import com.example.wordsmemory.framework.room.entities.CategoryEntity
+import com.example.wordsmemory.framework.room.entities.VocabularyItemEntity
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,7 +54,7 @@ object CloudDbSyncHelper {
         categoryDao: CategoryDao
     ) {
         val cloudVocabularyItems = mutableListOf<IItem>()
-        val localVocabularyItems = vocabularyItemDao.getVocabularyItems()
+        val localVocabularyItems = vocabularyItemDao.getVocabularyItems().value!!
 
         val cloudVocabularyItemsCollection =
             Tasks.await(cloudUserRef.collection(Constants.vocabularyItems).get())
@@ -62,7 +62,7 @@ object CloudDbSyncHelper {
         if (cloudVocabularyItemsCollection.isEmpty) return
 
         cloudVocabularyItemsCollection.forEach { item ->
-            cloudVocabularyItems.add(item.toObject<VocabularyItem>())
+            cloudVocabularyItems.add(item.toObject<VocabularyItemEntity>())
         }
 
         deleteObsoleteLocalItems(
@@ -86,7 +86,7 @@ object CloudDbSyncHelper {
         categoryDao: CategoryDao
     ) {
         val cloudCategories = mutableListOf<IItem>()
-        val localCategories = categoryDao.getCategories()
+        val localCategories = categoryDao.getCategories().value!!
 
         val cloudCategoriesCollection =
             Tasks.await(cloudUserRef.collection(Constants.categories).get())
@@ -94,7 +94,7 @@ object CloudDbSyncHelper {
         if (cloudCategoriesCollection.isEmpty) return
 
         cloudCategoriesCollection.forEach { item ->
-            cloudCategories.add(item.toObject<Category>())
+            cloudCategories.add(item.toObject<CategoryEntity>())
         }
 
         deleteObsoleteLocalItems(cloudCategories, localCategories, vocabularyItemDao, categoryDao)
@@ -110,8 +110,8 @@ object CloudDbSyncHelper {
         localItems.forEach { localItem ->
             if (cloudItems.firstOrNull { it.id == localItem.id } == null) {
                 when (localItem) {
-                    is VocabularyItem -> vocabularyItemDao.deleteVocabularyItem(localItem)
-                    is Category -> {
+                    is VocabularyItemEntity -> vocabularyItemDao.deleteVocabularyItem(localItem)
+                    is CategoryEntity -> {
                         if (localItem.category != Constants.defaultCategory)
                             categoryDao.deleteCategory(localItem)
                     }
@@ -129,13 +129,13 @@ object CloudDbSyncHelper {
         cloudItems.forEach { cloudItem ->
             if (localItems.firstOrNull { it.id == cloudItem.id } != null) {
                 when (cloudItem) {
-                    is VocabularyItem -> vocabularyItemDao.updateVocabularyItem(cloudItem)
-                    is Category -> categoryDao.updateCategory(cloudItem)
+                    is VocabularyItemEntity -> vocabularyItemDao.updateVocabularyItem(cloudItem)
+                    is CategoryEntity -> categoryDao.updateCategory(cloudItem)
                 }
             } else {
                 when (cloudItem) {
-                    is VocabularyItem -> vocabularyItemDao.insertVocabularyItem(cloudItem)
-                    is Category -> categoryDao.insertCategory(cloudItem)
+                    is VocabularyItemEntity -> vocabularyItemDao.insertVocabularyItem(cloudItem)
+                    is CategoryEntity -> categoryDao.insertCategory(cloudItem)
                 }
             }
         }
@@ -197,7 +197,7 @@ object CloudDbSyncHelper {
         try {
             val cloudVocabularyItemDoc = Tasks.await(cloudVocabularyItemRef.get())
             if (cloudVocabularyItemDoc.exists()) {
-                val cloudVocabularyItem = cloudVocabularyItemDoc.toObject<VocabularyItem>()
+                val cloudVocabularyItem = cloudVocabularyItemDoc.toObject<VocabularyItemEntity>()
 
                 if (cloudVocabularyItem != null) {
                     if (cloudVocabularyItem.enWord != localVocabularyItem.enWord)
@@ -254,7 +254,7 @@ object CloudDbSyncHelper {
         try {
             val cloudCategoryDoc = Tasks.await(cloudCategoryRef.get())
             if (cloudCategoryDoc.exists()) {
-                val cloudCategory = cloudCategoryDoc.toObject<Category>()
+                val cloudCategory = cloudCategoryDoc.toObject<CategoryEntity>()
 
                 if (cloudCategory != null) {
                     if (cloudCategory.category != localCategory.category)

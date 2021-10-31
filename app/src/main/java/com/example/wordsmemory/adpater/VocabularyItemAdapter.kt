@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordsmemory.databinding.VocabularyHeaderBinding
 import com.example.wordsmemory.databinding.VocabularyItemBinding
-import com.example.wordsmemory.model.vocabulary.VocabularyItem
+import com.example.wordsmemory.framework.room.entities.VocabularyItemEntity
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
@@ -24,7 +24,7 @@ class VocabularyItemAdapter(
         }
     }
 
-    fun addHeaderAndSubmitList(list: List<VocabularyItem>?) {
+    fun addHeaderAndSubmitList(list: List<VocabularyItemEntity>?) {
         val items = when (list) {
             null -> listOf(DataItem.Header)
             else -> listOf(DataItem.Header) + list.map { DataItem.EnVocabularyItem(it) }
@@ -36,7 +36,7 @@ class VocabularyItemAdapter(
         when (holder) {
             is VocabularyItemViewHolder -> {
                 val item = getItem(position) as DataItem.EnVocabularyItem
-                holder.bind(item.vocabularyItem)
+                holder.bind(item.vocabularyItemEntity)
                 holder.itemView.setOnLongClickListener {
                     _onLongClickListener.onLongClick(item)
                 }
@@ -65,9 +65,9 @@ class VocabularyItemAdapter(
 
         var itemId: Int = -1
 
-        fun bind(item: VocabularyItem) {
-            itemId = item.id
-            _binding.vocabularyItem = item
+        fun bind(itemEntity: VocabularyItemEntity) {
+            itemId = itemEntity.id
+            _binding.vocabularyItem = itemEntity
             _binding.executePendingBindings()
         }
     }
@@ -101,8 +101,8 @@ class VocabularyItemAdapter(
 sealed class DataItem {
     abstract val id: Int
 
-    data class EnVocabularyItem(val vocabularyItem: VocabularyItem) : DataItem() {
-        override val id = vocabularyItem.id
+    data class EnVocabularyItem(val vocabularyItemEntity: VocabularyItemEntity) : DataItem() {
+        override val id = vocabularyItemEntity.id
     }
 
     object Header : DataItem() {

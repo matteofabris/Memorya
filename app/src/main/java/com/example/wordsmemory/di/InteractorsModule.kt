@@ -4,13 +4,11 @@ import android.content.Context
 import androidx.work.WorkManager
 import com.example.wordsmemory.data.repository.UserRepository
 import com.example.wordsmemory.data.repository.VocabularyRepository
-import com.example.wordsmemory.framework.CloudDbServiceImpl
-import com.example.wordsmemory.framework.Interactors
-import com.example.wordsmemory.framework.UserDataSourceImpl
-import com.example.wordsmemory.framework.room.UserDao
-import com.example.wordsmemory.interactors.AddUser
-import com.example.wordsmemory.interactors.FetchCloudDb
-import com.example.wordsmemory.interactors.RemoveAllUsers
+import com.example.wordsmemory.framework.*
+import com.example.wordsmemory.framework.room.dao.CategoryDao
+import com.example.wordsmemory.framework.room.dao.UserDao
+import com.example.wordsmemory.framework.room.dao.VocabularyItemDao
+import com.example.wordsmemory.interactors.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,14 +29,24 @@ object InteractorsModule {
         return Interactors(
             FetchCloudDb(vocabularyRepository),
             AddUser(userRepository),
-            RemoveAllUsers(userRepository)
+            RemoveAllUsers(userRepository),
+            GetVocabularyItems(vocabularyRepository),
+            GetCategories(vocabularyRepository)
         )
     }
 
     @Provides
     @Singleton
-    fun provideVocabularyRepository(workManager: WorkManager): VocabularyRepository {
-        return VocabularyRepository(CloudDbServiceImpl(workManager))
+    fun provideVocabularyRepository(
+        workManager: WorkManager,
+        vocabularyItemDao: VocabularyItemDao,
+        categoryDao: CategoryDao
+    ): VocabularyRepository {
+        return VocabularyRepository(
+            CloudDbServiceImpl(workManager),
+            VocabularyItemDataSourceImpl(vocabularyItemDao),
+            CategoryDataSourceImpl(categoryDao)
+        )
     }
 
     @Provides

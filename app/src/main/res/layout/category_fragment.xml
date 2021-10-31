@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.wordsmemory.ui.vocabulary.category.CategoryViewModel" />
+            type="com.example.wordsmemory.presentation.vocabulary.category.CategoryViewModel" />
     </data>
 
     <LinearLayout
@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.wordsmemory.ui.topbar.TopBar
+        <com.example.wordsmemory.presentation.topbar.TopBar
             android:id="@+id/topBar"
             style="@style/TopBarStyle" />
 

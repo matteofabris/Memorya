@@ -2,8 +2,8 @@ package com.example.wordsmemory.adpater
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.wordsmemory.ui.vocabulary.words.VocabularyWordsFragment
-import com.example.wordsmemory.ui.vocabulary.categories.VocabularyCategoriesFragment
+import com.example.wordsmemory.presentation.vocabulary.words.VocabularyWordsFragment
+import com.example.wordsmemory.presentation.vocabulary.categories.VocabularyCategoriesFragment
 import kotlinx.coroutines.InternalCoroutinesApi
 
 @InternalCoroutinesApi
