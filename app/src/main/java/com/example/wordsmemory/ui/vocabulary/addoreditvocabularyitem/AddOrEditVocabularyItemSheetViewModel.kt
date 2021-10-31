@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.api.translate.TranslateService
-import com.example.wordsmemory.database.WMDao
+import com.example.wordsmemory.framework.room.CategoryDao
+import com.example.wordsmemory.framework.room.UserDao
+import com.example.wordsmemory.framework.room.VocabularyItemDao
 import com.example.wordsmemory.model.vocabulary.VocabularyItem
 import com.example.wordsmemory.worker.CloudDbSyncWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,11 +23,13 @@ import javax.inject.Inject
 @HiltViewModel
 class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
     private val _savedStateHandle: SavedStateHandle,
-    private val _dbDao: WMDao,
+    private val _vocabularyItemDao: VocabularyItemDao,
+    categoryDao: CategoryDao,
+    private val _userDao: UserDao,
     private val _workManager: WorkManager
 ) : ViewModel() {
 
-    val categories = _dbDao.getCategoriesAsLiveData()
+    val categories = categoryDao.getCategoriesAsLiveData()
     var isEdit = false
     val vocabularyItem = MutableLiveData<VocabularyItem>()
 
@@ -34,7 +38,8 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
             val selectedVocabularyItemId = _savedStateHandle.get<Int>("selectedVocabularyItemId")
             if (selectedVocabularyItemId != null && selectedVocabularyItemId != -1) {
                 isEdit = true
-                vocabularyItem.value = _dbDao.getVocabularyItemById(selectedVocabularyItemId)
+                vocabularyItem.value =
+                    _vocabularyItemDao.getVocabularyItemById(selectedVocabularyItemId)
             } else {
                 vocabularyItem.value = VocabularyItem("", "", 1)
             }
@@ -56,10 +61,10 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
             )
 
             val itemId: Int = if (isEdit) {
-                _dbDao.updateVocabularyItem(vocabularyItem.value!!)
+                _vocabularyItemDao.updateVocabularyItem(vocabularyItem.value!!)
                 vocabularyItem.value!!.id
             } else {
-                _dbDao.insertVocabularyItem(vocabularyItem.value!!).toInt()
+                _vocabularyItemDao.insertVocabularyItem(vocabularyItem.value!!).toInt()
             }
 
             updateCloudDbVocabularyItem(itemId)
@@ -72,7 +77,8 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
                 .setBackoffCriteria(
                     BackoffPolicy.EXPONENTIAL,
                     OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                    TimeUnit.MILLISECONDS)
+                    TimeUnit.MILLISECONDS
+                )
                 .setInputData(
                     workDataOf(
                         Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.InsertVocabularyItem.name,
@@ -86,7 +92,7 @@ class AddOrEditVocabularyItemSheetViewModel @Inject constructor(
     fun translate() {
         viewModelScope.launch(Dispatchers.IO) {
             val textToTranslate = vocabularyItem.value?.enWord ?: ""
-            val accessToken = _dbDao.getUsers().first().accessToken
+            val accessToken = _userDao.getUsers().first().accessToken
 
             val response = TranslateService.create()
                 .translate("Bearer $accessToken", textToTranslate)

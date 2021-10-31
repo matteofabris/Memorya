@@ -1,7 +1,6 @@
 package com.example.wordsmemory.ui.play
 
 import android.content.Context.INPUT_METHOD_SERVICE
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +12,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
@@ -25,7 +23,6 @@ import com.example.wordsmemory.R
 import com.example.wordsmemory.TranslateInputFilter
 import com.example.wordsmemory.databinding.PlayFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -34,15 +31,16 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private val _viewModel: PlayFragmentViewModel by viewModels()
     private lateinit var _binding: PlayFragmentBinding
-    private lateinit var _activityResultLauncher: ActivityResultLauncher<Intent>
+    private val _activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            _viewModel.manageAuthResult(it)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        registerForAuthActivityResult()
-        requestLogin()
+        authenticate()
     }
 
-    @InternalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,6 +60,16 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onResume() {
         super.onResume()
         _viewModel.setPlayWord()
+    }
+
+    private fun authenticate() {
+        if (_viewModel.isAuthenticated()) {
+            _viewModel.onAuthenticationOk()
+        } else {
+            _viewModel.signInClient.signInIntent.apply {
+                _activityResultLauncher.launch(this)
+            }
+        }
     }
 
     private fun setTopBarButtonsListeners() {
@@ -117,7 +125,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _viewModel.isAuthenticated.observe(viewLifecycleOwner,
             {
                 setPlayBoardVisible(it)
-                if (!it) requestLogin()
+                if (!it) authenticate()
             })
     }
 
@@ -162,21 +170,6 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
             delay(170)
             _binding.container.setBackgroundColor(Color.TRANSPARENT)
-        }
-    }
-
-    private fun registerForAuthActivityResult() {
-        _activityResultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                _viewModel.manageAuthResult(it)
-            }
-    }
-
-    private fun requestLogin() {
-        if (!_viewModel.checkAuthState()) {
-            _viewModel.signInClient.signInIntent.apply {
-                _activityResultLauncher.launch(this)
-            }
         }
     }
 

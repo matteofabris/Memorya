@@ -1,8 +1,11 @@
-package com.example.wordsmemory.database
+package com.example.wordsmemory.framework
 
 import android.util.Log
 import androidx.work.ListenableWorker
 import com.example.wordsmemory.Constants
+import com.example.wordsmemory.framework.room.CategoryDao
+import com.example.wordsmemory.framework.room.UserDao
+import com.example.wordsmemory.framework.room.VocabularyItemDao
 import com.example.wordsmemory.model.vocabulary.Category
 import com.example.wordsmemory.model.vocabulary.IItem
 import com.example.wordsmemory.model.vocabulary.VocabularyItem
@@ -14,11 +17,13 @@ import java.util.concurrent.ExecutionException
 
 object CloudDbSyncHelper {
     @Suppress("BlockingMethodInNonBlockingContext")
-    suspend fun fetchDataFromCloud(
-        dbDao: WMDao,
+    suspend fun fetchCloudDb(
+        userDao: UserDao,
+        vocabularyItemDao: VocabularyItemDao,
+        categoryDao: CategoryDao,
         firestoreDb: FirebaseFirestore
     ): ListenableWorker.Result {
-        val localUser = dbDao.getUsers().first()
+        val localUser = userDao.getUsers().first()
         val cloudUserRef = firestoreDb.collection(Constants.users).document(localUser.userId)
         var result = ListenableWorker.Result.success()
 
@@ -28,8 +33,8 @@ object CloudDbSyncHelper {
             if (cloudUserdoc.exists()) {
                 Log.d("FIRESTORE", "FIRESTORE: user is in cloud")
 
-                updateLocalDbVocabularyItems(cloudUserRef, dbDao)
-                updateLocalDbCategories(cloudUserRef, dbDao)
+                updateLocalDbVocabularyItems(cloudUserRef, vocabularyItemDao, categoryDao)
+                updateLocalDbCategories(cloudUserRef, vocabularyItemDao, categoryDao)
             }
         } catch (e: ExecutionException) {
             Log.e("ERROR", e.toString())
@@ -45,10 +50,11 @@ object CloudDbSyncHelper {
     @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun updateLocalDbVocabularyItems(
         cloudUserRef: DocumentReference,
-        dbDao: WMDao
+        vocabularyItemDao: VocabularyItemDao,
+        categoryDao: CategoryDao
     ) {
         val cloudVocabularyItems = mutableListOf<IItem>()
-        val localVocabularyItems = dbDao.getVocabularyItems()
+        val localVocabularyItems = vocabularyItemDao.getVocabularyItems()
 
         val cloudVocabularyItemsCollection =
             Tasks.await(cloudUserRef.collection(Constants.vocabularyItems).get())
@@ -59,17 +65,28 @@ object CloudDbSyncHelper {
             cloudVocabularyItems.add(item.toObject<VocabularyItem>())
         }
 
-        deleteObsoleteLocalItems(cloudVocabularyItems, localVocabularyItems, dbDao)
-        insertOrUpdateLocalItems(cloudVocabularyItems, localVocabularyItems, dbDao)
+        deleteObsoleteLocalItems(
+            cloudVocabularyItems,
+            localVocabularyItems,
+            vocabularyItemDao,
+            categoryDao
+        )
+        insertOrUpdateLocalItems(
+            cloudVocabularyItems,
+            localVocabularyItems,
+            vocabularyItemDao,
+            categoryDao
+        )
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun updateLocalDbCategories(
         cloudUserRef: DocumentReference,
-        dbDao: WMDao
+        vocabularyItemDao: VocabularyItemDao,
+        categoryDao: CategoryDao
     ) {
         val cloudCategories = mutableListOf<IItem>()
-        val localCategories = dbDao.getCategories()
+        val localCategories = categoryDao.getCategories()
 
         val cloudCategoriesCollection =
             Tasks.await(cloudUserRef.collection(Constants.categories).get())
@@ -80,22 +97,23 @@ object CloudDbSyncHelper {
             cloudCategories.add(item.toObject<Category>())
         }
 
-        deleteObsoleteLocalItems(cloudCategories, localCategories, dbDao)
-        insertOrUpdateLocalItems(cloudCategories, localCategories, dbDao)
+        deleteObsoleteLocalItems(cloudCategories, localCategories, vocabularyItemDao, categoryDao)
+        insertOrUpdateLocalItems(cloudCategories, localCategories, vocabularyItemDao, categoryDao)
     }
 
     private suspend fun deleteObsoleteLocalItems(
         cloudItems: MutableList<IItem>,
         localItems: List<IItem>,
-        dbDao: WMDao
+        vocabularyItemDao: VocabularyItemDao,
+        categoryDao: CategoryDao
     ) {
         localItems.forEach { localItem ->
             if (cloudItems.firstOrNull { it.id == localItem.id } == null) {
                 when (localItem) {
-                    is VocabularyItem -> dbDao.deleteVocabularyItem(localItem)
+                    is VocabularyItem -> vocabularyItemDao.deleteVocabularyItem(localItem)
                     is Category -> {
                         if (localItem.category != Constants.defaultCategory)
-                            dbDao.deleteCategory(localItem)
+                            categoryDao.deleteCategory(localItem)
                     }
                 }
             }
@@ -105,18 +123,19 @@ object CloudDbSyncHelper {
     private suspend fun insertOrUpdateLocalItems(
         cloudItems: MutableList<IItem>,
         localItems: List<IItem>,
-        dbDao: WMDao
+        vocabularyItemDao: VocabularyItemDao,
+        categoryDao: CategoryDao
     ) {
         cloudItems.forEach { cloudItem ->
             if (localItems.firstOrNull { it.id == cloudItem.id } != null) {
                 when (cloudItem) {
-                    is VocabularyItem -> dbDao.updateVocabularyItem(cloudItem)
-                    is Category -> dbDao.updateCategory(cloudItem)
+                    is VocabularyItem -> vocabularyItemDao.updateVocabularyItem(cloudItem)
+                    is Category -> categoryDao.updateCategory(cloudItem)
                 }
             } else {
                 when (cloudItem) {
-                    is VocabularyItem -> dbDao.insertVocabularyItem(cloudItem)
-                    is Category -> dbDao.insertCategory(cloudItem)
+                    is VocabularyItem -> vocabularyItemDao.insertVocabularyItem(cloudItem)
+                    is Category -> categoryDao.insertCategory(cloudItem)
                 }
             }
         }
@@ -124,10 +143,10 @@ object CloudDbSyncHelper {
 
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun insertCloudDbUser(
-        dbDao: WMDao,
+        userDao: UserDao,
         firestoreDb: FirebaseFirestore
     ): ListenableWorker.Result {
-        val localUserId = dbDao.getUsers().first().userId
+        val localUserId = userDao.getUsers().first().userId
         var result = ListenableWorker.Result.success()
 
         try {
@@ -163,15 +182,16 @@ object CloudDbSyncHelper {
 
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun updateCloudDbVocabularyItem(
-        dbDao: WMDao,
+        userDao: UserDao,
+        vocabularyItemDao: VocabularyItemDao,
         firestoreDb: FirebaseFirestore,
         localVocabularyItemId: Int
     ): ListenableWorker.Result {
         val cloudVocabularyItemRef =
-            firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
+            firestoreDb.collection(Constants.users).document(userDao.getUsers().first().userId)
                 .collection(Constants.vocabularyItems)
                 .document(localVocabularyItemId.toString())
-        val localVocabularyItem = dbDao.getVocabularyItemById(localVocabularyItemId)
+        val localVocabularyItem = vocabularyItemDao.getVocabularyItemById(localVocabularyItemId)
         var result = ListenableWorker.Result.success()
 
         try {
@@ -220,14 +240,15 @@ object CloudDbSyncHelper {
 
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun updateCloudDbCategory(
-        dbDao: WMDao,
+        userDao: UserDao,
+        categoryDao: CategoryDao,
         firestoreDb: FirebaseFirestore,
         localCategoryId: Int
     ): ListenableWorker.Result {
         val cloudCategoryRef =
-            firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
+            firestoreDb.collection(Constants.users).document(userDao.getUsers().first().userId)
                 .collection(Constants.categories).document(localCategoryId.toString())
-        val localCategory = dbDao.getCategoryById(localCategoryId)
+        val localCategory = categoryDao.getCategoryById(localCategoryId)
         var result = ListenableWorker.Result.success()
 
         try {
@@ -255,7 +276,7 @@ object CloudDbSyncHelper {
 
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun deleteVocabularyItem(
-        dbDao: WMDao,
+        userDao: UserDao,
         firestoreDb: FirebaseFirestore,
         localVocabularyItemId: Int
     ): ListenableWorker.Result {
@@ -263,7 +284,7 @@ object CloudDbSyncHelper {
 
         try {
             Tasks.await(
-                firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
+                firestoreDb.collection(Constants.users).document(userDao.getUsers().first().userId)
                     .collection(Constants.vocabularyItems)
                     .document(localVocabularyItemId.toString())
                     .delete()
@@ -281,7 +302,7 @@ object CloudDbSyncHelper {
 
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun deleteCategory(
-        dbDao: WMDao,
+        userDao: UserDao,
         firestoreDb: FirebaseFirestore,
         localCategoryId: Int
     ): ListenableWorker.Result {
@@ -289,7 +310,7 @@ object CloudDbSyncHelper {
 
         try {
             Tasks.await(
-                firestoreDb.collection(Constants.users).document(dbDao.getUsers().first().userId)
+                firestoreDb.collection(Constants.users).document(userDao.getUsers().first().userId)
                     .collection(Constants.categories).document(localCategoryId.toString()).delete()
             )
         } catch (e: ExecutionException) {

@@ -3,15 +3,17 @@ package com.example.wordsmemory.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.wordsmemory.domain.User
 
 @Entity(tableName = "user")
-data class User(
+data class UserEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    override val id: Int,
     @ColumnInfo(name = "user_id")
-    var userId: String,
+    override var userId: String,
     @ColumnInfo(name = "access_token")
-    var accessToken: String = ""
-) {
+    override var accessToken: String = ""
+) : User {
     constructor (userId: String, accessToken: String) : this(0, userId, accessToken)
+    constructor (user: User) : this(user.id, user.userId, user.accessToken)
 }

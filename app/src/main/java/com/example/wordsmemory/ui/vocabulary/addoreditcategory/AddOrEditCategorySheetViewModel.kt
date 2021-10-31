@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.database.WMDao
+import com.example.wordsmemory.framework.room.CategoryDao
 import com.example.wordsmemory.model.vocabulary.Category
 import com.example.wordsmemory.worker.CloudDbSyncWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddCategorySheetViewModel @Inject constructor(
     _savedStateHandle: SavedStateHandle,
-    private val _dbDao: WMDao,
+    private val _cateogryDao: CategoryDao,
     private val _workManager: WorkManager
 ) : ViewModel() {
 
@@ -32,7 +32,7 @@ class AddCategorySheetViewModel @Inject constructor(
             val selectedCategoryId = _savedStateHandle.get<Int>("selectedCategoryId")
             if (selectedCategoryId != null && selectedCategoryId != -1) {
                 isEdit = true
-                categoryItem.value = _dbDao.getCategoryById(selectedCategoryId)
+                categoryItem.value = _cateogryDao.getCategoryById(selectedCategoryId)
             } else {
                 categoryItem.value = Category("")
             }
@@ -46,10 +46,10 @@ class AddCategorySheetViewModel @Inject constructor(
                     .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
             val categoryId: Int = if (isEdit) {
-                _dbDao.updateCategory(categoryItem.value!!)
+                _cateogryDao.updateCategory(categoryItem.value!!)
                 categoryItem.value!!.id
             } else {
-                _dbDao.insertCategory(categoryItem.value!!).toInt()
+                _cateogryDao.insertCategory(categoryItem.value!!).toInt()
             }
 
             updateCloudDbCategory(categoryId)
@@ -62,7 +62,8 @@ class AddCategorySheetViewModel @Inject constructor(
                 .setBackoffCriteria(
                     BackoffPolicy.EXPONENTIAL,
                     OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                    TimeUnit.MILLISECONDS)
+                    TimeUnit.MILLISECONDS
+                )
                 .setInputData(
                     workDataOf(
                         Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.InsertCategory.name,

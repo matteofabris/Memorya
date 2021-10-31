@@ -8,37 +8,37 @@ import androidx.work.*
 import com.example.wordsmemory.BuildConfig
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.api.auth.AuthService
-import com.example.wordsmemory.database.CloudDbSyncHelper
-import com.example.wordsmemory.database.WMDao
-import com.example.wordsmemory.model.User
+import com.example.wordsmemory.framework.Interactors
+import com.example.wordsmemory.framework.room.CategoryDao
+import com.example.wordsmemory.framework.room.UserDao
+import com.example.wordsmemory.framework.room.VocabularyItemDao
+import com.example.wordsmemory.model.UserEntity
 import com.example.wordsmemory.model.vocabulary.VocabularyItem
-import com.example.wordsmemory.worker.CloudDbSyncWorker
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
 class PlayFragmentViewModel @Inject constructor(
-    private val _dbDao: WMDao,
+    vocabularyItemDao: VocabularyItemDao,
+    private val _categoryDao: CategoryDao,
+    private val _userDao: UserDao,
     val signInClient: GoogleSignInClient,
     private var _lastSignedInAccount: GoogleSignInAccount?,
-    private val _firestoreDb: FirebaseFirestore,
-    private val _workManager: WorkManager
+    private val _interactors: Interactors
 ) : ViewModel() {
 
     private var _categoryId = Constants.defaultCategoryId
 
-    val vocabularyList = _dbDao.getVocabularyItemsAsLiveData()
+    val vocabularyList = vocabularyItemDao.getVocabularyItemsAsLiveData()
     val translationText = MutableLiveData<String>()
-    val categories = _dbDao.getCategoriesAsLiveData()
+    val categories = _categoryDao.getCategoriesAsLiveData()
 
     private var _correctAttempts = 0
     val correctAttempts: Int
@@ -100,17 +100,6 @@ class PlayFragmentViewModel @Inject constructor(
         }
     }
 
-    private suspend fun setCategoryId(categoryName: String) {
-        return withContext(Dispatchers.IO) {
-            _categoryId = _dbDao.getCategoryId(categoryName)
-        }
-    }
-
-    private fun resetRecentAttempts() {
-        _correctAttempts = 0
-        _allAttempts.value = 0
-    }
-
     fun manageAuthResult(activityResult: ActivityResult) {
         when (activityResult.resultCode) {
             Activity.RESULT_OK -> {
@@ -122,8 +111,8 @@ class PlayFragmentViewModel @Inject constructor(
                     if (!authCode.isNullOrEmpty()) {
                         val accessToken = getAccessToken(authCode)
                         if (accessToken.isNotEmpty() && !googleSignInAccount.id.isNullOrEmpty()) {
-                            saveUser(User(googleSignInAccount.id!!, accessToken))
-                            fetchCloudDbData()
+                            _interactors.addUser(UserEntity(googleSignInAccount.id!!, accessToken))
+                            _interactors.fetchCloudDb()
                             _isAuthenticated.value = true
                         }
                     }
@@ -133,6 +122,33 @@ class PlayFragmentViewModel @Inject constructor(
                 Log.d("AUTH", "AUTH: authentication failed")
             }
         }
+    }
+
+    fun isAuthenticated() = _lastSignedInAccount != null
+
+    fun onAuthenticationOk() {
+        _isAuthenticated.value = true
+        _interactors.fetchCloudDb()
+    }
+
+    fun signOut() {
+        signInClient.signOut()
+        _lastSignedInAccount = null
+        _isAuthenticated.value = false
+        viewModelScope.launch(Dispatchers.IO) {
+            _userDao.deleteAllUsers()
+        }
+    }
+
+    private suspend fun setCategoryId(categoryName: String) {
+        return withContext(Dispatchers.IO) {
+            _categoryId = _categoryDao.getCategoryId(categoryName)
+        }
+    }
+
+    private fun resetRecentAttempts() {
+        _correctAttempts = 0
+        _allAttempts.value = 0
     }
 
     private suspend fun getAccessToken(authCode: String): String {
@@ -146,55 +162,5 @@ class PlayFragmentViewModel @Inject constructor(
                 return@withContext authResult.body()?.accessToken ?: ""
             } else return@withContext ""
         }
-    }
-
-    private suspend fun saveUser(user: User) {
-        return withContext(Dispatchers.IO) {
-            _dbDao.insertUser(user)
-            insertCloudDbUser()
-        }
-    }
-
-    private fun insertCloudDbUser() {
-        val workRequest: WorkRequest =
-            OneTimeWorkRequestBuilder<CloudDbSyncWorker>()
-                .setBackoffCriteria(
-                    BackoffPolicy.LINEAR,
-                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                    TimeUnit.MILLISECONDS)
-                .setInputData(workDataOf(Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.InsertUser.name))
-                .build()
-        _workManager.enqueue(workRequest)
-    }
-
-    fun signOut() {
-        signInClient.signOut()
-        _lastSignedInAccount = null
-        _isAuthenticated.value = false
-        viewModelScope.launch(Dispatchers.IO) {
-            _dbDao.deleteAllUsers()
-        }
-    }
-
-    fun checkAuthState(): Boolean {
-        if (_lastSignedInAccount != null) {
-            fetchCloudDbData()
-            _isAuthenticated.value = true
-            return true
-        }
-
-        return false
-    }
-
-    private fun fetchCloudDbData() {
-        val workRequest: WorkRequest =
-            OneTimeWorkRequestBuilder<CloudDbSyncWorker>()
-                .setBackoffCriteria(
-                    BackoffPolicy.EXPONENTIAL,
-                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                    TimeUnit.MILLISECONDS)
-                .setInputData(workDataOf(Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.Fetch.name))
-                .build()
-        _workManager.enqueue(workRequest)
     }
 }

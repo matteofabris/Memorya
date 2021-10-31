@@ -1,4 +1,4 @@
-package com.example.wordsmemory.framework.db
+package com.example.wordsmemory.framework.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

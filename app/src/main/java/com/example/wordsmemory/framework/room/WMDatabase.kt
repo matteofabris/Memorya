@@ -1,4 +1,4 @@
-package com.example.wordsmemory.database
+package com.example.wordsmemory.framework.room
 
 import android.content.Context
 import androidx.room.Database
@@ -6,17 +6,23 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.model.vocabulary.Category
-import com.example.wordsmemory.model.User
+import com.example.wordsmemory.model.UserEntity
 import com.example.wordsmemory.model.vocabulary.VocabularyItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
-@Database(entities = [VocabularyItem::class, Category::class, User::class], version = 1, exportSchema = false)
+@Database(
+    entities = [VocabularyItem::class, Category::class, UserEntity::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class WMDatabase : RoomDatabase() {
 
-    abstract fun wmDao(): WMDao
+    abstract fun vocabularyItemDao(): VocabularyItemDao
+    abstract fun categoryDao(): CategoryDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile
@@ -44,7 +50,7 @@ abstract class WMDatabase : RoomDatabase() {
         }
 
         private fun insertDefaultCategory() {
-            val dao = INSTANCE!!.wmDao()
+            val dao = INSTANCE!!.categoryDao()
             GlobalScope.launch(Dispatchers.IO) {
                 val categories = dao.getCategories()
                 if (categories.isEmpty())

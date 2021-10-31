@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.database.WMDao
+import com.example.wordsmemory.framework.room.VocabularyItemDao
 import com.example.wordsmemory.model.vocabulary.VocabularyItem
 import com.example.wordsmemory.worker.CloudDbSyncWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,14 +16,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VocabularyWordsViewModel @Inject constructor(
-    private val _dbDao: WMDao,
+    private val _vocabularyItemDao: VocabularyItemDao,
     private val _workManager: WorkManager
 ) : ViewModel() {
     lateinit var vocabularyList: LiveData<List<VocabularyItem>>
 
     fun deleteItem(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            _dbDao.deleteVocabularyItem(vocabularyList.value!!.first { it.id == id })
+            _vocabularyItemDao.deleteVocabularyItem(vocabularyList.value!!.first { it.id == id })
             deleteVocabularyItem(id)
         }
     }
@@ -34,7 +34,8 @@ class VocabularyWordsViewModel @Inject constructor(
                 .setBackoffCriteria(
                     BackoffPolicy.EXPONENTIAL,
                     OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                    TimeUnit.MILLISECONDS)
+                    TimeUnit.MILLISECONDS
+                )
                 .setInputData(
                     workDataOf(
                         Constants.WORK_TYPE to Constants.CloudDbSyncWorkType.DeleteVocabularyItem.name,
@@ -48,8 +49,10 @@ class VocabularyWordsViewModel @Inject constructor(
     fun initVocabularyList(categoryId: Int) {
         viewModelScope.launch {
             vocabularyList =
-                if (categoryId > 0) _dbDao.getVocabularyItemsByCategoryAsLiveData(categoryId)
-                else _dbDao.getVocabularyItemsAsLiveData()
+                if (categoryId > 0) _vocabularyItemDao.getVocabularyItemsByCategoryAsLiveData(
+                    categoryId
+                )
+                else _vocabularyItemDao.getVocabularyItemsAsLiveData()
         }
     }
 }
