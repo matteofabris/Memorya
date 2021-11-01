@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.wordsmemory.presentation.play.PlayFragmentViewModel" />
+            type="com.example.wordsmemory.presentation.fragment.play.PlayFragmentViewModel" />
     </data>
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.wordsmemory.presentation.topbar.TopBar
+        <com.example.wordsmemory.presentation.fragment.topbar.TopBar
             android:id="@+id/topBar"
             style="@style/TopBarStyle"
             app:title="@string/app_title" />
@@ -24,7 +24,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".presentation.play.PlayFragment">
+            tools:context=".presentation.fragment.play.PlayFragment">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/playBoard"

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.example.wordsmemory.presentation.vocabulary.category.CategoryViewModel" />
+            type="com.example.wordsmemory.presentation.fragment.vocabulary.category.CategoryViewModel" />
     </data>
 
     <LinearLayout
@@ -13,9 +14,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.wordsmemory.presentation.topbar.TopBar
+        <com.example.wordsmemory.presentation.fragment.topbar.TopBar
             android:id="@+id/topBar"
-            style="@style/TopBarStyle" />
+            style="@style/TopBarStyle"
+            app:title="@{viewModel.categoryName}"/>
 
         <FrameLayout
             android:id="@+id/category_vocabulary_container"

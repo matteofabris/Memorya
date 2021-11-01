@@ -22,10 +22,10 @@ class MainActivity : AppCompatActivity() {
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         requestedOrientation = if (isTablet()) {
-            Log.i("Orientation", "Tablet mode")
+            Log.i(Constants.packageName, "Tablet mode")
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         } else {
-            Log.i("Orientation", "Phone mode")
+            Log.i(Constants.packageName, "Phone mode")
             ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
     }

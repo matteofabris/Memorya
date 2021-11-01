@@ -6,6 +6,7 @@ import com.example.wordsmemory.data.manager.AuthenticationManager
 import com.example.wordsmemory.data.manager.UserManager
 import com.example.wordsmemory.data.manager.VocabularyManager
 import com.example.wordsmemory.framework.*
+import com.example.wordsmemory.framework.implementations.*
 import com.example.wordsmemory.framework.room.dao.CategoryDao
 import com.example.wordsmemory.framework.room.dao.UserDao
 import com.example.wordsmemory.framework.room.dao.VocabularyItemDao
@@ -33,10 +34,15 @@ object InteractorsModule {
             AddUser(userManager),
             RemoveAllUsers(userManager),
             GetVocabularyItems(vocabularyManager),
+            GetVocabularyItemsAsLiveData(vocabularyManager),
             GetCategoriesAsLiveData(vocabularyManager),
             GetCategories(vocabularyManager),
             GetAccessToken(authenticationManager),
-            AddCategory(vocabularyManager)
+            AddCategory(vocabularyManager),
+            AddVocabularyItem(vocabularyManager),
+            Translate(vocabularyManager),
+            RemoveCategory(vocabularyManager),
+            RemoveVocabularyItem(vocabularyManager)
         )
     }
 
@@ -45,12 +51,14 @@ object InteractorsModule {
     fun provideVocabularyManager(
         workManager: WorkManager,
         vocabularyItemDao: VocabularyItemDao,
-        categoryDao: CategoryDao
+        categoryDao: CategoryDao,
+        userDao: UserDao
     ): VocabularyManager {
         return VocabularyManager(
             CloudDbServiceImpl(workManager),
-            VocabularyItemDataSourceImpl(vocabularyItemDao),
-            CategoryDataSourceImpl(categoryDao, workManager)
+            VocabularyItemDataSourceImpl(vocabularyItemDao, workManager),
+            CategoryDataSourceImpl(categoryDao, workManager),
+            RESTServiceImpl(userDao)
         )
     }
 
@@ -62,8 +70,8 @@ object InteractorsModule {
 
     @Provides
     @Singleton
-    fun provideAuthenticationManager(): AuthenticationManager {
-        return AuthenticationManager(RESTServiceImpl())
+    fun provideAuthenticationManager(userDao: UserDao): AuthenticationManager {
+        return AuthenticationManager(RESTServiceImpl(userDao))
     }
 
     @Provides

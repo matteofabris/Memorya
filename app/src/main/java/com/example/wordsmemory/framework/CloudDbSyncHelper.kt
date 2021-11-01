@@ -31,16 +31,16 @@ object CloudDbSyncHelper {
             val cloudUserdoc = Tasks.await(cloudUserRef.get())
 
             if (cloudUserdoc.exists()) {
-                Log.d("FIRESTORE", "FIRESTORE: user is in cloud")
+                Log.d(Constants.packageName, "FIRESTORE: user is in cloud")
 
                 updateLocalDbVocabularyItems(cloudUserRef, vocabularyItemDao, categoryDao)
                 updateLocalDbCategories(cloudUserRef, vocabularyItemDao, categoryDao)
             }
         } catch (e: ExecutionException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         }
 
@@ -156,10 +156,10 @@ object CloudDbSyncHelper {
 
             setCloudDbUserDoc(firestoreDb, localUserId)
         } catch (e: ExecutionException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         }
 
@@ -170,7 +170,7 @@ object CloudDbSyncHelper {
         firestoreDb: FirebaseFirestore,
         localUserId: String
     ) {
-        Log.d("FIRESTORE", "FIRESTORE: add user")
+        Log.d(Constants.packageName, "FIRESTORE: add user")
 
         val task = firestoreDb.collection(Constants.users).document(localUserId).set(
             hashMapOf(
@@ -228,10 +228,10 @@ object CloudDbSyncHelper {
                 Tasks.await(cloudVocabularyItemRef.set(localVocabularyItem))
             }
         } catch (e: ExecutionException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         }
 
@@ -264,10 +264,10 @@ object CloudDbSyncHelper {
                 Tasks.await(cloudCategoryRef.set(localCategory))
             }
         } catch (e: ExecutionException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         }
 
@@ -290,10 +290,10 @@ object CloudDbSyncHelper {
                     .delete()
             )
         } catch (e: ExecutionException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         }
 
@@ -314,10 +314,10 @@ object CloudDbSyncHelper {
                     .collection(Constants.categories).document(localCategoryId.toString()).delete()
             )
         } catch (e: ExecutionException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e("ERROR", e.toString())
+            Log.e(Constants.packageName, e.toString())
             result = ListenableWorker.Result.retry()
         }
 

@@ -7,8 +7,13 @@ data class Interactors(
     val addUser: AddUser,
     val removeAllUsers: RemoveAllUsers,
     val getVocabularyItems: GetVocabularyItems,
+    val getVocabularyItemsAsLiveData: GetVocabularyItemsAsLiveData,
     val getCategoriesAsLiveData: GetCategoriesAsLiveData,
     val getCategories: GetCategories,
     val getAccessToken: GetAccessToken,
-    val addCategory: AddCategory
+    val addCategory: AddCategory,
+    val addVocabularyItem: AddVocabularyItem,
+    val translate: Translate,
+    val removeCategory: RemoveCategory,
+    val removeVocabularyItem: RemoveVocabularyItem
 )

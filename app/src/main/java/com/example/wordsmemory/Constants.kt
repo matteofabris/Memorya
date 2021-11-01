@@ -1,6 +1,7 @@
 package com.example.wordsmemory
 
 object Constants {
+    const val packageName = "wordsmemory"
     const val defaultCategory = "None"
     const val defaultCategoryId = 1
     const val translateBaseUrl = "https://translation.googleapis.com/"
