@@ -2,10 +2,6 @@ package com.example.wordsmemory.di
 
 import android.content.Context
 import com.example.wordsmemory.framework.room.WMDatabase
-import com.example.wordsmemory.framework.room.dao.CategoryDao
-import com.example.wordsmemory.framework.room.dao.UserDao
-import com.example.wordsmemory.framework.room.dao.VocabularyItemDao
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.Module
@@ -21,27 +17,18 @@ object DbModule {
 
     @InternalCoroutinesApi
     @Provides
-    fun provideDatabase(@ApplicationContext appContext: Context): WMDatabase {
-        return WMDatabase.getInstance(appContext)
-    }
+    fun provideDatabase(@ApplicationContext appContext: Context) =
+        WMDatabase.getInstance(appContext)
 
     @Provides
-    fun provideVocabularyItemDao(database: WMDatabase): VocabularyItemDao {
-        return database.vocabularyItemDao()
-    }
+    fun provideVocabularyItemDao(database: WMDatabase) = database.vocabularyItemDao()
 
     @Provides
-    fun provideCategoryDao(database: WMDatabase): CategoryDao {
-        return database.categoryDao()
-    }
+    fun provideCategoryDao(database: WMDatabase) = database.categoryDao()
 
     @Provides
-    fun provideUserDao(database: WMDatabase): UserDao {
-        return database.userDao()
-    }
+    fun provideUserDao(database: WMDatabase) = database.userDao()
 
     @Provides
-    fun provideFirestoreDb(): FirebaseFirestore {
-        return Firebase.firestore
-    }
+    fun provideFirestoreDb() = Firebase.firestore
 }

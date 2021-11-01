@@ -1,7 +1,6 @@
 package com.example.wordsmemory.framework.implementations
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.work.*
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.data.interfaces.VocabularyItemDataSource
@@ -19,16 +18,12 @@ class VocabularyItemDataSourceImpl @Inject constructor(
     private val _workManager: WorkManager
 ) : VocabularyItemDataSource {
 
-    override suspend fun getVocabularyItems(): List<VocabularyItemEntity> {
-        return _vocabularyItemDao.getVocabularyItems()
-    }
+    override suspend fun getVocabularyItems() = _vocabularyItemDao.getVocabularyItems()
 
-    override fun getVocabularyItemsAsLiveData(): LiveData<List<VocabularyItemEntity>> {
-        return _vocabularyItemDao.getVocabularyItemsAsLiveData()
-    }
+    override fun getVocabularyItemsAsLiveData() = _vocabularyItemDao.getVocabularyItemsAsLiveData()
 
-    override suspend fun addVocabularyItem(vocabularyItem: VocabularyItem, update: Boolean) {
-        return withContext(Dispatchers.IO) {
+    override suspend fun addVocabularyItem(vocabularyItem: VocabularyItem, update: Boolean) =
+        withContext(Dispatchers.IO) {
             Log.i(
                 Constants.packageName,
                 "Save vocabulary item: en - ${vocabularyItem.enWord}, " +
@@ -36,7 +31,7 @@ class VocabularyItemDataSourceImpl @Inject constructor(
                         "category - ${vocabularyItem.category}"
             )
 
-            val itemId: Int = if (update) {
+            val itemId = if (update) {
                 _vocabularyItemDao.updateVocabularyItem(VocabularyItemEntity(vocabularyItem))
                 vocabularyItem.id
             } else {
@@ -46,7 +41,6 @@ class VocabularyItemDataSourceImpl @Inject constructor(
 
             updateCloudDbVocabularyItem(itemId)
         }
-    }
 
     override suspend fun removeVocabularyItem(vocabularyItem: VocabularyItem) {
         _vocabularyItemDao.deleteVocabularyItem(VocabularyItemEntity(vocabularyItem))

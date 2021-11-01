@@ -33,7 +33,5 @@ class UserDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun removeAll() {
-        _userDao.deleteAllUsers()
-    }
+    override suspend fun removeAll() = _userDao.deleteAllUsers()
 }

@@ -21,9 +21,9 @@ class CategoryDataSourceImpl @Inject constructor(
 
     override suspend fun getCategories() = _categoryDao.getCategories()
 
-    override suspend fun addCategory(category: Category, update: Boolean) {
-        return withContext(Dispatchers.IO) {
-            val categoryId: Int = if (update) {
+    override suspend fun addCategory(category: Category, update: Boolean) =
+        withContext(Dispatchers.IO) {
+            val categoryId = if (update) {
                 _categoryDao.updateCategory(CategoryEntity(category))
                 category.id
             } else {
@@ -32,7 +32,6 @@ class CategoryDataSourceImpl @Inject constructor(
 
             updateCloudDbCategory(categoryId)
         }
-    }
 
     override suspend fun removeCategory(category: Category) {
         _categoryDao.deleteCategory(CategoryEntity(category))

@@ -1,7 +1,7 @@
 package com.example.wordsmemory.interactors
 
-import com.example.wordsmemory.data.manager.AuthenticationManager
+import com.example.wordsmemory.data.manager.UserManager
 
-class GetAccessToken(private val _authenticationManager: AuthenticationManager) {
-    suspend operator fun invoke(authCode: String) = _authenticationManager.getAccessToken(authCode)
+class GetAccessToken(private val _userManager: UserManager) {
+    suspend operator fun invoke(authCode: String) = _userManager.getAccessToken(authCode)
 }

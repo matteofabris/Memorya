@@ -2,7 +2,6 @@ package com.example.wordsmemory.di
 
 import android.content.Context
 import androidx.work.WorkManager
-import com.example.wordsmemory.data.manager.AuthenticationManager
 import com.example.wordsmemory.data.manager.UserManager
 import com.example.wordsmemory.data.manager.VocabularyManager
 import com.example.wordsmemory.framework.*
@@ -26,25 +25,22 @@ object InteractorsModule {
     @Singleton
     fun provideInteractors(
         vocabularyManager: VocabularyManager,
-        userManager: UserManager,
-        authenticationManager: AuthenticationManager
-    ): Interactors {
-        return Interactors(
-            FetchCloudDb(vocabularyManager),
-            AddUser(userManager),
-            RemoveAllUsers(userManager),
-            GetVocabularyItems(vocabularyManager),
-            GetVocabularyItemsAsLiveData(vocabularyManager),
-            GetCategoriesAsLiveData(vocabularyManager),
-            GetCategories(vocabularyManager),
-            GetAccessToken(authenticationManager),
-            AddCategory(vocabularyManager),
-            AddVocabularyItem(vocabularyManager),
-            Translate(vocabularyManager),
-            RemoveCategory(vocabularyManager),
-            RemoveVocabularyItem(vocabularyManager)
-        )
-    }
+        userManager: UserManager
+    ) = Interactors(
+        FetchCloudDb(vocabularyManager),
+        AddUser(userManager),
+        RemoveAllUsers(userManager),
+        GetVocabularyItems(vocabularyManager),
+        GetVocabularyItemsAsLiveData(vocabularyManager),
+        GetCategoriesAsLiveData(vocabularyManager),
+        GetCategories(vocabularyManager),
+        GetAccessToken(userManager),
+        AddCategory(vocabularyManager),
+        AddVocabularyItem(vocabularyManager),
+        Translate(vocabularyManager),
+        RemoveCategory(vocabularyManager),
+        RemoveVocabularyItem(vocabularyManager)
+    )
 
     @Provides
     @Singleton
@@ -53,29 +49,19 @@ object InteractorsModule {
         vocabularyItemDao: VocabularyItemDao,
         categoryDao: CategoryDao,
         userDao: UserDao
-    ): VocabularyManager {
-        return VocabularyManager(
-            CloudDbServiceImpl(workManager),
-            VocabularyItemDataSourceImpl(vocabularyItemDao, workManager),
-            CategoryDataSourceImpl(categoryDao, workManager),
-            RESTServiceImpl(userDao)
-        )
-    }
+    ) = VocabularyManager(
+        CloudDbServiceImpl(workManager),
+        VocabularyItemDataSourceImpl(vocabularyItemDao, workManager),
+        CategoryDataSourceImpl(categoryDao, workManager),
+        RESTServiceImpl(userDao)
+    )
 
     @Provides
     @Singleton
-    fun provideUserManager(userDao: UserDao, workManager: WorkManager): UserManager {
-        return UserManager(UserDataSourceImpl(userDao, workManager))
-    }
+    fun provideUserManager(userDao: UserDao, workManager: WorkManager) =
+        UserManager(UserDataSourceImpl(userDao, workManager), RESTServiceImpl(userDao))
 
     @Provides
-    @Singleton
-    fun provideAuthenticationManager(userDao: UserDao): AuthenticationManager {
-        return AuthenticationManager(RESTServiceImpl(userDao))
-    }
-
-    @Provides
-    fun provideWorkManager(@ApplicationContext appContext: Context): WorkManager {
-        return WorkManager.getInstance(appContext)
-    }
+    fun provideWorkManager(@ApplicationContext appContext: Context) =
+        WorkManager.getInstance(appContext)
 }
