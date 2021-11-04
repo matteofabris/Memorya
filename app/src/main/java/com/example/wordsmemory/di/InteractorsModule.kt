@@ -1,10 +1,9 @@
 package com.example.wordsmemory.di
 
-import android.content.Context
 import androidx.work.WorkManager
 import com.example.wordsmemory.data.manager.UserManager
 import com.example.wordsmemory.data.manager.VocabularyManager
-import com.example.wordsmemory.framework.*
+import com.example.wordsmemory.framework.Interactors
 import com.example.wordsmemory.framework.implementations.*
 import com.example.wordsmemory.framework.room.dao.CategoryDao
 import com.example.wordsmemory.framework.room.dao.UserDao
@@ -13,7 +12,6 @@ import com.example.wordsmemory.interactors.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -60,8 +58,4 @@ object InteractorsModule {
     @Singleton
     fun provideUserManager(userDao: UserDao, workManager: WorkManager) =
         UserManager(UserDataSourceImpl(userDao, workManager), RESTServiceImpl(userDao))
-
-    @Provides
-    fun provideWorkManager(@ApplicationContext appContext: Context) =
-        WorkManager.getInstance(appContext)
 }

@@ -5,11 +5,6 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.wordsmemory.Constants
-import com.example.wordsmemory.framework.CloudDbSyncHelper
-import com.example.wordsmemory.framework.room.dao.CategoryDao
-import com.example.wordsmemory.framework.room.dao.UserDao
-import com.example.wordsmemory.framework.room.dao.VocabularyItemDao
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
@@ -17,10 +12,7 @@ import dagger.assisted.AssistedInject
 class CloudDbSyncWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val _vocabularyItemDao: VocabularyItemDao,
-    private val _categoryDao: CategoryDao,
-    private val _userDao: UserDao,
-    private val _firestoreDb: FirebaseFirestore
+    private val _cloudDbSyncWorkerManager: CloudDbSyncWorkerManager
 ) :
     CoroutineWorker(appContext, workerParams) {
     @Suppress("MoveVariableDeclarationIntoWhen")
@@ -30,38 +22,20 @@ class CloudDbSyncWorker @AssistedInject constructor(
         val workType =
             Constants.CloudDbSyncWorkType.valueOf(inputData.getString(Constants.WORK_TYPE)!!)
         when (workType) {
-            Constants.CloudDbSyncWorkType.Fetch -> return CloudDbSyncHelper.fetchCloudDb(
-                _userDao,
-                _vocabularyItemDao,
-                _categoryDao,
-                _firestoreDb
-            )
-            Constants.CloudDbSyncWorkType.InsertVocabularyItem -> return CloudDbSyncHelper.updateCloudDbVocabularyItem(
-                _userDao,
-                _vocabularyItemDao,
-                _firestoreDb,
+            Constants.CloudDbSyncWorkType.Fetch -> return _cloudDbSyncWorkerManager.fetchCloudDb()
+            Constants.CloudDbSyncWorkType.InsertVocabularyItem -> return _cloudDbSyncWorkerManager.updateCloudDbVocabularyItem(
                 itemId
             )
-            Constants.CloudDbSyncWorkType.InsertCategory -> return CloudDbSyncHelper.updateCloudDbCategory(
-                _userDao,
-                _categoryDao,
-                _firestoreDb,
+            Constants.CloudDbSyncWorkType.InsertCategory -> return _cloudDbSyncWorkerManager.updateCloudDbCategory(
                 itemId
             )
-            Constants.CloudDbSyncWorkType.DeleteVocabularyItem -> return CloudDbSyncHelper.deleteVocabularyItem(
-                _userDao,
-                _firestoreDb,
+            Constants.CloudDbSyncWorkType.DeleteVocabularyItem -> return _cloudDbSyncWorkerManager.deleteVocabularyItem(
                 itemId
             )
-            Constants.CloudDbSyncWorkType.DeleteCategory -> return CloudDbSyncHelper.deleteCategory(
-                _userDao,
-                _firestoreDb,
+            Constants.CloudDbSyncWorkType.DeleteCategory -> return _cloudDbSyncWorkerManager.deleteCategory(
                 itemId
             )
-            Constants.CloudDbSyncWorkType.InsertUser -> return CloudDbSyncHelper.insertCloudDbUser(
-                _userDao,
-                _firestoreDb
-            )
+            Constants.CloudDbSyncWorkType.InsertUser -> return _cloudDbSyncWorkerManager.insertCloudDbUser()
         }
     }
 }
