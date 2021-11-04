@@ -23,7 +23,4 @@ interface VocabularyItemDao {
 
     @Query("SELECT * FROM vocabulary_item WHERE id == :id")
     suspend fun getVocabularyItemById(id: Int): VocabularyItemEntity
-
-    @Query("SELECT * FROM vocabulary_item WHERE category == :categoryId")
-    fun getVocabularyItemsByCategoryAsLiveData(categoryId: Int): LiveData<List<VocabularyItemEntity>>
 }

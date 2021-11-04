@@ -23,8 +23,12 @@ class RESTServiceImpl @Inject constructor(
             authCode
         )
         if (authResult.isSuccessful) {
+            Log.d(Constants.packageName, "Access token request is successful")
             return@withContext authResult.body()?.accessToken ?: ""
-        } else return@withContext ""
+        } else {
+            Log.d(Constants.packageName, "ERROR: ${authResult.errorBody()}")
+            return@withContext ""
+        }
     }
 
     override suspend fun translate(text: String) = withContext(Dispatchers.IO) {

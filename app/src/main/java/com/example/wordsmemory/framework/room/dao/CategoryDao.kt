@@ -21,12 +21,6 @@ interface CategoryDao {
     @Query("SELECT * FROM category ORDER BY category")
     suspend fun getCategories(): List<CategoryEntity>
 
-    @Query("SELECT category FROM category WHERE id == :id")
-    suspend fun getCategoryName(id: Int): String
-
-    @Query("SELECT category FROM category WHERE id == :id")
-    fun getCategoryNameAsLiveData(id: Int): LiveData<String>
-
     @Query("SELECT * FROM category WHERE id == :id")
     suspend fun getCategoryById(id: Int): CategoryEntity
 }
