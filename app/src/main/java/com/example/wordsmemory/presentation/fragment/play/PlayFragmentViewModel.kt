@@ -31,7 +31,8 @@ class PlayFragmentViewModel @Inject constructor(
 
     private var _categoryId = Constants.defaultCategoryId
 
-    val vocabularyList = _interactors.getVocabularyItemsAsLiveData() as LiveData<List<VocabularyItemEntity>>
+    val vocabularyList =
+        _interactors.getVocabularyItemsAsLiveData() as LiveData<List<VocabularyItemEntity>>
     val translationText = MutableLiveData<String>()
     val categories = _interactors.getCategoriesAsLiveData() as LiveData<List<CategoryEntity>>
 
@@ -122,8 +123,8 @@ class PlayFragmentViewModel @Inject constructor(
     fun isAuthenticated() = _lastSignedInAccount != null
 
     fun onAuthenticationOk() {
-        _isAuthenticated.value = true
         _interactors.fetchCloudDb()
+        _isAuthenticated.value = true
     }
 
     fun signOut() {
@@ -135,10 +136,8 @@ class PlayFragmentViewModel @Inject constructor(
         }
     }
 
-    private suspend fun setCategoryId(categoryName: String) {
-        return withContext(Dispatchers.IO) {
-            _categoryId = categories.value?.find { c -> c.category == categoryName }?.id!!
-        }
+    private suspend fun setCategoryId(categoryName: String) = withContext(Dispatchers.IO) {
+        _categoryId = categories.value?.find { c -> c.category == categoryName }?.id!!
     }
 
     private fun resetRecentAttempts() {
