@@ -49,13 +49,17 @@ object InteractorsModule {
         userDao: UserDao
     ) = VocabularyManager(
         CloudDbServiceImpl(workManager),
-        VocabularyItemDataSourceImpl(vocabularyItemDao, workManager),
-        CategoryDataSourceImpl(categoryDao, workManager),
+        VocabularyItemDataSourceImpl(vocabularyItemDao),
+        CategoryDataSourceImpl(categoryDao),
         RESTServiceImpl(userDao)
     )
 
     @Provides
     @Singleton
     fun provideUserManager(userDao: UserDao, workManager: WorkManager) =
-        UserManager(UserDataSourceImpl(userDao, workManager), RESTServiceImpl(userDao))
+        UserManager(
+            UserDataSourceImpl(userDao),
+            RESTServiceImpl(userDao),
+            CloudDbServiceImpl(workManager)
+        )
 }

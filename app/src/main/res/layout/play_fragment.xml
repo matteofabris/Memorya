@@ -55,7 +55,7 @@
                 <TextView
                     android:id="@+id/randomWord"
                     style="@style/LabelStyle"
-                    android:text="@{viewModel.vocabularyItemEntity.enWord}"
+                    android:text="@{viewModel.vocabularyItem.enWord}"
                     app:layout_constraintBottom_toTopOf="@+id/translation"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.12"

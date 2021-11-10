@@ -49,7 +49,7 @@ class PlayFragmentViewModel @Inject constructor(
         get() = _allAttempts
 
     private val _vocabularyItem = MutableLiveData<VocabularyItemEntity>()
-    val vocabularyItemEntity: LiveData<VocabularyItemEntity>
+    val vocabularyItem: LiveData<VocabularyItemEntity>
         get() = _vocabularyItem
 
     private val _isTranslationOk = MutableLiveData<Boolean>()
