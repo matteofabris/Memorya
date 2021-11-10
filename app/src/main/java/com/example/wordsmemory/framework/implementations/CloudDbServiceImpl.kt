@@ -11,13 +11,13 @@ import javax.inject.Inject
 
 class CloudDbServiceImpl @Inject constructor(private val _workManager: WorkManager) :
     CloudDbService {
-    override fun fetchCloudDb() = createWorkRequest(Constants.CloudDbSyncWorkType.Fetch.name)
+    override fun fetchCloudDb() = createWorkRequest(Constants.CloudDbSyncWorkType.Fetch)
 
     override fun add(type: CloudDbObjectType, id: Int) {
         val workType = when (type) {
-            User -> Constants.CloudDbSyncWorkType.InsertUser.name
-            VocabularyItem -> Constants.CloudDbSyncWorkType.InsertVocabularyItem.name
-            Category -> Constants.CloudDbSyncWorkType.InsertCategory.name
+            User -> Constants.CloudDbSyncWorkType.InsertUser
+            VocabularyItem -> Constants.CloudDbSyncWorkType.InsertVocabularyItem
+            Category -> Constants.CloudDbSyncWorkType.InsertCategory
         }
 
         createWorkRequest(workType, id)
@@ -25,15 +25,15 @@ class CloudDbServiceImpl @Inject constructor(private val _workManager: WorkManag
 
     override fun remove(type: CloudDbObjectType, id: Int) {
         val workType = when (type) {
-            VocabularyItem -> Constants.CloudDbSyncWorkType.DeleteVocabularyItem.name
-            Category -> Constants.CloudDbSyncWorkType.DeleteCategory.name
+            VocabularyItem -> Constants.CloudDbSyncWorkType.DeleteVocabularyItem
+            Category -> Constants.CloudDbSyncWorkType.DeleteCategory
             User -> return
         }
 
         createWorkRequest(workType, id)
     }
 
-    private fun createWorkRequest(workType: String, id: Int = -1) {
+    private fun createWorkRequest(workType: Constants.CloudDbSyncWorkType, id: Int = -1) {
         val workData = getWorkData(workType, id)
         val workRequest = OneTimeWorkRequestBuilder<CloudDbSyncWorker>()
             .setBackoffCriteria(
@@ -44,16 +44,16 @@ class CloudDbServiceImpl @Inject constructor(private val _workManager: WorkManag
         _workManager.enqueue(workRequest)
     }
 
-    private fun getWorkData(workType: String, id: Int = -1): Data {
+    private fun getWorkData(workType: Constants.CloudDbSyncWorkType, id: Int = -1): Data {
         return when (workType) {
-            Constants.CloudDbSyncWorkType.InsertUser.name, Constants.CloudDbSyncWorkType.Fetch.name -> {
+            Constants.CloudDbSyncWorkType.InsertUser, Constants.CloudDbSyncWorkType.Fetch -> {
                 workDataOf(
-                    Constants.WORK_TYPE to workType
+                    Constants.WORK_TYPE to workType.name
                 )
             }
             else -> {
                 workDataOf(
-                    Constants.WORK_TYPE to workType,
+                    Constants.WORK_TYPE to workType.name,
                     Constants.ITEM_ID to id
                 )
             }
