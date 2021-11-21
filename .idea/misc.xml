@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.12777777777777777" />
+        <entry key="app/src/main/res/drawable/add_word_background.xml" value="0.15555555555555556" />
+        <entry key="app/src/main/res/drawable/button_background.xml" value="0.1527777777777778" />
         <entry key="app/src/main/res/layout/add_or_edit_category_sheet_fragment.xml" value="0.13779128672745694" />
       </map>
     </option>

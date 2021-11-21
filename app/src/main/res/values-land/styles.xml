@@ -34,6 +34,7 @@
         <item name="android:textAlignment">center</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/extra_big_font_size</item>
+        <item name="android:backgroundTint">@color/color_states_materialbutton</item>
     </style>
 
     <style name="TopBarTitleStyle">

@@ -12,7 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/add_word_background"
         tools:context=".presentation.fragment.vocabulary.addoreditcategory.AddOrEditCategorySheet">
 
@@ -61,7 +61,6 @@
             android:id="@+id/addButton"
             style="@style/ButtonStyle"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/button_background"
             android:enabled="false"
             android:text="@string/add"
             app:layout_constraintBottom_toBottomOf="parent"

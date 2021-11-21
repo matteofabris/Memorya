@@ -105,7 +105,6 @@
             <Button
                 android:id="@+id/checkTranslationButton"
                 style="@style/ButtonStyle"
-                android:background="@drawable/button_background"
                 android:contentDescription="@string/logo_image"
                 android:enabled="false"
                 android:letterSpacing="0"

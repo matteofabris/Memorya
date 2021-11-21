@@ -44,20 +44,20 @@
             android:id="@+id/action_categoryFragment_to_addOrEditVocabularyItemSheet"
             app:destination="@id/addOrEditVocabularyItemSheet" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/addOrEditVocabularyItemSheet"
         android:name="com.example.wordsmemory.presentation.fragment.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheet"
         android:label="AddOrEditVocabularyItemSheet">
         <argument
             android:name="selectedVocabularyItemId"
             app:argType="integer" />
-    </fragment>
-    <fragment
+    </dialog>
+    <dialog
         android:id="@+id/addOrEditCategorySheet"
         android:name="com.example.wordsmemory.presentation.fragment.vocabulary.addoreditcategory.AddOrEditCategorySheet"
         android:label="AddOrEditCategorySheet" >
         <argument
             android:name="selectedCategoryId"
             app:argType="integer" />
-    </fragment>
+    </dialog>
 </navigation>

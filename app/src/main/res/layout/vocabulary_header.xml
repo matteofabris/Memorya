@@ -6,7 +6,7 @@
         android:id="@+id/vocabularyItemView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/button_background"
+        android:background="@drawable/header_background"
         android:layout_marginBottom="-2dp">
 
         <TextView
