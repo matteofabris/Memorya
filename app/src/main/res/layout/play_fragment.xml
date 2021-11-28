@@ -127,7 +127,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/checkTranslationButton"
-                app:srcCompat="@mipmap/ic_launcher" />
+                app:srcCompat="@mipmap/app_icon_foreground" />
 
             <TextView
                 android:id="@+id/categoryTextView"
