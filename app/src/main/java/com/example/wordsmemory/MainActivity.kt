@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import kotlin.math.sqrt
 
 @AndroidEntryPoint
@@ -18,11 +18,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // initialize timber in application class
+        Timber.plant(Timber.DebugTree())
+
         requestedOrientation = if (isTablet()) {
-            Log.i(Constants.packageName, "Tablet mode")
+            Timber.i("Tablet mode")
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         } else {
-            Log.i(Constants.packageName, "Phone mode")
+            Timber.i("Phone mode")
             ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
     }

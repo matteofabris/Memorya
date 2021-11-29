@@ -1,7 +1,6 @@
 package com.example.wordsmemory.presentation.fragment.play
 
 import android.app.Activity
-import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -115,7 +115,7 @@ class PlayFragmentViewModel @Inject constructor(
                 }
             }
             else -> {
-                Log.d(Constants.packageName, "AUTH: authentication failed")
+                Timber.d("AUTH: authentication failed")
             }
         }
     }

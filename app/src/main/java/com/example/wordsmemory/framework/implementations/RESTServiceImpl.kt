@@ -1,6 +1,5 @@
 package com.example.wordsmemory.framework.implementations
 
-import android.util.Log
 import androidx.work.*
 import com.example.wordsmemory.BuildConfig
 import com.example.wordsmemory.Constants
@@ -10,6 +9,7 @@ import com.example.wordsmemory.framework.api.translate.TranslateService
 import com.example.wordsmemory.framework.room.dao.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 class RESTServiceImpl @Inject constructor(
@@ -23,10 +23,10 @@ class RESTServiceImpl @Inject constructor(
             authCode
         )
         if (authResult.isSuccessful) {
-            Log.d(Constants.packageName, "Access token request is successful")
+            Timber.d("Access token request is successful")
             return@withContext authResult.body()?.accessToken ?: ""
         } else {
-            Log.d(Constants.packageName, "ERROR: ${authResult.errorBody()}")
+            Timber.d("ERROR! CODE: " + authResult.code() + ", MESSAGE: " + authResult.message())
             return@withContext ""
         }
     }
@@ -37,15 +37,15 @@ class RESTServiceImpl @Inject constructor(
             .translate("Bearer $accessToken", text)
 
         if (response.isSuccessful) {
-            Log.d(Constants.packageName, "Translation is successful")
+            Timber.d("Translation is successful")
             val translatedText =
                 response.body()?.data?.translations?.first()?.translatedText ?: ""
             if (translatedText.isNotEmpty()) {
-                Log.d(Constants.packageName, "Translated text - $translatedText")
+                Timber.d("Translated text - $translatedText")
                 return@withContext translatedText
             }
         } else {
-            Log.d(Constants.packageName, "ERROR: ${response.errorBody()}")
+            Timber.d("ERROR! CODE: " + response.code() + ", MESSAGE: " + response.message())
         }
 
         return@withContext ""

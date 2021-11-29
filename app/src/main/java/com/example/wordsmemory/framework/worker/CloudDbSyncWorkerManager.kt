@@ -1,6 +1,5 @@
 package com.example.wordsmemory.framework.worker
 
-import android.util.Log
 import androidx.work.ListenableWorker
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.domain.IItem
@@ -13,6 +12,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import timber.log.Timber
 import java.util.concurrent.ExecutionException
 
 class CloudDbSyncWorkerManager(
@@ -31,16 +31,16 @@ class CloudDbSyncWorkerManager(
             val cloudUserdoc = Tasks.await(cloudUserRef.get())
 
             if (cloudUserdoc.exists()) {
-                Log.d(Constants.packageName, "FIRESTORE: user is in cloud")
+                Timber.d("FIRESTORE: user is in cloud")
 
                 updateLocalDbVocabularyItems(cloudUserRef)
                 updateLocalDbCategories(cloudUserRef)
             }
         } catch (e: ExecutionException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         }
 
@@ -139,10 +139,10 @@ class CloudDbSyncWorkerManager(
 
             setCloudDbUserDoc(localUserId)
         } catch (e: ExecutionException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         }
 
@@ -150,7 +150,7 @@ class CloudDbSyncWorkerManager(
     }
 
     private fun setCloudDbUserDoc(localUserId: String) {
-        Log.d(Constants.packageName, "FIRESTORE: add user")
+        Timber.d("FIRESTORE: add user")
 
         val task = _firestoreDb.collection(Constants.users).document(localUserId).set(
             hashMapOf(
@@ -203,10 +203,10 @@ class CloudDbSyncWorkerManager(
                 Tasks.await(cloudVocabularyItemRef.set(localVocabularyItem))
             }
         } catch (e: ExecutionException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         }
 
@@ -234,10 +234,10 @@ class CloudDbSyncWorkerManager(
                 Tasks.await(cloudCategoryRef.set(localCategory))
             }
         } catch (e: ExecutionException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         }
 
@@ -257,10 +257,10 @@ class CloudDbSyncWorkerManager(
                     .delete()
             )
         } catch (e: ExecutionException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         }
 
@@ -278,10 +278,10 @@ class CloudDbSyncWorkerManager(
                     .collection(Constants.categories).document(localCategoryId.toString()).delete()
             )
         } catch (e: ExecutionException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         } catch (e: InterruptedException) {
-            Log.e(Constants.packageName, e.toString())
+            Timber.e(e.toString())
             result = ListenableWorker.Result.retry()
         }
 

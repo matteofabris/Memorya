@@ -3,7 +3,6 @@ package com.example.wordsmemory.presentation.fragment.play
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +24,7 @@ import com.example.wordsmemory.databinding.PlayFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
@@ -135,10 +135,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 val categories = it.map { c -> c.category }.toTypedArray()
 
                 it.forEach { c ->
-                    Log.i(
-                        Constants.packageName,
-                        "Category: id - ${c.id}, name - ${c.category}"
-                    )
+                    Timber.i("Category: id - " + c.id + ", name - " + c.category)
                 }
 
                 val arrayAdapter = ArrayAdapter(

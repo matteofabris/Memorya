@@ -8,8 +8,8 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.Spanned
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.EditText
+import timber.log.Timber
 
 fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
@@ -35,15 +35,15 @@ fun checkInternetConnection(activity: Activity): Boolean {
     if (capabilities != null) {
         when {
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                Log.i(Constants.packageName, "NetworkCapabilities.TRANSPORT_CELLULAR")
+                Timber.i("NetworkCapabilities.TRANSPORT_CELLULAR")
                 return true
             }
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                Log.i(Constants.packageName, "NetworkCapabilities.TRANSPORT_WIFI")
+                Timber.i("NetworkCapabilities.TRANSPORT_WIFI")
                 return true
             }
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
-                Log.i(Constants.packageName, "NetworkCapabilities.TRANSPORT_ETHERNET")
+                Timber.i("NetworkCapabilities.TRANSPORT_ETHERNET")
                 return true
             }
         }
