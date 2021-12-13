@@ -105,12 +105,18 @@ class PlayFragmentViewModel @Inject constructor(
 
                 viewModelScope.launch {
                     if (!authCode.isNullOrEmpty()) {
-                        val accessToken = _interactors.getAccessToken(authCode)
-                        if (accessToken.isNotEmpty() && !googleSignInAccount.id.isNullOrEmpty()) {
-                            _interactors.addUser(UserEntity(googleSignInAccount.id!!, accessToken))
-                            _interactors.fetchCloudDb()
-                            _isAuthenticated.value = true
-                        }
+                        val authTokens = _interactors.getAuthTokens(authCode)
+                        if (authTokens == null || authTokens.accessToken.isEmpty() || googleSignInAccount.id.isNullOrEmpty()) return@launch
+
+                        _interactors.addUser(
+                            UserEntity(
+                                googleSignInAccount.id!!,
+                                authTokens.accessToken,
+                                authTokens.refreshToken
+                            )
+                        )
+                        _interactors.fetchCloudDb()
+                        _isAuthenticated.value = true
                     }
                 }
             }

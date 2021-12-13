@@ -33,8 +33,8 @@ class CloudDbSyncWorkerManager(
             if (cloudUserdoc.exists()) {
                 Timber.d("FIRESTORE: user is in cloud")
 
-                updateLocalDbVocabularyItems(cloudUserRef)
                 updateLocalDbCategories(cloudUserRef)
+                updateLocalDbVocabularyItems(cloudUserRef)
             }
         } catch (e: ExecutionException) {
             Timber.e(e.toString())

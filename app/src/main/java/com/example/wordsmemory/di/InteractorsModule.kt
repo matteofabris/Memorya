@@ -32,7 +32,7 @@ object InteractorsModule {
         GetVocabularyItemsAsLiveData(vocabularyManager),
         GetCategoriesAsLiveData(vocabularyManager),
         GetCategories(vocabularyManager),
-        GetAccessToken(userManager),
+        GetAuthTokens(userManager),
         AddCategory(vocabularyManager),
         AddVocabularyItem(vocabularyManager),
         Translate(vocabularyManager),
@@ -51,7 +51,8 @@ object InteractorsModule {
         CloudDbServiceImpl(workManager),
         VocabularyItemDataSourceImpl(vocabularyItemDao),
         CategoryDataSourceImpl(categoryDao),
-        RESTServiceImpl(userDao)
+        RESTServiceImpl(userDao),
+        UserDataSourceImpl(userDao)
     )
 
     @Provides

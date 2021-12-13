@@ -17,5 +17,17 @@ class UserDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun update(user: User) {
+        return withContext(Dispatchers.IO) {
+            _userDao.updateUser(UserEntity(user))
+        }
+    }
+
+    override suspend fun getUser(): User {
+        return withContext(Dispatchers.IO) {
+            _userDao.getUsers().first()
+        }
+    }
+
     override suspend fun removeAll() = _userDao.deleteAllUsers()
 }

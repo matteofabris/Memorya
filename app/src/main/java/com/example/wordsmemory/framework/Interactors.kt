@@ -10,7 +10,7 @@ data class Interactors(
     val getVocabularyItemsAsLiveData: GetVocabularyItemsAsLiveData,
     val getCategoriesAsLiveData: GetCategoriesAsLiveData,
     val getCategories: GetCategories,
-    val getAccessToken: GetAccessToken,
+    val getAuthTokens: GetAuthTokens,
     val addCategory: AddCategory,
     val addVocabularyItem: AddVocabularyItem,
     val translate: Translate,

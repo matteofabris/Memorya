@@ -16,5 +16,5 @@ class UserManager(
         _cloudDbService.add(Constants.CloudDbObjectType.User, user.id)
     }
     suspend fun removeAll() = _userDataSource.removeAll()
-    suspend fun getAccessToken(authCode: String) = _restService.getAccessToken(authCode)
+    suspend fun getAuthTokens(authCode: String) = _restService.getAuthTokens(authCode)
 }

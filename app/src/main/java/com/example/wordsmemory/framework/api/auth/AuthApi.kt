@@ -13,4 +13,12 @@ interface AuthApi {
         @Query("grant_type") grantType: String = "authorization_code",
         @Query("redirect_uri") redirectUri: String = "urn:ietf:wg:oauth:2.0:oob"
     ): Response<AuthResponse>
+
+    @POST("token")
+    suspend fun refresh(
+        @Query("client_id") clientId: String,
+        @Query("client_secret") clientSecret: String,
+        @Query("grant_type") grantType: String = "refresh_token",
+        @Query("refresh_token") refreshToken: String
+    ): Response<AuthResponse>
 }
