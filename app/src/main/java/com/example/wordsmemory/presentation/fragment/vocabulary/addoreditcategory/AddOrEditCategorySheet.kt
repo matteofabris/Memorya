@@ -8,9 +8,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.wordsmemory.R
-import com.example.wordsmemory.TranslateInputFilter
 import com.example.wordsmemory.afterTextChanged
 import com.example.wordsmemory.databinding.AddOrEditCategorySheetFragmentBinding
+import com.example.wordsmemory.presentation.helper.CategoryInputFilter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -30,7 +30,7 @@ class AddOrEditCategorySheet : BottomSheetDialogFragment() {
         _binding = AddOrEditCategorySheetFragmentBinding.inflate(inflater)
         _binding.lifecycleOwner = viewLifecycleOwner
         _binding.viewModel = _viewModel
-        _binding.category.filters = arrayOf(TranslateInputFilter())
+        _binding.category.filters = arrayOf(CategoryInputFilter())
 
         setupAddButtonOnClickListener()
         setupObservers()

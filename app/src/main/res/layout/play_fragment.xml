@@ -78,7 +78,7 @@
                     style="@style/LabelStyle"
                     android:ems="10"
                     android:importantForAutofill="no"
-                    android:inputType="textPersonName"
+                    android:inputType="text|textNoSuggestions"
                     android:text="@={viewModel.translationText}"
                     app:layout_constraintBottom_toBottomOf="@id/translationTitle"
                     app:layout_constraintEnd_toEndOf="@+id/randomWord"

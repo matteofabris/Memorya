@@ -11,6 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.wordsmemory.*
 import com.example.wordsmemory.databinding.AddOrEditVocabularyItemSheetBinding
+import com.example.wordsmemory.presentation.helper.EnWordInputFilter
+import com.example.wordsmemory.presentation.helper.ItWordInputFilter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -42,9 +44,10 @@ class AddOrEditVocabularyItemSheet :
     }
 
     private fun setEditTextsFilters() {
-        val filter = TranslateInputFilter()
-        _binding.enWord.filters = arrayOf(filter)
-        _binding.itWord.filters = arrayOf(filter)
+        val enFilter = EnWordInputFilter()
+        val itFilter = ItWordInputFilter()
+        _binding.enWord.filters = arrayOf(enFilter)
+        _binding.itWord.filters = arrayOf(itFilter)
     }
 
     private fun setButtonsOnClickListeners() {

@@ -5,8 +5,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.text.Editable
-import android.text.InputFilter
-import android.text.Spanned
 import android.text.TextWatcher
 import android.widget.EditText
 import timber.log.Timber
@@ -50,45 +48,4 @@ fun checkInternetConnection(activity: Activity): Boolean {
     }
 
     return false
-}
-
-class TranslateInputFilter : InputFilter {
-    override fun filter(
-        source: CharSequence?,
-        start: Int,
-        end: Int,
-        dest: Spanned?,
-        dstart: Int,
-        dend: Int
-    ): CharSequence {
-        if (source == null) return ""
-
-        for (i in start until end) {
-            if (dest != null && dest.toString() != "to" && !Character.isLetter(source[i]))
-                return ""
-            else if (dest != null && dest.toString() == "to" && Character.isWhitespace(source[i]))
-                return source
-        }
-        return source
-    }
-}
-
-class AddCategoryInputFilter : InputFilter {
-    override fun filter(
-        source: CharSequence?,
-        start: Int,
-        end: Int,
-        dest: Spanned?,
-        dstart: Int,
-        dend: Int
-    ): CharSequence {
-        if (source == null) return ""
-
-        for (i in start until end) {
-            if (!Character.isLetter(source[i]))
-                return ""
-        }
-
-        return source
-    }
 }

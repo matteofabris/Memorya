@@ -19,8 +19,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.wordsmemory.Constants
 import com.example.wordsmemory.R
-import com.example.wordsmemory.TranslateInputFilter
 import com.example.wordsmemory.databinding.PlayFragmentBinding
+import com.example.wordsmemory.presentation.helper.EnWordInputFilter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -48,7 +48,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _binding = PlayFragmentBinding.inflate(inflater)
         _binding.lifecycleOwner = viewLifecycleOwner
         _binding.viewModel = _viewModel
-        _binding.translation.filters = arrayOf(TranslateInputFilter())
+        _binding.translation.filters = arrayOf(EnWordInputFilter())
 
         setTopBarButtonsListeners()
         setupObservers()
