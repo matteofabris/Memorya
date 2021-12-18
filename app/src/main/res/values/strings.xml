@@ -16,6 +16,8 @@
     <string name="italian_word">ITALIAN WORD:</string>
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
+    <string name="deleted">Deleted</string>
+    <string name="undo">UNDO</string>
     <string name="app_title">WordsMemory</string>
     <string name="english_vocabulary">English Vocabulary</string>
     <string name="all_words">ALL WORDS</string>

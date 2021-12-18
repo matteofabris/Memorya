@@ -18,9 +18,9 @@ class CloudDbSyncWorker @AssistedInject constructor(
     @Suppress("MoveVariableDeclarationIntoWhen")
     override suspend fun doWork(): Result {
         val itemId = inputData.getInt(Constants.ITEM_ID, -1)
-
         val workType =
             Constants.CloudDbSyncWorkType.valueOf(inputData.getString(Constants.WORK_TYPE)!!)
+
         when (workType) {
             Constants.CloudDbSyncWorkType.Fetch -> return _cloudDbSyncWorkerManager.fetchCloudDb()
             Constants.CloudDbSyncWorkType.InsertVocabularyItem -> return _cloudDbSyncWorkerManager.updateCloudDbVocabularyItem(

@@ -10,10 +10,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordsmemory.R
 import com.example.wordsmemory.presentation.adpater.CategoryItemAdapter
 import com.example.wordsmemory.databinding.VocabularyCategoriesFragmentBinding
 import com.example.wordsmemory.presentation.helper.SwipeToDeleteCallback
 import com.example.wordsmemory.presentation.fragment.vocabulary.VocabularyFragmentDirections
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -95,7 +98,20 @@ class VocabularyCategoriesFragment : Fragment() {
     private fun setSwipeGesture() {
         val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                _viewModel.deleteItem((viewHolder as CategoryItemAdapter.CategoryViewHolder).itemId)
+                var delete = true
+                Snackbar.make(_binding.coordinatorLayout, R.string.deleted, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.undo) { delete = false }
+                    .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            super.onDismissed(transientBottomBar, event)
+                            if (delete) {
+                                _viewModel.deleteCategory((viewHolder as CategoryItemAdapter.CategoryViewHolder).itemId)
+                            } else {
+                                _binding.categoriesList.adapter?.notifyItemChanged(viewHolder.layoutPosition)
+                            }
+                        }
+                    })
+                    .show()
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)

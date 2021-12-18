@@ -18,7 +18,7 @@ class VocabularyCategoriesViewModel @Inject constructor(
 
     val categories = _interactors.getCategoriesAsLiveData() as LiveData<List<CategoryEntity>>
 
-    fun deleteItem(id: Int) {
+    fun deleteCategory(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _interactors.removeCategory(categories.value!!.first { it.id == id })
         }
