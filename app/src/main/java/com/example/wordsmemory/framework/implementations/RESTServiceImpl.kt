@@ -32,8 +32,12 @@ class RESTServiceImpl @Inject constructor(
             is Result.Error -> return@withContext null
             is Result.Loading -> return@withContext null
             is Result.Success -> {
-                Timber.i("Access token request is successful")
                 val response = authResult.data
+
+                Timber.i("Access token request is successful")
+                Timber.i("Access token: ${response.accessToken}")
+                Timber.i("Refresh token: ${response.refreshToken}")
+
                 return@withContext AuthTokens(response.accessToken, response.refreshToken)
             }
         }
