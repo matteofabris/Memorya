@@ -18,6 +18,9 @@ interface CategoryDao {
     @Query("SELECT * FROM category ORDER BY category")
     fun getCategoriesAsLiveData(): LiveData<List<CategoryEntity>>
 
+    @Query("SELECT * FROM category WHERE id in (SELECT category FROM vocabulary_item) ORDER BY category")
+    fun getNotEmptyCategoriesAsLiveData(): LiveData<List<CategoryEntity>>
+
     @Query("SELECT * FROM category ORDER BY category")
     suspend fun getCategories(): List<CategoryEntity>
 

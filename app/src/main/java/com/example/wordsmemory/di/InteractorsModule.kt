@@ -31,6 +31,7 @@ object InteractorsModule {
         GetVocabularyItems(vocabularyManager),
         GetVocabularyItemsAsLiveData(vocabularyManager),
         GetCategoriesAsLiveData(vocabularyManager),
+        GetNotEmptyCategoriesAsLiveData(vocabularyManager),
         GetCategories(vocabularyManager),
         GetAuthTokens(userManager),
         AddCategory(vocabularyManager),

@@ -39,6 +39,7 @@ class VocabularyManager(
     // Category
     suspend fun getCategories() = _categoryDataSource.getCategories()
     fun getCategoriesAsLiveData() = _categoryDataSource.getCategoriesAsLiveData()
+    fun getNotEmptyCategoriesAsLiveData() = _categoryDataSource.getNotEmptyCategoriesAsLiveData()
     suspend fun addOrUpdateCategory(category: Category, update: Boolean = false) {
         val id = _categoryDataSource.addCategory(category, update)
         _cloudDbService.add(Constants.CloudDbObjectType.Category, id)

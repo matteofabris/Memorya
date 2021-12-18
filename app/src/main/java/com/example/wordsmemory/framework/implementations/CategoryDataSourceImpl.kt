@@ -3,6 +3,7 @@ package com.example.wordsmemory.framework.implementations
 import com.example.wordsmemory.data.interfaces.CategoryDataSource
 import com.example.wordsmemory.domain.Category
 import com.example.wordsmemory.framework.room.dao.CategoryDao
+import com.example.wordsmemory.framework.room.dao.VocabularyItemDao
 import com.example.wordsmemory.framework.room.entities.CategoryEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,6 +14,8 @@ class CategoryDataSourceImpl @Inject constructor(
 ) : CategoryDataSource {
 
     override fun getCategoriesAsLiveData() = _categoryDao.getCategoriesAsLiveData()
+
+    override fun getNotEmptyCategoriesAsLiveData() = _categoryDao.getNotEmptyCategoriesAsLiveData()
 
     override suspend fun getCategories() = _categoryDao.getCategories()
 

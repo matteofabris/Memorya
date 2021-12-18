@@ -34,7 +34,7 @@ class PlayFragmentViewModel @Inject constructor(
     val vocabularyList =
         _interactors.getVocabularyItemsAsLiveData() as LiveData<List<VocabularyItemEntity>>
     val translationText = MutableLiveData<String>()
-    val categories = _interactors.getCategoriesAsLiveData() as LiveData<List<CategoryEntity>>
+    val categories = _interactors.getNotEmptyCategoriesAsLiveData() as LiveData<List<CategoryEntity>>
 
     private var _correctAttempts = 0
     val correctAttempts: Int
