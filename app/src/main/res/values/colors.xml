@@ -13,4 +13,10 @@
     <color name="wm_widgetsBackground">#9fdf9f</color>
     <color name="wm_widgetsBackgroundShadow">#79d279</color>
     <color name="delete_list_item_color">#f44336</color>
+
+    <color name="palette_color_1">#9fe7f5</color>
+    <color name="palette_color_2">#429ebd</color>
+    <color name="palette_color_3">#053f5c</color>
+    <color name="palette_color_4">#f7ad19</color>
+    <color name="palette_color_5">#f27f0c</color>
 </resources>

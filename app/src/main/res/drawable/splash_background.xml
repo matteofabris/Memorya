@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape android:shape="rectangle">
-            <gradient
-                android:angle="135"
-                android:endColor="#e67d20"
-                android:startColor="#ff1b49"
-                android:type="linear" />
-        </shape>
+        <shape
+            android:shape="rectangle"
+            android:tint="@color/palette_color_3" />
     </item>
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/logo_memorya" />
+    <item
+        android:width="900dp"
+        android:height="900dp"
+        android:gravity="center">
+        <bitmap android:src="@drawable/splashscreenimage" />
     </item>
 </layer-list>
