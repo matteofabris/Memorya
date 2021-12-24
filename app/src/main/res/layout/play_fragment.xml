@@ -18,7 +18,7 @@
         <com.example.wordsmemory.presentation.fragment.topbar.TopBar
             android:id="@+id/topBar"
             style="@style/TopBarStyle"
-            app:title="@string/app_title" />
+            app:title="@string/app_name" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container"
