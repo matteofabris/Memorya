@@ -154,7 +154,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun changeBackgroundColor(rightAnswer: Boolean) {
         val color = if (rightAnswer) resources.getColor(
-            R.color.wm_primaryVariant,
+            R.color.palette_color_3,
             context?.theme
         ) else Color.RED
 
