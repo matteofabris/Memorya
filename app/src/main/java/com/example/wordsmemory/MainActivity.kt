@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // initialize timber in application class
-        Timber.plant(Timber.DebugTree())
+        Timber.plant(WMDebugTree())
 
         requestedOrientation = if (isTablet()) {
             Timber.i("Tablet mode")
