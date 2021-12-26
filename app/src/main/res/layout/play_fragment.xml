@@ -132,7 +132,7 @@
             <TextView
                 android:id="@+id/categoryTextView"
                 style="@style/LabelStyle"
-                android:layout_marginStart="22dp"
+                android:layout_marginStart="30dp"
                 android:text="@string/category"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toTopOf="@+id/playBoard"
@@ -145,7 +145,8 @@
                 android:id="@+id/categorySpinner"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginEnd="22dp"
+                android:layout_marginEnd="30dp"
+                android:popupBackground="@color/palette_color_2"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/categoryTextView"
                 app:layout_constraintEnd_toEndOf="parent"

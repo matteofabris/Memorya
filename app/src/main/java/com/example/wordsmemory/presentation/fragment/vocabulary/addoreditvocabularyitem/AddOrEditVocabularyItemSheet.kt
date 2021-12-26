@@ -85,10 +85,10 @@ class AddOrEditVocabularyItemSheet :
 
             val arrayAdapter = ArrayAdapter(
                 requireContext(),
-                android.R.layout.simple_spinner_item,
+                R.layout.spinner_item,
                 categories
             )
-            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            arrayAdapter.setDropDownViewResource(R.layout.spinner_item)
 
             _binding.categorySpinner.adapter = arrayAdapter
             _viewModel.initVocabularyItem()

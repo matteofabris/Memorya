@@ -94,6 +94,7 @@
                 android:id="@+id/categorySpinner"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:popupBackground="@color/palette_color_2"
                 app:layout_constraintBottom_toBottomOf="@id/categoryTitle"
                 app:layout_constraintEnd_toEndOf="@+id/itWord"
                 app:layout_constraintStart_toStartOf="@id/itWord"
