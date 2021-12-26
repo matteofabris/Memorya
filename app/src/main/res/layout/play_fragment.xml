@@ -10,149 +10,177 @@
             type="com.example.wordsmemory.presentation.fragment.play.PlayFragmentViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.example.wordsmemory.presentation.fragment.topbar.TopBar
-            android:id="@+id/topBar"
-            style="@style/TopBarStyle"
-            app:title="@string/app_name" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/container"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".presentation.fragment.play.PlayFragment">
+            android:orientation="vertical">
+
+            <com.example.wordsmemory.presentation.fragment.topbar.TopBar
+                android:id="@+id/topBar"
+                style="@style/TopBarStyle"
+                app:title="@string/app_name" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/playBoard"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/game_background"
-                android:padding="10dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.23"
-                app:layout_constraintWidth_percent="0.9">
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".presentation.fragment.play.PlayFragment">
 
-                <TextView
-                    android:id="@+id/randomWordTitle"
-                    style="@style/LabelStyle"
-                    android:text="@string/english_word"
-                    android:textAlignment="textStart"
-                    app:layout_constraintBottom_toTopOf="@+id/translation"
-                    app:layout_constraintEnd_toStartOf="@id/randomWord"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/playBoard"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/game_background"
+                    android:padding="10dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.3" />
+                    app:layout_constraintVertical_bias="0.23"
+                    app:layout_constraintWidth_percent="0.9">
+
+                    <TextView
+                        android:id="@+id/randomWordTitle"
+                        style="@style/LabelStyle"
+                        android:text="@string/english_word"
+                        android:textAlignment="textStart"
+                        app:layout_constraintBottom_toTopOf="@+id/translation"
+                        app:layout_constraintEnd_toStartOf="@id/randomWord"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="0.3" />
+
+                    <TextView
+                        android:id="@+id/randomWord"
+                        style="@style/LabelStyle"
+                        android:text="@{viewModel.vocabularyItem.enWord}"
+                        app:layout_constraintBottom_toTopOf="@+id/translation"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.12"
+                        app:layout_constraintStart_toEndOf="@id/randomWordTitle"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/translationTitle"
+                        style="@style/LabelStyle"
+                        android:text="@string/translate"
+                        android:textAlignment="textStart"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/randomWordTitle"
+                        app:layout_constraintStart_toStartOf="@id/randomWordTitle"
+                        app:layout_constraintTop_toBottomOf="@id/randomWordTitle"
+                        app:layout_constraintWidth_percent="0.3" />
+
+                    <EditText
+                        android:id="@+id/translation"
+                        style="@style/LabelStyle"
+                        android:ems="10"
+                        android:importantForAutofill="no"
+                        android:inputType="text|textNoSuggestions"
+                        android:text="@={viewModel.translationText}"
+                        app:layout_constraintBottom_toBottomOf="@id/translationTitle"
+                        app:layout_constraintEnd_toEndOf="@+id/randomWord"
+                        app:layout_constraintStart_toStartOf="@id/randomWord"
+                        app:layout_constraintTop_toTopOf="@id/translationTitle"
+                        tools:ignore="LabelFor" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    android:id="@+id/randomWord"
-                    style="@style/LabelStyle"
-                    android:text="@{viewModel.vocabularyItem.enWord}"
-                    app:layout_constraintBottom_toTopOf="@+id/translation"
+                    android:id="@+id/recentAttemptsTextView"
+                    style="@style/RecentAttemptsLabelStyle"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toTopOf="@+id/checkTranslationButton"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.12"
-                    app:layout_constraintStart_toEndOf="@id/randomWordTitle"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/playBoard"
+                    app:layout_constraintVertical_bias="0.01999998"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <Button
+                    android:id="@+id/checkTranslationButton"
+                    style="@style/ButtonStyle"
+                    android:contentDescription="@string/logo_image"
+                    android:enabled="false"
+                    android:letterSpacing="0"
+                    android:onClick="@{() -> viewModel.onCheckTranslationButtonClicked()}"
+                    android:text="@string/check_word"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recentAttemptsTextView"
+                    app:layout_constraintVertical_bias="0.060000002" />
+
+                <ImageView
+                    android:id="@+id/appIconImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/app_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/checkTranslationButton"
+                    app:srcCompat="@mipmap/app_icon_foreground" />
 
                 <TextView
-                    android:id="@+id/translationTitle"
+                    android:id="@+id/categoryTextView"
                     style="@style/LabelStyle"
-                    android:text="@string/translate"
-                    android:textAlignment="textStart"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/randomWordTitle"
-                    app:layout_constraintStart_toStartOf="@id/randomWordTitle"
-                    app:layout_constraintTop_toBottomOf="@id/randomWordTitle"
-                    app:layout_constraintWidth_percent="0.3" />
+                    android:layout_marginStart="30dp"
+                    android:text="@string/category"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toTopOf="@+id/playBoard"
+                    app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.78" />
 
-                <EditText
-                    android:id="@+id/translation"
-                    style="@style/LabelStyle"
-                    android:ems="10"
-                    android:importantForAutofill="no"
-                    android:inputType="text|textNoSuggestions"
-                    android:text="@={viewModel.translationText}"
-                    app:layout_constraintBottom_toBottomOf="@id/translationTitle"
-                    app:layout_constraintEnd_toEndOf="@+id/randomWord"
-                    app:layout_constraintStart_toStartOf="@id/randomWord"
-                    app:layout_constraintTop_toTopOf="@id/translationTitle"
-                    tools:ignore="LabelFor" />
+                <Spinner
+                    android:id="@+id/categorySpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="30dp"
+                    android:popupBackground="@color/palette_color_2"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/categoryTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/categoryTextView"
+                    app:layout_constraintTop_toTopOf="@+id/categoryTextView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/recentAttemptsTextView"
-                style="@style/RecentAttemptsLabelStyle"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="@+id/checkTranslationButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/playBoard"
-                app:layout_constraintVertical_bias="0.01999998"
-                app:layout_constraintVertical_chainStyle="packed" />
+        <View
+            android:id="@+id/opaqueLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.8"
+            android:background="#000000"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/checkTranslationButton"
-                style="@style/ButtonStyle"
-                android:contentDescription="@string/logo_image"
-                android:enabled="false"
-                android:letterSpacing="0"
-                android:onClick="@{() -> viewModel.onCheckTranslationButtonClicked()}"
-                android:text="@string/check_word"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recentAttemptsTextView"
-                app:layout_constraintVertical_bias="0.060000002" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/appIconImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/app_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/checkTranslationButton"
-                app:srcCompat="@mipmap/app_icon_foreground" />
-
-            <TextView
-                android:id="@+id/categoryTextView"
-                style="@style/LabelStyle"
-                android:layout_marginStart="30dp"
-                android:text="@string/category"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="@+id/playBoard"
-                app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.78" />
-
-            <Spinner
-                android:id="@+id/categorySpinner"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginEnd="30dp"
-                android:popupBackground="@color/palette_color_2"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/categoryTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/categoryTextView"
-                app:layout_constraintTop_toTopOf="@+id/categoryTextView" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

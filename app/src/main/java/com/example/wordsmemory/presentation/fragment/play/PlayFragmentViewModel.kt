@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -30,11 +31,13 @@ class PlayFragmentViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var _categoryId = Constants.defaultCategoryId
+    private var _setPlayWordTimer: Timer? = null
 
     val vocabularyList =
         _interactors.getVocabularyItemsAsLiveData() as LiveData<List<VocabularyItemEntity>>
     val translationText = MutableLiveData<String>()
-    val categories = _interactors.getNotEmptyCategoriesAsLiveData() as LiveData<List<CategoryEntity>>
+    val categories =
+        _interactors.getNotEmptyCategoriesAsLiveData() as LiveData<List<CategoryEntity>>
 
     private var _correctAttempts = 0
     val correctAttempts: Int
@@ -56,22 +59,49 @@ class PlayFragmentViewModel @Inject constructor(
     val isTranslationOk: LiveData<Boolean>
         get() = _isTranslationOk
 
-    fun setPlayWord() {
-        if (vocabularyList.value != null) {
-            if (vocabularyList.value!!.isNotEmpty()) {
-                val filteredList = if (_categoryId == Constants.defaultCategoryId) {
-                    vocabularyList.value!!
-                } else {
-                    vocabularyList.value!!.filter {
-                        it.category == _categoryId
-                    }
-                }
+    private val _isLoadingCompleted = MutableLiveData(false)
+    val isLoadingCompleted: LiveData<Boolean>
+        get() = _isLoadingCompleted
 
-                val randomIndex = Random.nextInt(filteredList.size)
-                _vocabularyItem.value = filteredList[randomIndex]
-            } else {
-                _vocabularyItem.value = VocabularyItemEntity("", "")
+    fun setPlayWord(afterCorrectTranslation: Boolean = false) {
+        fun action() {
+            try {
+                if (vocabularyList.value == null) return
+
+                if (vocabularyList.value!!.isNotEmpty()) {
+                    val filteredList = if (_categoryId == Constants.defaultCategoryId) {
+                        vocabularyList.value!!
+                    } else {
+                        vocabularyList.value!!.filter {
+                            it.category == _categoryId
+                        }
+                    }
+
+                    val randomIndex = Random.nextInt(filteredList.size)
+                    _vocabularyItem.postValue(filteredList[randomIndex])
+                } else {
+                    _vocabularyItem.postValue(VocabularyItemEntity("", ""))
+                }
+                _isLoadingCompleted.postValue(true)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
+        }
+
+        if (afterCorrectTranslation) {
+            action()
+        } else {
+            val timerTask = object : TimerTask() {
+                override fun run() {
+                    action()
+                }
+            }
+
+            _isLoadingCompleted.postValue(false)
+
+            _setPlayWordTimer?.cancel()
+            _setPlayWordTimer = Timer()
+            _setPlayWordTimer?.schedule(timerTask, 800)
         }
     }
 

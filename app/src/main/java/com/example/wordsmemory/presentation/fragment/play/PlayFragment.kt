@@ -52,14 +52,9 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         setTopBarButtonsListeners()
         setupObservers()
-        setCategoriesSpinner()
+        setupCategoriesSpinner()
 
         return _binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        _viewModel.setPlayWord()
     }
 
     private fun authenticate() {
@@ -127,9 +122,17 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 setPlayBoardVisible(it)
                 if (!it) authenticate()
             })
+
+        _viewModel.isLoadingCompleted.observe(viewLifecycleOwner,
+            {
+                val visibility = if (it) View.GONE else View.VISIBLE
+
+                _binding.opaqueLayer.visibility = visibility
+                _binding.progressBar.visibility = visibility
+            })
     }
 
-    private fun setCategoriesSpinner() {
+    private fun setupCategoriesSpinner() {
         _viewModel.categories.observe(viewLifecycleOwner, {
             it.let {
                 val categories = it.map { c -> c.category }.toTypedArray()
