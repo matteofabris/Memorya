@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
 
     <data>
 
@@ -43,7 +44,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.23"
-                    app:layout_constraintWidth_percent="0.9">
+                    app:layout_constraintWidth_percent="0.6">
 
                     <TextView
                         android:id="@+id/randomWordTitle"
@@ -136,7 +137,7 @@
                 <TextView
                     android:id="@+id/categoryTextView"
                     style="@style/LabelStyle"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="350dp"
                     android:text="@string/category"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toTopOf="@+id/playBoard"
@@ -149,7 +150,7 @@
                     android:id="@+id/categorySpinner"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginEnd="30dp"
+                    android:layout_marginEnd="350dp"
                     android:popupBackground="@color/palette_color_2"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@+id/categoryTextView"

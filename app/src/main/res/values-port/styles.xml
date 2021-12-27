@@ -21,12 +21,6 @@
         <item name="android:textSize">@dimen/medium_font_size</item>
     </style>
 
-    <style name="ImageButtonStyle">
-        <item name="android:layout_width">110dp</item>
-        <item name="android:layout_height">50dp</item>
-        <item name="android:backgroundTint">@color/white</item>
-    </style>
-
     <style name="ButtonStyle">
         <item name="android:layout_width">150dp</item>
         <item name="android:layout_height">40dp</item>
@@ -35,6 +29,10 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/medium_font_size</item>
         <item name="android:backgroundTint">@color/color_states_materialbutton</item>
+    </style>
+
+    <style name="ImageButtonStyle" parent="@style/ButtonStyle">
+        <item name="android:textSize">@dimen/micro_font_size</item>
     </style>
 
     <style name="TopBarTitleStyle">

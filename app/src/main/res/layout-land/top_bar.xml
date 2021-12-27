@@ -2,7 +2,8 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/topBar">
+    android:id="@+id/topBar"
+    tools:ignore="MissingDefaultResource">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/outline_library_books_white_24"
+            android:src="@drawable/outline_library_books_white_36"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/logoutButton"
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/baseline_logout_white_24"
+            android:src="@drawable/baseline_logout_white_36"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -116,10 +116,9 @@
 
         <Button
             android:id="@+id/googleTranslateButton"
-            style="@style/ButtonStyle"
+            style="@style/ImageButtonStyle"
             android:enabled="false"
             android:text="@string/g_translate"
-            android:textSize="12sp"
             app:icon="@drawable/baseline_g_translate_black_24"
             app:iconTint="@null"
             app:layout_constraintBottom_toBottomOf="@id/addButton"
