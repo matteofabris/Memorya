@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.wordsmemory.presentation.fragment.vocabulary.category.CategoryViewModel" />
+            type="com.memorya.presentation.fragment.vocabulary.category.CategoryViewModel" />
     </data>
 
     <LinearLayout
@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.wordsmemory.presentation.fragment.topbar.TopBar
+        <com.memorya.presentation.fragment.topbar.TopBar
             android:id="@+id/topBar"
             style="@style/TopBarStyle"
             app:title="@{viewModel.categoryName}"/>

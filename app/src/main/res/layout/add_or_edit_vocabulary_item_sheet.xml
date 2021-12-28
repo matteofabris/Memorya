@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.wordsmemory.presentation.fragment.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheetViewModel" />
+            type="com.memorya.presentation.fragment.vocabulary.addoreditvocabularyitem.AddOrEditVocabularyItemSheetViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

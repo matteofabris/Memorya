@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.wordsmemory.presentation.fragment.play.PlayFragmentViewModel" />
+            type="com.memorya.presentation.fragment.play.PlayFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.example.wordsmemory.presentation.fragment.topbar.TopBar
+            <com.memorya.presentation.fragment.topbar.TopBar
                 android:id="@+id/topBar"
                 style="@style/TopBarStyle"
                 app:title="@string/app_name" />

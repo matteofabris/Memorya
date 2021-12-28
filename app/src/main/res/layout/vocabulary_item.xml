@@ -6,7 +6,7 @@
 
         <variable
             name="vocabularyItem"
-            type="com.example.wordsmemory.framework.room.entities.VocabularyItemEntity" />
+            type="com.memorya.framework.room.entities.VocabularyItemEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
