@@ -1,7 +1,7 @@
 package com.memorya
 
 object Constants {
-    const val packageName = "memorya"
+    const val appName = "Memorya"
     const val defaultCategory = "None"
     const val defaultCategoryId = 1
     const val translateBaseUrl = "https://translation.googleapis.com/"

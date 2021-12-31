@@ -11,7 +11,8 @@ interface AuthApi {
         @Query("client_secret") clientSecret: String,
         @Query("code") authCode: String,
         @Query("grant_type") grantType: String = "authorization_code",
-        @Query("redirect_uri") redirectUri: String = "urn:ietf:wg:oauth:2.0:oob"
+        @Query("redirect_uri") redirectUri: String = "urn:ietf:wg:oauth:2.0:oob",
+        @Query("access_type") accessType: String = "offline"
     ): Response<AuthResponse>
 
     @POST("token")
