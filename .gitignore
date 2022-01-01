@@ -18,3 +18,4 @@ wordstranslationcredentials.json
 client_secret.properties
 app/release
 keystore.properties
+.name
