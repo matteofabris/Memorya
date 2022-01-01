@@ -16,17 +16,5 @@ local.properties
 wordstranslation-55fe8471baa5.json
 wordstranslationcredentials.json
 client_secret.properties
-banner.png
-MemoryaDocs/Screenshot1Mobile.jpg
-MemoryaDocs/Screenshot1Tablet.png
-MemoryaDocs/Screenshot2Mobile.jpg
-MemoryaDocs/Screenshot2Tablet.png
-MemoryaDocs/Screenshot3Mobile.jpg
-MemoryaDocs/Screenshot3Tablet.png
-MemoryaDocs/Screenshot4Mobile.jpg
-MemoryaDocs/Screenshot4Tablet.png
-MemoryaDocs/Screenshot5Mobile.jpg
-MemoryaDocs/Screenshot6Mobile.jpg
-MemoryaRecordVerification.mp4
 app/release
 keystore.properties
