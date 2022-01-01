@@ -1,5 +1,9 @@
 # Memorya
-Hey there! :raising_hand: I developed a simple application to help you to memorize new english words based on your own vocabulary! Challenge yourself to remember the correct translation of the words in your vocabulary!
+Hey there! :raising_hand: I developed a simple application to help you memorize new english words based on your own vocabulary! Challenge yourself to remember the correct translation of the words in your vocabulary!
+Group the words by category and check how your training session is going.
+Login to the app from different devices and you will have your own vocabulary always updated on all your devices!
+
+**OUT SOON: new graphics + Play Store availability**
 
 The app has various features:
 
@@ -17,7 +21,7 @@ The app has various features:
  - **LiveData**
  - **Coroutines**
 
-Here some screenshots of the app (**OUT SOON: new graphics + PlayStore availability**)
+Here some screenshots of the app:
 
 ![alt text](https://github.com/matteofabris/Memorya/blob/develop/MemoryaDocs/Screenshot1Mobile.jpg?raw=true)
 
