@@ -1,5 +1,5 @@
 # Memorya
-Hey there! :raising_hand: I developed a simple application to help you to memorize new english words based on your own vocabulary!
+Hey there! :raising_hand: I developed a simple application to help you to memorize new english words based on your own vocabulary! Challenge yourself to remember the correct translation of the words in your vocabulary!
 
 The app has various features:
 
