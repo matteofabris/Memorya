@@ -143,10 +143,10 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
                 val arrayAdapter = ArrayAdapter(
                     requireContext(),
-                    R.layout.spinner_item,
+                    R.layout.play_spinner_item,
                     categories
                 )
-                arrayAdapter.setDropDownViewResource(R.layout.spinner_item)
+                arrayAdapter.setDropDownViewResource(R.layout.play_spinner_item)
 
                 _binding.categorySpinner.adapter = arrayAdapter
             }
