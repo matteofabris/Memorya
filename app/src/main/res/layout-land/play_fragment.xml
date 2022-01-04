@@ -134,29 +134,40 @@
                     app:layout_constraintTop_toBottomOf="@+id/checkTranslationButton"
                     app:srcCompat="@mipmap/app_icon_foreground" />
 
-                <TextView
-                    android:id="@+id/categoryTextView"
-                    style="@style/LabelStyle"
-                    android:layout_marginStart="350dp"
-                    android:text="@string/category"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toTopOf="@+id/playBoard"
-                    app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.78" />
-
-                <Spinner
-                    android:id="@+id/categorySpinner"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/spinnerContainer"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginEnd="350dp"
-                    android:popupBackground="@color/palette_color_2"
+                    android:background="@drawable/category_spinner_background"
+                    android:padding="10dp"
                     android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="@+id/categoryTextView"
+                    app:layout_constraintBottom_toTopOf="@id/playBoard"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/categoryTextView"
-                    app:layout_constraintTop_toTopOf="@+id/categoryTextView" />
+                    app:layout_constraintHeight_percent="0.07"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.78"
+                    app:layout_constraintWidth_percent="0.4">
+
+                    <TextView
+                        android:id="@+id/categoryTextView"
+                        style="@style/WhiteLabelStyle"
+                        android:text="@string/category"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Spinner
+                        android:id="@+id/categorySpinner"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:popupBackground="@color/palette_color_3"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/categoryTextView"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

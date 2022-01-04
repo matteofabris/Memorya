@@ -1,16 +1,18 @@
 package com.memorya.presentation.fragment.vocabulary
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.memorya.R
-import com.memorya.presentation.adpater.VocabularyFragmentsAdapter
-import com.memorya.databinding.VocabularyFragmentBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.memorya.R
+import com.memorya.databinding.VocabularyFragmentBinding
+import com.memorya.presentation.adpater.VocabularyFragmentsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -37,10 +39,14 @@ class VocabularyFragment : Fragment() {
 
     private fun setTabLayoutMediator() {
         TabLayoutMediator(_binding.tabLayout, _binding.viewPager) { tab: TabLayout.Tab, i: Int ->
-            tab.text = when (i) {
-                0 -> getString(R.string.all_words)
-                1 -> getString(R.string.categories)
-                else -> "Empty"
+            tab.customView = TextView(context).apply {
+                this.setTextAppearance(R.style.TabLabelStyle)
+                this.gravity = Gravity.CENTER
+                this.text = when (i) {
+                    0 -> getString(R.string.all_words)
+                    1 -> getString(R.string.categories)
+                    else -> "Empty"
+                }
             }
         }.attach()
     }

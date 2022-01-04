@@ -45,8 +45,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabGravity="fill"
-                app:tabMaxWidth="0dp"
-                app:tabTextAppearance="@style/TabViewTextStyle" />
+                app:tabMaxWidth="0dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </layout>

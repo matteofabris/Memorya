@@ -177,8 +177,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _binding.playBoard.visibility = if (visible) View.VISIBLE else View.INVISIBLE
         _binding.recentAttemptsTextView.visibility = if (visible) View.VISIBLE else View.INVISIBLE
         _binding.checkTranslationButton.visibility = if (visible) View.VISIBLE else View.INVISIBLE
-        _binding.categoryTextView.visibility = if (visible) View.VISIBLE else View.INVISIBLE
-        _binding.categorySpinner.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+        _binding.spinnerContainer.visibility = if (visible) View.VISIBLE else View.INVISIBLE
 
         _binding.topBar.isButtonsVisible = visible
     }
