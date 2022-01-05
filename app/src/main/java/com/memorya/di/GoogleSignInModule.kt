@@ -23,7 +23,6 @@ object GoogleSignInModule {
         val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestServerAuthCode(Constants.webClientId)
             .requestScopes(
-                Scope(appContext.getString(R.string.cloud_platform_scope)),
                 Scope(appContext.getString(R.string.cloud_translation_scope))
             )
             .build()
