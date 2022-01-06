@@ -11,7 +11,6 @@ data class Interactors(
     val getCategoriesAsLiveData: GetCategoriesAsLiveData,
     val getNotEmptyCategoriesAsLiveData: GetNotEmptyCategoriesAsLiveData,
     val getCategories: GetCategories,
-    val getAuthTokens: GetAuthTokens,
     val addCategory: AddCategory,
     val addVocabularyItem: AddVocabularyItem,
     val translate: Translate,

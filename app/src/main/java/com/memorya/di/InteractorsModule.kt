@@ -33,7 +33,6 @@ object InteractorsModule {
         GetCategoriesAsLiveData(vocabularyManager),
         GetNotEmptyCategoriesAsLiveData(vocabularyManager),
         GetCategories(vocabularyManager),
-        GetAuthTokens(userManager),
         AddCategory(vocabularyManager),
         AddVocabularyItem(vocabularyManager),
         Translate(vocabularyManager),
@@ -46,14 +45,12 @@ object InteractorsModule {
     fun provideVocabularyManager(
         workManager: WorkManager,
         vocabularyItemDao: VocabularyItemDao,
-        categoryDao: CategoryDao,
-        userDao: UserDao
+        categoryDao: CategoryDao
     ) = VocabularyManager(
         CloudDbServiceImpl(workManager),
         VocabularyItemDataSourceImpl(vocabularyItemDao),
         CategoryDataSourceImpl(categoryDao),
-        RESTServiceImpl(userDao),
-        UserDataSourceImpl(userDao)
+        RESTServiceImpl()
     )
 
     @Provides
@@ -61,7 +58,6 @@ object InteractorsModule {
     fun provideUserManager(userDao: UserDao, workManager: WorkManager) =
         UserManager(
             UserDataSourceImpl(userDao),
-            RESTServiceImpl(userDao),
             CloudDbServiceImpl(workManager)
         )
 }

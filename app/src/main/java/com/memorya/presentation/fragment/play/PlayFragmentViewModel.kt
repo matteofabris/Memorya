@@ -131,23 +131,13 @@ class PlayFragmentViewModel @Inject constructor(
             Activity.RESULT_OK -> {
                 val googleSignInAccount =
                     GoogleSignIn.getSignedInAccountFromIntent(activityResult.data).result
-                val authCode = googleSignInAccount?.serverAuthCode
 
                 viewModelScope.launch {
-                    if (!authCode.isNullOrEmpty()) {
-                        val authTokens = _interactors.getAuthTokens(authCode)
-                        if (authTokens == null || authTokens.accessToken.isEmpty() || googleSignInAccount.id.isNullOrEmpty()) return@launch
+                    if (googleSignInAccount.id.isNullOrEmpty()) return@launch
 
-                        _interactors.addUser(
-                            UserEntity(
-                                googleSignInAccount.id!!,
-                                authTokens.accessToken,
-                                authTokens.refreshToken
-                            )
-                        )
-                        _interactors.fetchCloudDb()
-                        _isAuthenticated.value = true
-                    }
+                    _interactors.addUser(UserEntity(googleSignInAccount.id!!))
+                    _interactors.fetchCloudDb()
+                    _isAuthenticated.value = true
                 }
             }
             else -> {

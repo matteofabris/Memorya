@@ -10,18 +10,9 @@ data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     override val id: Int,
     @ColumnInfo(name = "user_id")
-    override var userId: String,
-    @ColumnInfo(name = "access_token")
-    override var accessToken: String = "",
-    @ColumnInfo(name = "refresh_token")
-    override var refreshToken: String = ""
+    override var userId: String
 ) : User {
-    constructor (userId: String, accessToken: String, refreshToken: String) : this(
-        0,
-        userId,
-        accessToken,
-        refreshToken
-    )
+    constructor (userId: String) : this(0, userId)
 
-    constructor (user: User) : this(user.id, user.userId, user.accessToken, user.refreshToken)
+    constructor (user: User) : this(user.id, user.userId)
 }

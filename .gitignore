@@ -19,3 +19,4 @@ client_secret.properties
 app/release
 keystore.properties
 .name
+api.properties

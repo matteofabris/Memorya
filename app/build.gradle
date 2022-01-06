@@ -7,10 +7,10 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
-// Client secret storage
-def clientSecretFile = rootProject.file("client_secret.properties")
-def clientSecretProperties = new Properties()
-clientSecretProperties.load(new FileInputStream(clientSecretFile))
+// api storage
+def apiFile = rootProject.file("api.properties")
+def apiProperties = new Properties()
+apiProperties.load(new FileInputStream(apiFile))
 
 // Load keystore
 def keystorePropertiesFile = rootProject.file("keystore.properties");
@@ -38,7 +38,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "CLIENT_SECRET", clientSecretProperties['CLIENT_SECRET'])
+        buildConfigField("String", "API_KEY", apiProperties['API_KEY'])
     }
 
     packagingOptions {

@@ -1,13 +1,10 @@
 package com.memorya.di
 
 import android.content.Context
-import com.memorya.Constants
-import com.memorya.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.Scope
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,10 +18,6 @@ object GoogleSignInModule {
     @Provides
     fun provideClient(@ApplicationContext appContext: Context): GoogleSignInClient {
         val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestServerAuthCode(Constants.webClientId)
-            .requestScopes(
-                Scope(appContext.getString(R.string.cloud_translation_scope))
-            )
             .build()
         return GoogleSignIn.getClient(appContext, signInOptions)
     }
