@@ -12,7 +12,7 @@ The app has various features:
  - Remote DB backup made with **Firebase Firestore** associated with the specific user: this enables you to retrieve your vocabulary from multiple devices
  - Use of **WorkManager** to manage the tasks related to the Firestore DB
  - Immediate translation of a new added word through **Google Cloud Translate API**
- - Use of **Retrofit** to manage authentication and translation tasks
+ - Use of **Retrofit** to manage translation tasks
  - Use of **Timber** for logging
  - **Clean Architecture**
  - **MVVM**
