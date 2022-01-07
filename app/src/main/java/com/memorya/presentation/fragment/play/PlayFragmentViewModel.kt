@@ -111,7 +111,7 @@ class PlayFragmentViewModel @Inject constructor(
 
         if (_isTranslationOk.value!!) {
             _correctAttempts++
-            setPlayWord()
+            setPlayWord(true)
             translationText.value = ""
         }
 
