@@ -23,17 +23,33 @@
           }
         },
         {
+          "client_id": "139830564645-ef8s4sid09lp7squ58jdg9te1fgo3j2q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.memorya",
+            "certificate_hash": "99341cfefa135750394e33222d1ede84b12515a1"
+          }
+        },
+        {
           "client_id": "139830564645-r2le9fg954ko4l1vmrbo1i1nqbvbv7co.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.memorya",
             "certificate_hash": "df1ff6c84f724bfbf32b63206dcc957b5cb94491"
           }
+        },
+        {
+          "client_id": "139830564645-uee7rpp2c5mp57fosfrc7lv1nojo27l6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.memorya",
+            "certificate_hash": "9a903263be89971875cfc38eabe29bff7e4377ef"
+          }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBW8wtyUHtABhORyOan7s_oF1rJOX1N3Mk"
+          "current_key": "AIzaSyCGSYmmUwsu_o09-LZhWBYx8pL_E5o9I80"
         }
       ],
       "services": {
