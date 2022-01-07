@@ -55,7 +55,13 @@ class CloudDbSyncWorkerManager(
         val cloudVocabularyItemsCollection =
             Tasks.await(cloudUserRef.collection(Constants.vocabularyItems).get())
 
-        if (cloudVocabularyItemsCollection.isEmpty) return
+        if (cloudVocabularyItemsCollection.isEmpty) {
+            deleteObsoleteLocalItems(
+                cloudVocabularyItems,
+                localVocabularyItems
+            )
+            return
+        }
 
         cloudVocabularyItemsCollection.forEach { item ->
             cloudVocabularyItems.add(item.toObject<VocabularyItemEntity>())
@@ -81,7 +87,10 @@ class CloudDbSyncWorkerManager(
         val cloudCategoriesCollection =
             Tasks.await(cloudUserRef.collection(Constants.categories).get())
 
-        if (cloudCategoriesCollection.isEmpty) return
+        if (cloudCategoriesCollection.isEmpty) {
+            deleteObsoleteLocalItems(cloudCategories, localCategories)
+            return
+        }
 
         cloudCategoriesCollection.forEach { item ->
             cloudCategories.add(item.toObject<CategoryEntity>())
