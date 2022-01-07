@@ -18,7 +18,7 @@
         <com.memorya.presentation.fragment.topbar.TopBar
             android:id="@+id/topBar"
             style="@style/TopBarStyle"
-            app:title="@string/english_vocabulary" />
+            app:title="@string/vocabulary" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

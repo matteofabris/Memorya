@@ -18,7 +18,6 @@
     <string name="cancel">Cancel</string>
     <string name="deleted">Deleted</string>
     <string name="undo">UNDO</string>
-    <string name="english_vocabulary">En-It Vocabulary</string>
     <string name="all_words">ALL WORDS</string>
     <string name="categories">CATEGORIES</string>
     <string name="category">CATEGORY:</string>
@@ -26,6 +25,4 @@
     <string name="recent_attempts">Recent attempts:</string>
     <string name="default_category">None</string>
     <string name="update">Update</string>
-    <string name="cloud_platform_scope" translatable="false">https://www.googleapis.com/auth/cloud-platform</string>
-    <string name="cloud_translation_scope" translatable="false">https://www.googleapis.com/auth/cloud-translation</string>
 </resources>
