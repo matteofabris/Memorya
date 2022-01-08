@@ -14,7 +14,7 @@ abstract class ResultProvider {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        Timber.i("Network call successful")
+                        Timber.i("Network call successful - ${response.raw()}")
                         return@withContext Result.Success(body)
                     }
 
