@@ -3,7 +3,7 @@ Hey there! :raising_hand: I developed a simple application to help you memorize 
 Group the words by category and check how your training session is going.
 Login to the app from different devices and you will have your own vocabulary always updated on all your devices!
 
-**OUT SOON: new graphics + Play Store availability**
+**Available on Play Store**
 
 The app has various features:
 
