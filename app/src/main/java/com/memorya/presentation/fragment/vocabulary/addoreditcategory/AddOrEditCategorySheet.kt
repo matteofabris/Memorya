@@ -11,7 +11,7 @@ import com.memorya.R
 import com.memorya.databinding.AddOrEditCategorySheetFragmentBinding
 import com.memorya.presentation.helper.CategoryInputFilter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.memorya.afterTextChanged
+import com.memorya.utils.afterTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -52,8 +52,8 @@ class AddOrEditCategorySheet : BottomSheetDialogFragment() {
             _binding.addButton.isEnabled = s.isNotEmpty()
         }
 
-        _viewModel.categoryItem.observe(viewLifecycleOwner, {
+        _viewModel.categoryItem.observe(viewLifecycleOwner) {
             if (_viewModel.isEdit) _binding.addButton.text = getString(R.string.update)
-        })
+        }
     }
 }

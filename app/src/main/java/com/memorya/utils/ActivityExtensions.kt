@@ -1,32 +1,15 @@
-package com.memorya
+package com.memorya.utils
 
 import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.EditText
 import timber.log.Timber
 
-fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        }
-
-        override fun afterTextChanged(editable: Editable?) {
-            afterTextChanged.invoke(editable.toString())
-        }
-    })
-}
-
-fun checkInternetConnection(activity: Activity): Boolean {
+fun Activity.checkInternetConnection(): Boolean {
     //Check internet connection:
     val connectivityManager =
-        activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     val capabilities =
         connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
@@ -48,4 +31,15 @@ fun checkInternetConnection(activity: Activity): Boolean {
     }
 
     return false
+}
+
+fun Activity.getBooleanPref(key: String): Boolean {
+    return getPreferences(Context.MODE_PRIVATE).getBoolean(key, false)
+}
+
+fun Activity.setBooleanPref(key: String, value: Boolean) {
+    with(getPreferences(Context.MODE_PRIVATE).edit()) {
+        putBoolean(key, value)
+        apply()
+    }
 }

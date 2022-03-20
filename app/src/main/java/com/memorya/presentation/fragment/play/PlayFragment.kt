@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.ColorUtils
@@ -21,6 +22,12 @@ import com.memorya.Constants
 import com.memorya.R
 import com.memorya.databinding.PlayFragmentBinding
 import com.memorya.presentation.helper.EnWordInputFilter
+import com.memorya.utils.createBalloon
+import com.memorya.utils.getBooleanPref
+import com.memorya.utils.setBooleanPref
+import com.skydoves.balloon.overlay.BalloonOverlayCircle
+import com.skydoves.balloon.overlay.BalloonOverlayRoundRect
+import com.skydoves.balloon.showAlignBottom
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -85,55 +92,59 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setupObservers() {
-        _viewModel.translationText.observe(viewLifecycleOwner, { s ->
+        _viewModel.translationText.observe(viewLifecycleOwner) { s ->
             _binding.checkTranslationButton.isEnabled =
                 _binding.randomWord.text.isNotEmpty() && s.isNotEmpty()
-        })
+        }
 
-        _viewModel.allAttempts.observe(viewLifecycleOwner, { allAttempts ->
+        _viewModel.allAttempts.observe(viewLifecycleOwner) { allAttempts ->
             val recentAttempts = getString(R.string.recent_attempts)
             val correctAttempts = _viewModel.correctAttempts
             val correct = getString(R.string.correct)
 
             ("$recentAttempts $correctAttempts/$allAttempts $correct")
                 .also { _binding.recentAttemptsTextView.text = it }
-        })
+        }
 
         _viewModel.isTranslationOk.observe(
-            viewLifecycleOwner,
-            {
-                val text: String =
-                    if (it) getString(R.string.right_translation) else getString(R.string.wrong_translation)
-                val toast = Toast.makeText(this.context, text, Toast.LENGTH_SHORT)
-                toast.setGravity(Gravity.TOP, 0, 0)
-                toast.show()
+            viewLifecycleOwner
+        ) {
+            val text: String =
+                if (it) getString(R.string.right_translation) else getString(R.string.wrong_translation)
+            val toast = Toast.makeText(this.context, text, Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.TOP, 0, 0)
+            toast.show()
 
-                changeBackgroundColor(it)
-            })
+            changeBackgroundColor(it)
+        }
 
         _viewModel.vocabularyList.observe(
-            viewLifecycleOwner,
-            {
-                _viewModel.setPlayWord()
-            })
+            viewLifecycleOwner
+        ) {
+            _viewModel.setPlayWord()
+        }
 
-        _viewModel.isAuthenticated.observe(viewLifecycleOwner,
-            {
-                setPlayBoardVisible(it)
-                if (!it) authenticate()
-            })
+        _viewModel.isAuthenticated.observe(
+            viewLifecycleOwner
+        ) {
+            setPlayBoardVisible(it)
+            if (!it) authenticate()
+        }
 
-        _viewModel.isLoadingCompleted.observe(viewLifecycleOwner,
-            {
-                val visibility = if (it) View.GONE else View.VISIBLE
+        _viewModel.isLoadingCompleted.observe(
+            viewLifecycleOwner
+        ) {
+            val visibility = if (it) View.GONE else View.VISIBLE
 
-                _binding.opaqueLayer.visibility = visibility
-                _binding.progressBar.visibility = visibility
-            })
+            _binding.opaqueLayer.visibility = visibility
+            _binding.progressBar.visibility = visibility
+
+            if (it) showTips()
+        }
     }
 
     private fun setupCategoriesSpinner() {
-        _viewModel.categories.observe(viewLifecycleOwner, {
+        _viewModel.categories.observe(viewLifecycleOwner) {
             it.let {
                 val categories = it.map { c -> c.category }.toTypedArray()
 
@@ -150,7 +161,7 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
                 _binding.categorySpinner.adapter = arrayAdapter
             }
-        })
+        }
 
         _binding.categorySpinner.onItemSelectedListener = this
     }
@@ -180,6 +191,36 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _binding.spinnerContainer.visibility = if (visible) View.VISIBLE else View.INVISIBLE
 
         _binding.topBar.isButtonsVisible = visible
+    }
+
+    private fun showTips() {
+        if (requireActivity().getBooleanPref(getString(R.string.play_fragment_tips_shown_key))) return
+
+        val vocabularyBalloon = createBalloon(
+            getString(R.string.vocabulary_balloon_text),
+            BalloonOverlayCircle(radius = 50f)
+        )
+        val translateBalloon = createBalloon(
+            getString(R.string.translate_balloon_text),
+            BalloonOverlayRoundRect(12f, 12f)
+        )
+        val checkButtonBalloon = createBalloon(
+            getString(R.string.check_button_balloon_text),
+            BalloonOverlayRoundRect(12f, 12f)
+        )
+        val categoryBalloon = createBalloon(
+            getString(R.string.category_balloon_text),
+            BalloonOverlayRoundRect(12f, 12f)
+        )
+
+        vocabularyBalloon.relayShowAlignBottom(translateBalloon, _binding.translation)
+            .relayShowAlignBottom(checkButtonBalloon, _binding.checkTranslationButton)
+            .relayShowAlignBottom(categoryBalloon, _binding.spinnerContainer)
+
+        activity?.findViewById<ImageButton>(R.id.vocabularyButton)
+            ?.showAlignBottom(vocabularyBalloon)
+
+        requireActivity().setBooleanPref(getString(R.string.play_fragment_tips_shown_key), true)
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

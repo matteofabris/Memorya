@@ -13,15 +13,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import com.memorya.R
-import com.memorya.presentation.adpater.VocabularyItemAdapter
 import com.memorya.databinding.VocabularyWordsFragmentBinding
-import com.memorya.presentation.helper.SwipeToDeleteCallback
+import com.memorya.presentation.adpater.VocabularyItemAdapter
 import com.memorya.presentation.fragment.vocabulary.VocabularyFragment
 import com.memorya.presentation.fragment.vocabulary.VocabularyFragmentDirections
 import com.memorya.presentation.fragment.vocabulary.category.CategoryFragmentDirections
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
+import com.memorya.presentation.helper.SwipeToDeleteCallback
+import com.memorya.utils.createBalloon
+import com.memorya.utils.getBooleanPref
+import com.memorya.utils.setBooleanPref
+import com.skydoves.balloon.overlay.BalloonOverlayRoundRect
+import com.skydoves.balloon.showAlignTop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -77,6 +82,12 @@ class VocabularyWordsFragment(private val _categoryId: Int = -1) : Fragment() {
         return _binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Workaround to be sure that the add button is positioned correctly
+        showTips()
+    }
+
     private fun setupVocabularyList() {
         val vocabularyAdapter = VocabularyItemAdapter(
             VocabularyItemAdapter.OnLongClickListener { _showAddOrEditVocabularyItemSheet.invoke(it.id) }
@@ -88,8 +99,8 @@ class VocabularyWordsFragment(private val _categoryId: Int = -1) : Fragment() {
         setSwipeGesture()
 
         _viewModel.vocabularyList.observe(
-            viewLifecycleOwner,
-            { it?.let { vocabularyAdapter.addHeaderAndSubmitList(it) } })
+            viewLifecycleOwner
+        ) { it?.let { vocabularyAdapter.addHeaderAndSubmitList(it) } }
     }
 
     private fun setupAddButtonListener() {
@@ -131,5 +142,21 @@ class VocabularyWordsFragment(private val _categoryId: Int = -1) : Fragment() {
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
         itemTouchHelper.attachToRecyclerView(_binding.vocabularyList)
+    }
+
+    private fun showTips() {
+        if (requireActivity().getBooleanPref(getString(R.string.vocabulary_words_fragment_tips_shown_key))) return
+
+        val addItemBalloon = createBalloon(
+            getString(R.string.add_item_balloon_text),
+            BalloonOverlayRoundRect(12f, 12f)
+        )
+
+        _binding.addButton.showAlignTop(addItemBalloon)
+
+        requireActivity().setBooleanPref(
+            getString(R.string.vocabulary_words_fragment_tips_shown_key),
+            true
+        )
     }
 }

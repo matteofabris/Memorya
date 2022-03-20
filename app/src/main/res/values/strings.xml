@@ -25,4 +25,15 @@
     <string name="recent_attempts">Recent attempts:</string>
     <string name="default_category">None</string>
     <string name="update">Update</string>
+    <string name="vocabulary_balloon_text">Aggiungi nuove parole al tuo vocabolario personale!</string>
+    <string name="translate_balloon_text">Esercitati inserendo la traduzione corretta!</string>
+    <string name="check_button_balloon_text">Controlla se la traduzione che hai inserito è corretta!</string>
+    <string name="category_balloon_text">Scegli una delle categorie di parole che hai creato all\'interno del vocabolario!</string>
+    <string name="add_item_balloon_text">Aggiungi al tuo vocabolario una parola inglese che vuoi imparare e la traduzione italiana che ritieni più opportuna!</string>
+    <string name="category_section_balloon_text">Crea una nuova categoria a cui puoi aggiungere le parole del tuo vocabolario</string>
+    <string name="translate_button_balloon_text">Non sai bene quale traduzione inserire? Fatti aiutare premendo il bottone di traduzione!</string>
+    <string name="play_fragment_tips_shown_key">play_fragment_tips_shown_key</string>
+    <string name="vocabulary_words_fragment_tips_shown_key">vocabulary_words_fragment_tips_shown_key</string>
+    <string name="vocabulary_categories_fragment_tips_shown_key">vocabulary_categories_fragment_tips_shown_key</string>
+    <string name="add_vocabulary_item_tips_shown_key">add_vocabulary_item_tips_shown_key</string>
 </resources>

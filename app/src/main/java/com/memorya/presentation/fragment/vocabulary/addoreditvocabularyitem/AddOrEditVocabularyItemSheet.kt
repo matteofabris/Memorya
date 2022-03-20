@@ -9,11 +9,15 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.memorya.*
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.memorya.Constants
+import com.memorya.R
 import com.memorya.databinding.AddOrEditVocabularyItemSheetBinding
 import com.memorya.presentation.helper.EnWordInputFilter
 import com.memorya.presentation.helper.ItWordInputFilter
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.memorya.utils.*
+import com.skydoves.balloon.overlay.BalloonOverlayRoundRect
+import com.skydoves.balloon.showAlignTop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -40,6 +44,8 @@ class AddOrEditVocabularyItemSheet :
 
         _binding.categorySpinner.onItemSelectedListener = this
 
+        showTips()
+
         return _binding.root
     }
 
@@ -60,7 +66,7 @@ class AddOrEditVocabularyItemSheet :
         _binding.googleTranslateButton.setOnClickListener {
             if (activity != null) {
                 lifecycleScope.launch {
-                    if (checkInternetConnection(requireActivity())) {
+                    if (requireActivity().checkInternetConnection()) {
                         _viewModel.translate()
                     }
                 }
@@ -80,7 +86,7 @@ class AddOrEditVocabularyItemSheet :
                 s.isNotEmpty() && _binding.enWord.text.isNotEmpty()
         }
 
-        _viewModel.categories.observe(viewLifecycleOwner, {
+        _viewModel.categories.observe(viewLifecycleOwner) {
             val categories = it.map { c -> c.category }.toTypedArray()
 
             val arrayAdapter = ArrayAdapter(
@@ -92,9 +98,9 @@ class AddOrEditVocabularyItemSheet :
 
             _binding.categorySpinner.adapter = arrayAdapter
             _viewModel.initVocabularyItem()
-        })
+        }
 
-        _viewModel.vocabularyItem.observe(viewLifecycleOwner, {
+        _viewModel.vocabularyItem.observe(viewLifecycleOwner) {
             if (_viewModel.isEdit) {
                 _binding.addButton.text = getString(R.string.update)
 
@@ -105,7 +111,23 @@ class AddOrEditVocabularyItemSheet :
                     _binding.categorySpinner.setSelection(index)
                 }
             }
-        })
+        }
+    }
+
+    private fun showTips() {
+        if (requireActivity().getBooleanPref(getString(R.string.add_vocabulary_item_tips_shown_key))) return
+
+        val translateButtonBalloon = createBalloon(
+            getString(R.string.translate_button_balloon_text),
+            BalloonOverlayRoundRect(12f, 12f)
+        )
+
+        _binding.googleTranslateButton.showAlignTop(translateButtonBalloon)
+
+        requireActivity().setBooleanPref(
+            getString(R.string.add_vocabulary_item_tips_shown_key),
+            true
+        )
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
