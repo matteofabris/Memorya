@@ -10,13 +10,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.memorya.R
-import com.memorya.presentation.adpater.CategoryItemAdapter
-import com.memorya.databinding.VocabularyCategoriesFragmentBinding
-import com.memorya.presentation.helper.SwipeToDeleteCallback
-import com.memorya.presentation.fragment.vocabulary.VocabularyFragmentDirections
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.memorya.R
+import com.memorya.databinding.VocabularyCategoriesFragmentBinding
+import com.memorya.presentation.adpater.CategoryItemAdapter
+import com.memorya.presentation.fragment.vocabulary.VocabularyFragmentDirections
+import com.memorya.presentation.helper.SwipeToDeleteCallback
+import com.memorya.utils.createBalloon
+import com.memorya.utils.getBooleanPref
+import com.memorya.utils.setBooleanPref
+import com.skydoves.balloon.overlay.BalloonOverlayRoundRect
+import com.skydoves.balloon.showAlignTop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -66,6 +71,12 @@ class VocabularyCategoriesFragment : Fragment() {
         return _binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Workaround to be sure that the add button is positioned correctly
+        showTips()
+    }
+
     private fun setupCategoriesList() {
         val categoryItemAdapter = CategoryItemAdapter(
             CategoryItemAdapter.OnClickListener {
@@ -80,13 +91,13 @@ class VocabularyCategoriesFragment : Fragment() {
         setSwipeGesture()
 
         _viewModel.categories.observe(
-            viewLifecycleOwner,
-            {
-                it?.let {
-                    val filteredList = it.toMutableList().filter { c -> c.id != 1 }
-                    categoryItemAdapter.submitList(filteredList)
-                }
-            })
+            viewLifecycleOwner
+        ) {
+            it?.let {
+                val filteredList = it.toMutableList().filter { c -> c.id != 1 }
+                categoryItemAdapter.submitList(filteredList)
+            }
+        }
     }
 
     private fun setupAddButtonListener() {
@@ -116,5 +127,21 @@ class VocabularyCategoriesFragment : Fragment() {
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
         itemTouchHelper.attachToRecyclerView(_binding.categoriesList)
+    }
+
+    private fun showTips() {
+        if (requireActivity().getBooleanPref(getString(R.string.vocabulary_categories_fragment_tips_shown_key))) return
+
+        val categorySectionBalloon = createBalloon(
+            getString(R.string.category_section_balloon_text),
+            BalloonOverlayRoundRect(12f, 12f)
+        )
+
+        _binding.addButton.showAlignTop(categorySectionBalloon)
+
+        requireActivity().setBooleanPref(
+            getString(R.string.vocabulary_categories_fragment_tips_shown_key),
+            true
+        )
     }
 }
