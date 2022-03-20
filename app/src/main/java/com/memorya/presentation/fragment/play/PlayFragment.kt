@@ -29,6 +29,7 @@ import com.skydoves.balloon.overlay.BalloonOverlayCircle
 import com.skydoves.balloon.overlay.BalloonOverlayRoundRect
 import com.skydoves.balloon.showAlignBottom
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -129,6 +130,12 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         ) {
             setPlayBoardVisible(it)
             if (!it) authenticate()
+
+            if (it) {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    scheduleShowTips()
+                }
+            }
         }
 
         _viewModel.isLoadingCompleted.observe(
@@ -138,8 +145,6 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
             _binding.opaqueLayer.visibility = visibility
             _binding.progressBar.visibility = visibility
-
-            if (it) showTips()
         }
     }
 
@@ -191,6 +196,15 @@ class PlayFragment : Fragment(), AdapterView.OnItemSelectedListener {
         _binding.spinnerContainer.visibility = if (visible) View.VISIBLE else View.INVISIBLE
 
         _binding.topBar.isButtonsVisible = visible
+    }
+
+    private suspend fun scheduleShowTips() {
+        delay(1000)
+
+        if (_viewModel.isLoadingCompleted.value!!)
+            showTips()
+        else
+            scheduleShowTips()
     }
 
     private fun showTips() {
